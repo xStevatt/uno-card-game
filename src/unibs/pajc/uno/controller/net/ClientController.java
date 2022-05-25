@@ -5,12 +5,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.ExecutorService;
+
+import unibs.pajc.uno.model.GameModel;
+import unibs.pajc.uno.view.GameView;
 
 public class ClientController
 {
 	private Socket clientSocket;
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
+
+	private ExecutorService executor;
 
 	private GameView view;
 	private GameModel model;
@@ -36,7 +42,6 @@ public class ClientController
 
 		try
 		{
-
 			clientSocket = new Socket("127.0.0.1", ServerController.PORT_NUMBER);
 
 			objInputStream = new ObjectInputStream(clientSocket.getInputStream());

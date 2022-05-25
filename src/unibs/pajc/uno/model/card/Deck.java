@@ -2,7 +2,9 @@ package unibs.pajc.uno.model.card;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.Random;
+
+import unibs.pajc.uno.model.GameRules;
 
 /**
  * Deck of cards class, a deck consists of 108 cards
@@ -12,22 +14,18 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class Deck
 {
-	private static final int NUMBER_OF_ACTIONS_CARDS_PER_COLOR = 2;
-	private static final int NUMBER_OF_WILD_CARDS = 4;
-	private static final int DECK_CARD_NUMBER = 108;
-
 	private ArrayList<Card> cardDeck;
 
 	public Deck()
 	{
-		cardDeck = new ArrayList<>(DECK_CARD_NUMBER);
+		cardDeck = new ArrayList<>(GameRules.DECK_CARD_NUMBER);
 	}
 
-	public void initCardDec()
+	public void initCardDeck()
 	{
 		initActionCards();
-		initCardDec();
 		initNumberCards();
+		initWildCards();
 	}
 
 	public void initNumberCards()
@@ -45,7 +43,7 @@ public class Deck
 	{
 		for (CardColor cardColor : CardColor.values())
 		{
-			for (var i = 0; i < NUMBER_OF_ACTIONS_CARDS_PER_COLOR; i++)
+			for (var i = 0; i < GameRules.NUMBER_OF_ACTIONS_CARDS_PER_COLOR; i++)
 			{
 				cardDeck.add(new ActionCard(CardType.SKIP, cardColor));
 				cardDeck.add(new ActionCard(CardType.SKIP, cardColor));
@@ -56,7 +54,7 @@ public class Deck
 
 	public void initWildCards()
 	{
-		for (int i = 0; i < NUMBER_OF_WILD_CARDS; i++)
+		for (int i = 0; i < GameRules.NUMBER_OF_WILD_CARDS; i++)
 		{
 			cardDeck.add(new WildCard(CardType.WILD_COLOR));
 			cardDeck.add(new WildCard(CardType.WILD_DRAW_FOUR));
@@ -65,7 +63,13 @@ public class Deck
 
 	public Card getRandomCard()
 	{
-		return cardDeck.get(ThreadLocalRandom.current().nextInt(cardDeck.size()));
+		int randomIndex = new Random().nextInt(cardDeck.size());
+
+		Card card = cardDeck.get(new Random().nextInt(cardDeck.size()));
+
+		cardDeck.remove(randomIndex);
+
+		return card;
 	}
 
 	public void shuffleCards()
