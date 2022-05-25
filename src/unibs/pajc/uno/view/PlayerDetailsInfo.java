@@ -81,6 +81,7 @@ public class PlayerDetailsInfo extends JFrame
 		panelSettingsClient.add(lblNewLabel_1_1);
 
 		textField_2 = new JTextField();
+		textField_2.setText("127.0.0.1");
 		textField_2.setBounds(108, 23, 130, 31);
 		panelSettingsClient.add(textField_2);
 		textField_2.setColumns(10);
@@ -91,6 +92,7 @@ public class PlayerDetailsInfo extends JFrame
 		lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
 
 		textField_5 = new JTextField();
+		textField_5.setText("6761");
 		textField_5.setBounds(306, 23, 85, 31);
 		panelSettingsClient.add(textField_5);
 		textField_5.setColumns(10);

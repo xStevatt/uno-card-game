@@ -48,7 +48,6 @@ public class MainMenu extends JFrame
 	public MainMenu()
 	{
 		super("Uno");
-
 		loadInterface();
 	}
 
