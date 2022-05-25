@@ -16,6 +16,16 @@ public class NumberCard extends AbstractCard
 		this.value = value;
 	}
 
+	public int getValue()
+	{
+		return value;
+	}
+
+	public void setValue(int value)
+	{
+		this.value = value;
+	}
+
 	@Override
 	public CardType getCardType()
 	{

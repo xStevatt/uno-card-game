@@ -83,7 +83,7 @@ public class Util
 		{
 			return "4+";
 		}
-		default -> throw new IllegalArgumentException("Unsupported card type " + card.getType());
+		default -> throw new IllegalArgumentException("Unsupported card type " + card.getCardType());
 		}
 	}
 }

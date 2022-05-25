@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-import unibs.pajc.uno.model.card.Card;
+import unibs.pajc.uno.model.card.NumberCard;
 
 public class GameView extends JFrame
 {
@@ -45,12 +45,10 @@ public class GameView extends JFrame
 
 	public void loadChat()
 	{
-
 		JTextArea chat = new JTextArea();
 		chat.setBounds(579, 0, 214, 431);
 		chat.setEditable(false);
 		contentPane.add(chat);
-
 	}
 
 	public void loadTitle()
@@ -74,7 +72,6 @@ public class GameView extends JFrame
 				Image i = wallpaper.getImage();
 
 				g.drawImage(i, 0, 0, this.getSize().width, this.getSize().height, this);
-
 			}
 
 		};
@@ -92,8 +89,7 @@ public class GameView extends JFrame
 
 		for (int i = 0; i < 20; i++)
 		{
-			panelCarta.add(new NumberCard(String.valueOf(i)));
+			panelCarta.add(new CardView(new NumberCard(null, i)));
 		}
-
 	}
 }
