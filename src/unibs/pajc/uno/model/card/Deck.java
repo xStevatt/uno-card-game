@@ -2,6 +2,7 @@ package unibs.pajc.uno.model.card;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Deck of cards class, a deck consists of 108 cards
@@ -60,6 +61,11 @@ public class Deck
 			cardDeck.add(new WildCard(CardType.WILD_COLOR));
 			cardDeck.add(new WildCard(CardType.WILD_DRAW_FOUR));
 		}
+	}
+
+	public Card getRandomCard()
+	{
+		return cardDeck.get(ThreadLocalRandom.current().nextInt(cardDeck.size()));
 	}
 
 	public void shuffleCards()

@@ -12,9 +12,13 @@ public class ClientController
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
 
-	public ClientController()
-	{
+	private GameView view;
+	private GameModel model;
 
+	public ClientController(GameView view, GameModel model)
+	{
+		this.view = view;
+		this.model = model;
 	}
 
 	private void initializeGame()
