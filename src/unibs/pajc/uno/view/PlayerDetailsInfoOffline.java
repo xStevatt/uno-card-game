@@ -70,6 +70,7 @@ public class PlayerDetailsInfoOffline extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				setVisible(false);
 				Table table = new Table();
 				table.setVisible(true);
 			}
@@ -80,5 +81,7 @@ public class PlayerDetailsInfoOffline extends JFrame
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(37, 107, 333, 12);
 		panel.add(separator_1);
+
+		this.setLocationRelativeTo(null);
 	}
 }

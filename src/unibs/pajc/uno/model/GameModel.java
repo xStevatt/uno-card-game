@@ -39,6 +39,27 @@ public class GameModel
 	}
 
 	/**
+	 * Checks if the game is over. The game is over if a player has 0 cards.
+	 * 
+	 * @return the function returns a player if a player has zero cards, otherwise
+	 *         it returns null
+	 */
+	public Player isGameOver()
+	{
+		Player playerWinner = null;
+
+		for (Player player : players)
+		{
+			if (player.getHandCards().getNumberOfCards() == 0)
+			{
+				playerWinner = player;
+			}
+		}
+
+		return playerWinner;
+	}
+
+	/**
 	 * Method returns a card from the deck. The card is drawn from the deck. After
 	 * the card is drawn, it's removed from the deck
 	 * 

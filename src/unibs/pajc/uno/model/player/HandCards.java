@@ -13,4 +13,9 @@ public class HandCards
 	{
 		this.cardList = new ArrayList<Card>(Arrays.asList(cards));
 	}
+
+	public int getNumberOfCards()
+	{
+		return cardList.size();
+	}
 }

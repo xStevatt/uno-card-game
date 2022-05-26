@@ -1,4 +1,4 @@
-package uno.pajc.uno;
+package unibs.pajc.uno;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import unibs.pajc.uno.view.PlayerDetailsInfoOffline;
 import unibs.pajc.uno.view.PlayerDetailsInfoOnline;
 
 /**
@@ -48,7 +49,8 @@ public class MainApp extends JFrame
 	private JPanel AIGamePanel;
 	private JButton newAIGameButton;
 
-	private PlayerDetailsInfoOnline playerInfoFrame;
+	private PlayerDetailsInfoOnline playerInfoFrameOnline;
+	private PlayerDetailsInfoOffline playerInfoFrameOffline;
 
 	public static void main(String[] args)
 	{
@@ -175,11 +177,11 @@ public class MainApp extends JFrame
 			{
 				System.out.println("Start a new local game");
 				setVisible(false);
-				playerInfoFrame = new PlayerDetailsInfoOnline();
+				playerInfoFrameOffline = new PlayerDetailsInfoOffline();
 
-				playerInfoFrame.setTitle("Input Window");
-				playerInfoFrame.setResizable(false);
-				playerInfoFrame.setVisible(true);
+				playerInfoFrameOffline.setTitle("Input Window");
+				playerInfoFrameOffline.setResizable(false);
+				playerInfoFrameOffline.setVisible(true);
 			}
 		});
 
@@ -190,11 +192,11 @@ public class MainApp extends JFrame
 			{
 				System.out.println("Start a new local game");
 				setVisible(false);
-				playerInfoFrame = new PlayerDetailsInfoOnline();
+				playerInfoFrameOffline = new PlayerDetailsInfoOffline();
 
-				playerInfoFrame.setTitle("Input Window");
-				playerInfoFrame.setResizable(false);
-				playerInfoFrame.setVisible(true);
+				playerInfoFrameOffline.setTitle("Input Window");
+				playerInfoFrameOffline.setResizable(false);
+				playerInfoFrameOffline.setVisible(true);
 			}
 		});
 
@@ -205,11 +207,10 @@ public class MainApp extends JFrame
 			{
 				System.out.println("Start an AI game!");
 				setVisible(false);
-				playerInfoFrame = new PlayerDetailsInfoOnline();
 
-				playerInfoFrame.setTitle("Input Window");
-				playerInfoFrame.setResizable(false);
-				playerInfoFrame.setVisible(true);
+				playerInfoFrameOffline.setTitle("Input Window");
+				playerInfoFrameOffline.setResizable(false);
+				playerInfoFrameOffline.setVisible(true);
 			}
 		});
 
