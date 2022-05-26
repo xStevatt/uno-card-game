@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-public class PlayerDetailsInfo extends JFrame
+public class PlayerDetailsInfoOnline extends JFrame
 {
 	/**
 	 * 
@@ -30,7 +30,7 @@ public class PlayerDetailsInfo extends JFrame
 	/**
 	 * Create the frame.
 	 */
-	public PlayerDetailsInfo()
+	public PlayerDetailsInfoOnline()
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 290);

@@ -1,8 +1,9 @@
-package unibs.pajc.uno.view;
+package uno.pajc.uno;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -18,13 +19,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import unibs.pajc.uno.view.PlayerDetailsInfoOnline;
+
 /**
  * Enum describing card types
  * 
  * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
  *
  */
-public class MainMenu extends JFrame
+public class MainApp extends JFrame
 {
 	private static final String TITLE = "UnoPACJ, an opensource uno game made in Java";
 
@@ -41,11 +44,30 @@ public class MainMenu extends JFrame
 	private JButton newOnlineGameButton;
 
 	private JPanel AIGamePanel;
-	private JButton AIGameButton;
+	private JButton newAIGameButton;
 
-	private PlayerDetailsInfo playerInfoFrame; // new frame to input players' info
+	private PlayerDetailsInfoOnline playerInfoFrame; // new frame to input players' info
 
-	public MainMenu()
+	public static void main(String[] args)
+	{
+		EventQueue.invokeLater(new Runnable()
+		{
+			public void run()
+			{
+				try
+				{
+					MainApp window = new MainApp();
+					window.setVisible(true);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	public MainApp()
 	{
 		super("Uno");
 		loadInterface();
@@ -66,6 +88,7 @@ public class MainMenu extends JFrame
 		Image bannerImage = new ImageIcon("res/img/main_icon.png").getImage().getScaledInstance(500, 500,
 				java.awt.Image.SCALE_SMOOTH);
 
+		this.setResizable(false);
 		this.setIconImage(bannerImage);
 		this.setLocationRelativeTo(null);
 	}
@@ -92,9 +115,9 @@ public class MainMenu extends JFrame
 
 	protected void initializeButtonsPanel()
 	{
-		newLocalGameButton = new JButton("New Online Game");
-		newOnlineGameButton = new JButton("New Offline Game");
-		AIGameButton = new JButton("AI Simulated");
+		newLocalGameButton = new JButton("Online Game");
+		newOnlineGameButton = new JButton("Offline Game");
+		newAIGameButton = new JButton("Against AI");
 
 		newGameButtonPanel = new JPanel(new GridLayout());
 		newGameButtonPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 40, 25));
@@ -106,7 +129,7 @@ public class MainMenu extends JFrame
 
 		AIGamePanel = new JPanel(new GridLayout());
 		AIGamePanel.setBorder(BorderFactory.createEmptyBorder(30, 25, 40, 40));
-		AIGamePanel.add(AIGameButton);
+		AIGamePanel.add(newAIGameButton);
 
 		buttonsPanel = new JPanel(new GridLayout(1, 3));
 		buttonsPanel.setPreferredSize(new Dimension(600, 150));
@@ -131,15 +154,46 @@ public class MainMenu extends JFrame
 		mainContainer.add(buttonsPanel, BorderLayout.CENTER);
 		mainContainer.add(descriptionPaneSouth, BorderLayout.SOUTH);
 
+		// STARTING A NEW GAME WHEN BUTTON IS CLICKED
+
 		newLocalGameButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println("Start a new game!");
-
+				System.out.println("Start a new local game");
 				setVisible(false);
-				playerInfoFrame = new PlayerDetailsInfo();
+				playerInfoFrame = new PlayerDetailsInfoOnline();
+
+				playerInfoFrame.setTitle("Input Window");
+				playerInfoFrame.setResizable(false);
+				playerInfoFrame.setVisible(true);
+			}
+		});
+
+		newOnlineGameButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				System.out.println("Start a new local game");
+				setVisible(false);
+				playerInfoFrame = new PlayerDetailsInfoOnline();
+
+				playerInfoFrame.setTitle("Input Window");
+				playerInfoFrame.setResizable(false);
+				playerInfoFrame.setVisible(true);
+			}
+		});
+
+		newAIGameButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				System.out.println("Start an AI game!");
+				setVisible(false);
+				playerInfoFrame = new PlayerDetailsInfoOnline();
 
 				playerInfoFrame.setTitle("Input Window");
 				playerInfoFrame.setResizable(false);
@@ -148,11 +202,12 @@ public class MainMenu extends JFrame
 		});
 
 		// ADDING MOUSE LISTENER TO CHANGE TEXT WHEN BUTTON IS HOVERED
+
 		newLocalGameButton.addMouseListener(new MouseAdapter()
 		{
 			public void mouseEntered(MouseEvent e)
 			{
-				descriptorLabel.setText("Play single player game");
+				descriptorLabel.setText("Start a singleplayer game.");
 			}
 
 			public void mouseExited(MouseEvent e)
@@ -165,7 +220,7 @@ public class MainMenu extends JFrame
 		{
 			public void mouseEntered(MouseEvent e)
 			{
-				descriptorLabel.setText("Play LAN multiplayer 2 vs 2");
+				descriptorLabel.setText("Start a multiplayer game.");
 			}
 
 			public void mouseExited(MouseEvent e)
@@ -174,11 +229,11 @@ public class MainMenu extends JFrame
 			}
 		});
 
-		AIGameButton.addMouseListener(new MouseAdapter()
+		newAIGameButton.addMouseListener(new MouseAdapter()
 		{
 			public void mouseEntered(MouseEvent e)
 			{
-				descriptorLabel.setText("Play against AI");
+				descriptorLabel.setText("Start a game against AI");
 			}
 
 			public void mouseExited(MouseEvent e)

@@ -24,12 +24,38 @@ public class ServerController
 	private GameView view;
 	private GameModel model;
 
+	/**
+	 * 
+	 * Constructor containing IP address and port inserted by the user
+	 * 
+	 * @param view
+	 * @param model
+	 * @param IP_ADDRESS
+	 * @param PORT
+	 */
 	public ServerController(GameView view, GameModel model, String IP_ADDRESS, int PORT)
 	{
 		this.model = model;
 		this.view = view;
+
 		this.IP_ADDRESS = IP_ADDRESS;
 		this.PORT = PORT;
+	}
+
+	/**
+	 * 
+	 * Sets default IP address and port
+	 * 
+	 * @param view
+	 * @param model
+	 */
+	public ServerController(GameView view, GameModel model)
+	{
+		this.view = view;
+		this.model = model;
+
+		this.IP_ADDRESS = NetUtils.DEFAULT_IP_ADDRESS;
+		this.PORT = NetUtils.DEFAULT_PORT;
 	}
 
 	public void initGame()
