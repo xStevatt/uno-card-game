@@ -18,6 +18,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import unibs.pajc.uno.view.PlayerDetailsInfoOnline;
 
@@ -46,7 +48,7 @@ public class MainApp extends JFrame
 	private JPanel AIGamePanel;
 	private JButton newAIGameButton;
 
-	private PlayerDetailsInfoOnline playerInfoFrame; // new frame to input players' info
+	private PlayerDetailsInfoOnline playerInfoFrame;
 
 	public static void main(String[] args)
 	{
@@ -54,6 +56,16 @@ public class MainApp extends JFrame
 		{
 			public void run()
 			{
+				try
+				{
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				}
+				catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+						| UnsupportedLookAndFeelException ex)
+				{
+					System.err.println("Error trying to set default system Look and Feel.");
+				}
+
 				try
 				{
 					MainApp window = new MainApp();
