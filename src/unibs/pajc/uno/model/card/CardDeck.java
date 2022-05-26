@@ -12,11 +12,11 @@ import unibs.pajc.uno.model.GameRules;
  * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
  *
  */
-public class Deck
+public class CardDeck
 {
 	private ArrayList<Card> cardDeck;
 
-	public Deck()
+	public CardDeck()
 	{
 		cardDeck = new ArrayList<>(GameRules.DECK_CARD_NUMBER);
 	}

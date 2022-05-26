@@ -70,6 +70,9 @@ public class PlayerDetailsInfoOffline extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				String playerOneNameString = txtPlayerOne.getText();
+				String playerTwoNameString = txtPlayerTwo.getText();
+
 				setVisible(false);
 				Table table = new Table();
 				table.setVisible(true);

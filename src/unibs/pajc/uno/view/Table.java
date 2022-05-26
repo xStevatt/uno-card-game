@@ -14,8 +14,11 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.border.TitledBorder;
 
 import unibs.pajc.uno.model.card.Card;
+import unibs.pajc.uno.model.card.CardColor;
+import unibs.pajc.uno.model.card.NumberCard;
 import unibs.pajc.uno.model.player.Player;
 
 public class Table extends JFrame
@@ -24,6 +27,10 @@ public class Table extends JFrame
 	private JPanel contentPane;
 	private JTextField textField;
 
+	private JPanel panelPlayerOne;
+	private JPanel panelPlayerTwo;
+	private JPanel centerPanel;
+
 	/**
 	 * Create the frame.
 	 */
@@ -31,13 +38,13 @@ public class Table extends JFrame
 	{
 		super("Uno - cards game");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 980, 500);
+		setBounds(100, 100, 1200, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JPanel panel = new JPanel()
+		centerPanel = new JPanel()
 		{
 			@Override
 			public void paintComponent(Graphics g)
@@ -48,33 +55,35 @@ public class Table extends JFrame
 				g.drawImage(i, 0, 0, this.getSize().width, this.getSize().height, this);
 			}
 		};
-		panel.setBackground(Color.GREEN);
-		panel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		panel.setBounds(6, 6, 728, 460);
-		contentPane.add(panel);
-		panel.setLayout(null);
+		centerPanel.setBackground(Color.GREEN);
+		centerPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+		centerPanel.setBounds(6, 6, 948, 660);
+		contentPane.add(centerPanel);
+		centerPanel.setLayout(null);
 
-		JPanel panelPlayerTwo = new JPanel();
-		panelPlayerTwo.setOpaque(false);
-		panelPlayerTwo.setBorder(new LineBorder(Color.DARK_GRAY));
-		panelPlayerTwo.setBounds(6, 6, 716, 117);
-		panel.add(panelPlayerTwo);
-
-		JPanel panelPlayerOne = new JPanel();
+		panelPlayerOne = new JPanel();
 		panelPlayerOne.setOpaque(false);
-		panelPlayerOne.setBorder(new LineBorder(Color.DARK_GRAY));
-		panelPlayerOne.setBounds(6, 337, 716, 117);
-		panel.add(panelPlayerOne);
+		panelPlayerOne
+				.setBorder(new TitledBorder(null, "Player 1", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelPlayerOne.setBounds(6, 454, 936, 200);
+		centerPanel.add(panelPlayerOne);
+
+		panelPlayerTwo = new JPanel();
+		panelPlayerTwo.setOpaque(false);
+		panelPlayerTwo
+				.setBorder(new TitledBorder(null, "Player 2", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelPlayerTwo.setBounds(6, 6, 936, 200);
+		centerPanel.add(panelPlayerTwo);
 
 		JPanel midTable = new JPanel();
 		midTable.setOpaque(false);
 		midTable.setBorder(new LineBorder(Color.DARK_GRAY));
-		midTable.setBounds(6, 135, 716, 190);
-		panel.add(midTable);
+		midTable.setBounds(6, 218, 936, 224);
+		centerPanel.add(midTable);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(new Color(64, 64, 64), 1, true));
-		panel_1.setBounds(746, 6, 228, 460);
+		panel_1.setBounds(966, 206, 228, 460);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
@@ -97,6 +106,17 @@ public class Table extends JFrame
 		JSeparator separator = new JSeparator();
 		separator.setBounds(6, 404, 216, 12);
 		panel_1.add(separator);
+
+		loadCards();
+	}
+
+	public void loadCards()
+	{
+		for (int i = 0; i < 5; i++)
+		{
+			panelPlayerOne.add(new CardView(new NumberCard(CardColor.RED, i)));
+			panelPlayerTwo.add(new CardView(new NumberCard(CardColor.GREEN, i)));
+		}
 	}
 
 	public void addCardToView(Card card, Player player)

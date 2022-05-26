@@ -1,12 +1,15 @@
 package unibs.pajc.uno.model;
 
 import unibs.pajc.uno.model.card.Card;
-import unibs.pajc.uno.model.card.Deck;
+import unibs.pajc.uno.model.card.CardDeck;
+import unibs.pajc.uno.model.card.UsedPile;
+import unibs.pajc.uno.model.card.WildCard;
 import unibs.pajc.uno.model.player.Player;
 
 public class GameModel
 {
-	private Deck cardsDeck;
+	private CardDeck cardsDeck;
+	private UsedPile usedCards;
 	private Player players[];
 
 	/**
@@ -30,12 +33,51 @@ public class GameModel
 	}
 
 	/**
-	 * Method that initializes all the items necessary: deck, starting hand cards
+	 * Method that initializes all the items necessary: deck, discarded cards deck,
+	 * and starting hand cards. Instead of using a specific class for the discarded
+	 * cards, it would've been enough to used a variable Card to store just the last
+	 * card used
 	 */
 	public void initGameElements()
 	{
-		cardsDeck = new Deck();
+		cardsDeck = new CardDeck();
+		usedCards = new UsedPile();
+
 		cardsDeck.initCardDeck();
+	}
+
+	/**
+	 * 
+	 */
+	public void determineEffectsOfCard()
+	{
+
+	}
+
+	/**
+	 * Method that checks if the card that the user wants to place is valid. A card
+	 * that needs to be placed must be the same color of the last card that was
+	 * discarded in the used cards pile.
+	 * 
+	 * @return
+	 */
+	public boolean isPlacedCardValid(Card card)
+	{
+		boolean isCardValid = true;
+
+		if (card instanceof WildCard)
+		{
+			return isCardValid;
+		}
+		else
+		{
+			if (usedCards.getLastCardUsed().getCardColor() == card.getCardColor())
+			{
+				return isCardValid;
+			}
+		}
+
+		return !isCardValid;
 	}
 
 	/**
