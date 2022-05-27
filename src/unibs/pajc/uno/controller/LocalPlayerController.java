@@ -38,5 +38,6 @@ public class LocalPlayerController
 	public void updateView(Player playerOne, Player playerTwo)
 	{
 		gameView.loadCards(playerOne.getHandCards());
+		gameView.loadCards(playerTwo.getHandCards());
 	}
 }

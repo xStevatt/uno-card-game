@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -114,18 +116,32 @@ public class TableView extends JFrame
 		midTable.setLayout(null);
 
 		sayUnoButtonPlayerOne = new JButton("SAY UNO!");
+		sayUnoButtonPlayerOne.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+
+			}
+		});
 		sayUnoButtonPlayerOne.setVisible(false);
 		sayUnoButtonPlayerOne.setBounds(795, 179, 135, 39);
 		midTable.add(sayUnoButtonPlayerOne);
 
 		sayUnoButtonPlayerTwo = new JButton("SAY UNO!");
+		sayUnoButtonPlayerTwo.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+
+			}
+		});
 		sayUnoButtonPlayerTwo.setVisible(false);
-		sayUnoButtonPlayerTwo.setBounds(795, 6, 135, 39);
+		sayUnoButtonPlayerTwo.setBounds(6, 6, 135, 39);
 		midTable.add(sayUnoButtonPlayerTwo);
 
 		JPanel panelDeck = new JPanel();
 		// +5 is due to card's border
-		panelDeck.setBounds(314, 30, 100 + 5, 150 + 5);
+		panelDeck.setBounds(331, 30, 100 + 5, 150 + 5);
 		midTable.add(panelDeck);
 		panelDeck.setOpaque(false);
 
@@ -133,7 +149,7 @@ public class TableView extends JFrame
 
 		panelPlaced = new JPanel();
 		// +5 is due to card's border
-		panelPlaced.setBounds(443, 30, 100 + 5, 150 + 5);
+		panelPlaced.setBounds(471, 30, 100 + 5, 150 + 5);
 		panelPlaced.add(new CardDropped(firstRandomCard));
 		panelPlaced.setOpaque(false);
 		midTable.add(panelPlaced);
@@ -255,12 +271,9 @@ public class TableView extends JFrame
 	 * @param handCards
 	 * @param players
 	 */
-	public void loadCards(HandCards handCards, Player[] players)
+	public void loadCards(Player[] players)
 	{
-		for (int i = 0; i < handCards.getNumberOfCards(); i++)
-		{
 
-		}
 	}
 
 	/**
