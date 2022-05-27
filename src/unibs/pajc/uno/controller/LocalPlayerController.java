@@ -1,6 +1,7 @@
 package unibs.pajc.uno.controller;
 
 import unibs.pajc.uno.model.GameModel;
+import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.view.TableView;
 
@@ -12,8 +13,6 @@ public class LocalPlayerController
 	public LocalPlayerController(String playerOneName, String playerTwoName)
 	{
 		model = new GameModel();
-		gameView = new TableView(playerOneName, playerTwoName);
-		gameView.setVisible(true);
 
 		Player playerOne = new Player(playerOneName, model.generateStartingCards(), 0);
 		Player playerTwo = new Player(playerTwoName, model.generateStartingCards(), 1);
@@ -21,7 +20,12 @@ public class LocalPlayerController
 		model.initPlayer(playerOne);
 		model.initPlayer(playerTwo);
 
-		initBeginningStateView(playerOne, playerTwo);
+		// Takes a random car out of the deck and puts it in the used card deck
+		Card randomCard = model.getCardsDeck().getRandomCard();
+
+		gameView = new TableView(playerOneName, playerTwoName, randomCard);
+		gameView.setVisible(true);
+		updateView(playerOne, playerTwo);
 
 		runGame();
 	}
@@ -31,20 +35,8 @@ public class LocalPlayerController
 
 	}
 
-	public void initBeginningStateModel(Player playerOneName, Player playerTwoName)
+	public void updateView(Player playerOne, Player playerTwo)
 	{
-
-	}
-
-	public void initBeginningStateView(Player playerOne, Player playerTwo)
-	{
-		System.out.println(playerOne.getHandCards().getNumberOfCards());
-
-		gameView.addCardToView();
-
-		for (int i = 0; i < 10; i++)
-		{
-			gameView.loadCards(playerOne.getHandCards());
-		}
+		gameView.loadCards(playerOne.getHandCards());
 	}
 }

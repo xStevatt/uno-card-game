@@ -21,6 +21,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 
 import unibs.pajc.uno.model.GameRules;
+import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.player.HandCards;
 import unibs.pajc.uno.model.player.Player;
 
@@ -49,11 +50,16 @@ public class TableView extends JFrame
 
 	JButton sayUnoButtonPlayerTwo;
 	JButton sayUnoButtonPlayerOne;
+	private JPanel panelPlaced;
 
 	/**
-	 * Create the frame.
+	 * Constructor to create the form.
+	 * 
+	 * @param namePlayerOne
+	 * @param namePlayerTwo
+	 * @param firstRandomCard
 	 */
-	public TableView(String namePlayerOne, String namePlayerTwo)
+	public TableView(String namePlayerOne, String namePlayerTwo, Card firstRandomCard)
 	{
 		super("Uno - cards game");
 		setTitle("Uno - card's game");
@@ -117,6 +123,21 @@ public class TableView extends JFrame
 		sayUnoButtonPlayerTwo.setBounds(795, 6, 135, 39);
 		midTable.add(sayUnoButtonPlayerTwo);
 
+		JPanel panelDeck = new JPanel();
+		// +5 is due to card's border
+		panelDeck.setBounds(314, 30, 100 + 5, 150 + 5);
+		midTable.add(panelDeck);
+		panelDeck.setOpaque(false);
+
+		panelDeck.add(new CardBackView());
+
+		panelPlaced = new JPanel();
+		// +5 is due to card's border
+		panelPlaced.setBounds(443, 30, 100 + 5, 150 + 5);
+		panelPlaced.add(new CardDropped(firstRandomCard));
+		panelPlaced.setOpaque(false);
+		midTable.add(panelPlaced);
+
 		panelChat = new JPanel();
 		panelChat.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Chat",
 				TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
@@ -145,18 +166,28 @@ public class TableView extends JFrame
 		panelChat.add(separator);
 	}
 
+	/**
+	 * 
+	 */
 	public void makeSayUnoButtonVisibile()
 	{
 		sayUnoButtonPlayerOne.setVisible(true);
 		sayUnoButtonPlayerTwo.setVisible(true);
 	}
 
+	/**
+	 * 
+	 */
 	public void makeSayUnoButtonInvisible()
 	{
 		sayUnoButtonPlayerOne.setVisible(false);
 		sayUnoButtonPlayerTwo.setVisible(false);
 	}
 
+	/**
+	 * 
+	 * @param handCards
+	 */
 	public void loadCards(HandCards handCards)
 	{
 		handCardsView.removeAll();
@@ -182,6 +213,11 @@ public class TableView extends JFrame
 		panelPlayerOne.add(handCardsView);
 	}
 
+	/**
+	 * 
+	 * @param totalCards
+	 * @return
+	 */
 	private Point getFirstCardPoint(int totalCards)
 	{
 		Point p = new Point(0, 20);
@@ -196,6 +232,12 @@ public class TableView extends JFrame
 		return p;
 	}
 
+	/**
+	 * 
+	 * @param width
+	 * @param totalCards
+	 * @return
+	 */
 	private int calculateOffset(int width, int totalCards)
 	{
 		if (totalCards <= GameRules.DEFAULT_NUMBER_OF_CARDS)
@@ -208,7 +250,12 @@ public class TableView extends JFrame
 		}
 	}
 
-	public void loadCards(HandCards handCards, Player[] players, Player player)
+	/**
+	 * 
+	 * @param handCards
+	 * @param players
+	 */
+	public void loadCards(HandCards handCards, Player[] players)
 	{
 		for (int i = 0; i < handCards.getNumberOfCards(); i++)
 		{
@@ -216,6 +263,9 @@ public class TableView extends JFrame
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public void addCardToView()
 	{
 		panelPlayerOne.add(new CardBackView());

@@ -126,9 +126,9 @@ public class GameModel
 
 	public boolean isGameOver()
 	{
-		for (Player player : players)
+		for (int i = 0; i < numberOfPlayers; i++)
 		{
-			if (player.getHandCards().getNumberOfCards() == 0)
+			if (players[i].getHandCards().getNumberOfCards() == 0)
 			{
 				this.gameOver = true;
 			}
@@ -183,5 +183,62 @@ public class GameModel
 		{
 			card[i] = cardsDeck.getRandomCard();
 		}
+	}
+
+	// GETTERS AND SETTERS
+
+	public CardDeck getCardsDeck()
+	{
+		return cardsDeck;
+	}
+
+	public void setCardsDeck(CardDeck cardsDeck)
+	{
+		this.cardsDeck = cardsDeck;
+	}
+
+	public UsedPile getUsedCards()
+	{
+		return usedCards;
+	}
+
+	public void setUsedCards(UsedPile usedCards)
+	{
+		this.usedCards = usedCards;
+	}
+
+	public Player[] getPlayers()
+	{
+		return players;
+	}
+
+	public void setPlayers(Player[] players)
+	{
+		this.players = players;
+	}
+
+	public int getMaxNumberOfPlayers()
+	{
+		return maxNumberOfPlayers;
+	}
+
+	public void setMaxNumberOfPlayers(int maxNumberOfPlayers)
+	{
+		this.maxNumberOfPlayers = maxNumberOfPlayers;
+	}
+
+	public int getNumberOfPlayers()
+	{
+		return numberOfPlayers;
+	}
+
+	public void setNumberOfPlayers(int numberOfPlayers)
+	{
+		this.numberOfPlayers = numberOfPlayers;
+	}
+
+	public void setGameOver(boolean gameOver)
+	{
+		this.gameOver = gameOver;
 	}
 }
