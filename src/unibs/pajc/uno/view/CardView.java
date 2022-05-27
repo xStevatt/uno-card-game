@@ -11,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
@@ -27,8 +28,10 @@ public class CardView extends JPanel
 
 	private final Dimension dimension = new Dimension(cardWidth, cardHeight);
 
-	private final Border defaultBorder = BorderFactory.createEtchedBorder(WHEN_FOCUSED, Color.white, Color.gray);
-	private final Border focusedBorder = BorderFactory.createEtchedBorder(WHEN_FOCUSED, Color.black, Color.gray);
+	private final Border defaultBorder = BorderFactory.createEtchedBorder(JComponent.WHEN_FOCUSED, Color.white,
+			Color.gray);
+	private final Border focusedBorder = BorderFactory.createEtchedBorder(JComponent.WHEN_FOCUSED, Color.black,
+			Color.gray);
 
 	private final Consumer<Card> handleCardClick;
 

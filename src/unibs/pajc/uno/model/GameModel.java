@@ -11,15 +11,19 @@ public class GameModel
 	private CardDeck cardsDeck;
 	private UsedPile usedCards;
 	private Player players[];
+	private int maxNumberOfPlayers;
+	private int numberOfPlayers = 0;
+	private boolean gameOver = false;
 
 	/**
 	 * Constructor that allows to set a custom number of players
 	 * 
 	 * @param numberOfPlayers the number of players set by the user
 	 */
-	public GameModel(int numberOfPlayers)
+	public GameModel(int maxNumberOfPlayers)
 	{
-		players = new Player[numberOfPlayers];
+		this.maxNumberOfPlayers = maxNumberOfPlayers;
+		players = new Player[maxNumberOfPlayers];
 		initGameElements();
 	}
 
@@ -44,6 +48,25 @@ public class GameModel
 		usedCards = new UsedPile();
 
 		cardsDeck.initCardDeck();
+	}
+
+	public void initPlayer(String name, Card[] cards)
+	{
+		if (numberOfPlayers < maxNumberOfPlayers - 1)
+		{
+			players[numberOfPlayers] = new Player(name, cards, numberOfPlayers);
+			numberOfPlayers++;
+			System.out.println("Player added");
+		}
+	}
+
+	public void initPlayer(Player player)
+	{
+		if (numberOfPlayers < maxNumberOfPlayers - 1)
+		{
+			players[numberOfPlayers] = player;
+			numberOfPlayers++;
+		}
 	}
 
 	/**
@@ -86,7 +109,7 @@ public class GameModel
 	 * @return the function returns a player if a player has zero cards, otherwise
 	 *         it returns null
 	 */
-	public Player isGameOver()
+	public Player getWinnerPlayer()
 	{
 		Player playerWinner = null;
 
@@ -101,6 +124,19 @@ public class GameModel
 		return playerWinner;
 	}
 
+	public boolean isGameOver()
+	{
+		for (Player player : players)
+		{
+			if (player.getHandCards().getNumberOfCards() == 0)
+			{
+				this.gameOver = true;
+			}
+		}
+
+		return this.gameOver;
+	}
+
 	/**
 	 * Method returns a card from the deck. The card is drawn from the deck. After
 	 * the card is drawn, it's removed from the deck
@@ -113,6 +149,25 @@ public class GameModel
 	}
 
 	/**
+	 * Generates a starting set of card and returns it. Number of cards is not
+	 * passed as an argument and is set automatically to default, constant is used
+	 * directly
+	 * 
+	 * @param player is the identifier of the player
+	 */
+	public Card[] generateStartingCards()
+	{
+		Card[] card = new Card[GameRules.DEFAULT_NUMBER_OF_CARDS];
+
+		for (int i = 0; i < GameRules.DEFAULT_NUMBER_OF_CARDS; i++)
+		{
+			card[i] = cardsDeck.getRandomCard();
+		}
+
+		return card;
+	}
+
+	/**
 	 * Generates a starting set of cards and returns it. Number of cards is passed
 	 * as an argument.
 	 * 
@@ -120,27 +175,11 @@ public class GameModel
 	 * @param player        is the index of the player the new set of cards is set
 	 *                      for
 	 */
-	public void generateStartingCards(int startingCards, int player)
+	public void generateStartingCards(int startingCards)
 	{
 		Card[] card = new Card[startingCards];
 
 		for (int i = 0; i < startingCards; i++)
-		{
-			card[i] = cardsDeck.getRandomCard();
-		}
-	}
-
-	/**
-	 * Generates a starting set of card and returns it Number of cards is not passed
-	 * as an argument and is set automatically to default
-	 * 
-	 * @param player is the identifier of the player
-	 */
-	public void generateStartingCards(int player)
-	{
-		Card[] card = new Card[GameRules.DEFAULT_NUMBER_OF_CARDS];
-
-		for (int i = 0; i < GameRules.DEFAULT_NUMBER_OF_CARDS; i++)
 		{
 			card[i] = cardsDeck.getRandomCard();
 		}

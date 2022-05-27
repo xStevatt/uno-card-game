@@ -170,7 +170,7 @@ public class MainApp extends JFrame
 
 		// STARTING A NEW GAME WHEN BUTTON IS CLICKED
 
-		newLocalGameButton.addActionListener(new ActionListener()
+		newOnlineGameButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
@@ -185,18 +185,18 @@ public class MainApp extends JFrame
 			}
 		});
 
-		newOnlineGameButton.addActionListener(new ActionListener()
+		newLocalGameButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
 				System.out.println("Start a new local game");
 				setVisible(false);
-				playerInfoFrameOffline = new PlayerDetailsInfoOffline();
+				playerInfoFrameOnline = new PlayerDetailsInfoOnline();
 
-				playerInfoFrameOffline.setTitle("Input Window");
-				playerInfoFrameOffline.setResizable(false);
-				playerInfoFrameOffline.setVisible(true);
+				playerInfoFrameOnline.setTitle("Input Window");
+				playerInfoFrameOnline.setResizable(false);
+				playerInfoFrameOnline.setVisible(true);
 			}
 		});
 

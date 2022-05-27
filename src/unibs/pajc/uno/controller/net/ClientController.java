@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 
 import unibs.pajc.uno.model.GameModel;
-import unibs.pajc.uno.view.GameView;
+import unibs.pajc.uno.view.TableView;
 
 public class ClientController
 {
@@ -18,10 +18,10 @@ public class ClientController
 
 	private ExecutorService executor;
 
-	private GameView view;
+	private TableView view;
 	private GameModel model;
 
-	public ClientController(GameView view, GameModel model)
+	public ClientController(TableView view, GameModel model)
 	{
 		this.view = view;
 		this.model = model;

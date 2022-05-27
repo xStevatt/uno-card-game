@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 
 import unibs.pajc.uno.model.GameModel;
-import unibs.pajc.uno.view.GameView;
+import unibs.pajc.uno.view.TableView;
 
 public class ServerController
 {
@@ -21,7 +21,7 @@ public class ServerController
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
 
-	private GameView view;
+	private TableView view;
 	private GameModel model;
 
 	/**
@@ -33,7 +33,7 @@ public class ServerController
 	 * @param IP_ADDRESS
 	 * @param PORT
 	 */
-	public ServerController(GameView view, GameModel model, String IP_ADDRESS, int PORT)
+	public ServerController(TableView view, GameModel model, String IP_ADDRESS, int PORT)
 	{
 		this.model = model;
 		this.view = view;
@@ -49,7 +49,7 @@ public class ServerController
 	 * @param view
 	 * @param model
 	 */
-	public ServerController(GameView view, GameModel model)
+	public ServerController(TableView view, GameModel model)
 	{
 		this.view = view;
 		this.model = model;
@@ -60,12 +60,10 @@ public class ServerController
 
 	public void initGame()
 	{
-		view = new GameView();
+		view = new TableView("", "");
 		view.setVisible(true);
 
-		boolean isGameOver = false;
-
-		while (!isGameOver)
+		while (!model.isGameOver())
 		{
 
 		}

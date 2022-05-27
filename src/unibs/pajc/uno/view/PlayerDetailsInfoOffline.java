@@ -7,11 +7,14 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import unibs.pajc.uno.controller.LocalPlayerController;
 
 public class PlayerDetailsInfoOffline extends JFrame
 {
@@ -73,9 +76,17 @@ public class PlayerDetailsInfoOffline extends JFrame
 				String playerOneNameString = txtPlayerOne.getText();
 				String playerTwoNameString = txtPlayerTwo.getText();
 
-				setVisible(false);
-				Table table = new Table();
-				table.setVisible(true);
+				if (playerOneNameString.length() > 0 && playerTwoNameString.length() > 0)
+				{
+					setVisible(false);
+
+					new LocalPlayerController(playerOneNameString, playerTwoNameString);
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Please insert a valid name!", "Error",
+							JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		btnStartNewGame.setBounds(129, 135, 128, 42);

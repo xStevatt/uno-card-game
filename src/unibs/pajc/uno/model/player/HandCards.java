@@ -23,4 +23,9 @@ public class HandCards
 	{
 		return cardList.size();
 	}
+
+	public ArrayList<Card> getCardList()
+	{
+		return this.cardList;
+	}
 }
