@@ -29,22 +29,20 @@ public class LocalPlayerController
 	{
 		int turn = new Random().nextInt(1);
 
-		while (!model.isGameOver())
+		int i = 0;
+
+		while (i < 3)
 		{
 			if (turn == 0)
 			{
-				disableViewUser(1);
+				gameView.disableViewPlayer(1);
 			}
 			else
 			{
-				disableViewUser(0);
+				gameView.disableViewPlayer(0);
 			}
+			i++;
 		}
-	}
-
-	public void disableViewUser(int playerIndex)
-	{
-
 	}
 
 	public void updateView(Player playerOne, Player playerTwo)

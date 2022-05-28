@@ -2,6 +2,7 @@ package unibs.pajc.uno.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -12,11 +13,13 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
@@ -57,6 +60,8 @@ public class TableView extends JFrame
 
 	private JButton sayUnoButtonPlayerTwo;
 	private JButton sayUnoButtonPlayerOne;
+	private JLabel lblNewLabel;
+	private JLabel matchDescriptor;
 
 	/**
 	 * Constructor to create the form.
@@ -162,9 +167,7 @@ public class TableView extends JFrame
 		midTable.add(panelDeck);
 		panelDeck.setOpaque(false);
 
-		panelDeck.
-
-				panelDeck.add(new CardBackView());
+		panelDeck.add(new CardBackView());
 
 		panelPlaced = new JPanel();
 		// +5 is due to card's border
@@ -201,19 +204,36 @@ public class TableView extends JFrame
 		panelChat.add(separator);
 
 		JPanel panel_1 = new JPanel();
+		panel_1.setBorder(new LineBorder(Color.DARK_GRAY));
 		panel_1.setBounds(966, 6, 249, 124);
 		contentPane.add(panel_1);
+		panel_1.setLayout(null);
+
+		lblNewLabel = new JLabel("Uno Game");
+		lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(6, 14, 237, 23);
+		panel_1.add(lblNewLabel);
+
+		matchDescriptor = new JLabel(namePlayerOne + " vs " + namePlayerTwo);
+		matchDescriptor.setHorizontalAlignment(SwingConstants.CENTER);
+		matchDescriptor.setBounds(16, 66, 227, 52);
+		panel_1.add(matchDescriptor);
+
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(16, 49, 227, 12);
+		panel_1.add(separator_1);
 	}
 
 	public void disableViewPlayer(int index)
 	{
 		if (index == 0)
 		{
-
+			panelActualPlayer.setFocusable(false);
 		}
 		else
 		{
-
+			panelAdversaryPlayer.setFocusable(false);
 		}
 	}
 
@@ -221,11 +241,11 @@ public class TableView extends JFrame
 	{
 		if (index == 0)
 		{
-
+			panelActualPlayer.setFocusable(true);
 		}
 		else
 		{
-
+			panelAdversaryPlayer.setFocusable(true);
 		}
 	}
 
