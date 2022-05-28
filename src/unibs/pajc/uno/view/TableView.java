@@ -267,6 +267,10 @@ public class TableView extends JFrame
 		timer.start();
 	}
 
+	/**
+	 * 
+	 * @param index
+	 */
 	public void disableViewPlayer(int index)
 	{
 		if (index == 0)
@@ -274,7 +278,6 @@ public class TableView extends JFrame
 			System.out.println(handCardsViewActual.getComponentCount());
 			for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
 			{
-				System.out.println("Here...");
 				((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(false);
 			}
 		}
@@ -283,19 +286,21 @@ public class TableView extends JFrame
 		{
 			for (int i = 0; i < handCardsViewAdversary.getComponentCount(); i++)
 			{
-				System.out.println("Changing cards");
 				((CardView) handCardsViewAdversary.getComponent(i)).setShouldAnimationsMove(false);
 			}
 		}
 	}
 
+	/**
+	 * 
+	 * @param index
+	 */
 	public void enableViewPlayer(int index)
 	{
 		if (index == 0)
 		{
 			for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
 			{
-				System.out.println("Here...");
 				((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(true);
 			}
 		}
@@ -304,7 +309,6 @@ public class TableView extends JFrame
 		{
 			for (int i = 0; i < handCardsViewAdversary.getComponentCount(); i++)
 			{
-				System.out.println("Changing cards");
 				((CardView) handCardsViewAdversary.getComponent(i)).setShouldAnimationsMove(true);
 			}
 		}
