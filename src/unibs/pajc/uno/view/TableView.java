@@ -215,6 +215,16 @@ public class TableView extends JFrame
 	}
 
 	/**
+	 * Replaces the cards dropped on the table
+	 * 
+	 * @param card
+	 */
+	public void changeDroppedCardView(Card card)
+	{
+		panelPlaced.add(new CardView(card));
+	}
+
+	/**
 	 * 
 	 * Method to load all cards.
 	 * 
@@ -234,6 +244,7 @@ public class TableView extends JFrame
 	}
 
 	/**
+	 * Method to add cards of the players
 	 * 
 	 * @param handCards
 	 * @param panelToAddCards
@@ -283,6 +294,7 @@ public class TableView extends JFrame
 	}
 
 	/**
+	 * Calculates the offset to set cards
 	 * 
 	 * @param width
 	 * @param totalCards

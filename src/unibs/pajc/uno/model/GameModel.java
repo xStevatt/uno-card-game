@@ -2,6 +2,7 @@ package unibs.pajc.uno.model;
 
 import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardDeck;
+import unibs.pajc.uno.model.card.NumberCard;
 import unibs.pajc.uno.model.card.UsedPile;
 import unibs.pajc.uno.model.card.WildCard;
 import unibs.pajc.uno.model.player.Player;
@@ -72,9 +73,24 @@ public class GameModel
 	/**
 	 * 
 	 */
-	public void determineEffectsOfCard()
+	public void determineEffectsOfCard(Card card, int index)
 	{
+		switch (card.getCardType())
+		{
+		case NUMBER:
 
+			break;
+		case WILD_COLOR:
+			break;
+		case WILD_DRAW_FOUR:
+			break;
+		case WILD_DRAW_TWO:
+			break;
+		case SKIP:
+			break;
+		case REVERSE:
+			break;
+		}
 	}
 
 	/**
@@ -94,7 +110,12 @@ public class GameModel
 		}
 		else
 		{
-			if (usedCards.getLastCardUsed().getCardColor() == card.getCardColor())
+			if ((usedCards.getLastCardUsed().getCardColor() == card.getCardColor()))
+			{
+				return isCardValid;
+			}
+			else if ((card instanceof NumberCard && usedCards.getLastCardUsed() instanceof NumberCard)
+					&& ((NumberCard) card).getValue() == ((NumberCard) usedCards.getLastCardUsed()).getValue())
 			{
 				return isCardValid;
 			}

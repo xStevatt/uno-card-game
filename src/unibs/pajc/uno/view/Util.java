@@ -71,7 +71,7 @@ public class Util
 		{
 			return REVERSE_CHAR.toString();
 		}
-		case DRAW_TWO ->
+		case WILD_DRAW_TWO ->
 		{
 			return "2+";
 		}

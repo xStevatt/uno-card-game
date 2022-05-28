@@ -15,6 +15,16 @@ public class Player
 		this.index = index;
 	}
 
+	public boolean removeCard(Card card)
+	{
+		return handCards.getCardList().remove(card);
+	}
+
+	public void addCard()
+	{
+
+	}
+
 	public String getNamePlayer()
 	{
 		return namePlayer;
