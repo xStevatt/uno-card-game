@@ -126,7 +126,7 @@ public class TableView extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-
+				System.out.println("UNO!");
 			}
 		});
 		sayUnoButtonPlayerOne.setVisible(false);
@@ -138,7 +138,7 @@ public class TableView extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-
+				System.out.println("UNO!");
 			}
 		});
 		sayUnoButtonPlayerTwo.setVisible(false);

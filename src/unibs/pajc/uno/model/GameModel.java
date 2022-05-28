@@ -49,6 +49,7 @@ public class GameModel
 		usedCards = new UsedPile();
 
 		cardsDeck.initCardDeck();
+		usedCards.initUsedCardsDeck(Card card);
 	}
 
 	public void initPlayer(String name, Card[] cards)
@@ -78,9 +79,9 @@ public class GameModel
 		switch (card.getCardType())
 		{
 		case NUMBER:
-
 			break;
 		case WILD_COLOR:
+
 			break;
 		case WILD_DRAW_FOUR:
 			break;

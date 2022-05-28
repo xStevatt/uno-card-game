@@ -20,9 +20,9 @@ public class Player
 		return handCards.getCardList().remove(card);
 	}
 
-	public void addCard()
+	public void addCard(Card card)
 	{
-
+		handCards.addCard(card);
 	}
 
 	public String getNamePlayer()

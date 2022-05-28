@@ -13,33 +13,41 @@ public class LocalPlayerController
 	public LocalPlayerController(String playerOneName, String playerTwoName)
 	{
 		model = new GameModel();
+		initModel(playerOneName, playerTwoName);
 
-		Player playerOne = new Player(playerOneName, model.generateStartingCards(), 0);
-		Player playerTwo = new Player(playerTwoName, model.generateStartingCards(), 1);
-
-		model.initPlayer(playerOne);
-		model.initPlayer(playerTwo);
-
-		// Takes a random car out of the deck and puts it in the used card deck
 		Card randomCard = model.getCardsDeck().getRandomCard();
-
 		gameView = new TableView(playerOneName, playerTwoName, randomCard);
-		gameView.setVisible(true);
-		gameView.setResizable(false);
-		;
-		updateView(playerOne, playerTwo);
+		initView();
 
-		runGame();
+		// runGame();
 	}
 
 	public void runGame()
 	{
+		while (!model.isGameOver())
+		{
 
+		}
 	}
 
 	public void updateView(Player playerOne, Player playerTwo)
 	{
 		gameView.loadCards(playerOne.getHandCards(), 0);
 		gameView.loadCards(playerTwo.getHandCards(), 1);
+	}
+
+	public void initModel(String playerOneName, String playerTwoName)
+	{
+		Player playerOne = new Player(playerOneName, model.generateStartingCards(), 0);
+		Player playerTwo = new Player(playerTwoName, model.generateStartingCards(), 1);
+
+		model.initPlayer(playerOne);
+		model.initPlayer(playerTwo);
+	}
+
+	public void initView()
+	{
+		gameView.setVisible(true);
+		gameView.setResizable(false);
 	}
 }

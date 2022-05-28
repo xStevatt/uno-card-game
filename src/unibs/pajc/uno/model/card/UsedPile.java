@@ -6,9 +6,10 @@ public class UsedPile
 {
 	private ArrayList<Card> usedCards;
 
-	public UsedPile()
+	public UsedPile(Card startingCard)
 	{
 		this.usedCards = new ArrayList<>();
+		usedCards.add(startingCard);
 	}
 
 	public void addCard(Card card)

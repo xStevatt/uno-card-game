@@ -16,7 +16,7 @@ public class HandCards
 
 	public void addCard(Card card)
 	{
-
+		cardList.add(card);
 	}
 
 	public Card getCard(int index)
