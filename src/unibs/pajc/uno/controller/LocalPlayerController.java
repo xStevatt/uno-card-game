@@ -25,6 +25,8 @@ public class LocalPlayerController
 
 		gameView = new TableView(playerOneName, playerTwoName, randomCard);
 		gameView.setVisible(true);
+		gameView.setResizable(false);
+		;
 		updateView(playerOne, playerTwo);
 
 		runGame();
@@ -37,7 +39,7 @@ public class LocalPlayerController
 
 	public void updateView(Player playerOne, Player playerTwo)
 	{
-		gameView.loadCards(playerOne.getHandCards());
-		gameView.loadCards(playerTwo.getHandCards());
+		gameView.loadCards(playerOne.getHandCards(), 0);
+		gameView.loadCards(playerTwo.getHandCards(), 1);
 	}
 }

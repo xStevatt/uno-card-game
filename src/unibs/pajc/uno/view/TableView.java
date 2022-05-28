@@ -25,7 +25,6 @@ import javax.swing.border.TitledBorder;
 import unibs.pajc.uno.model.GameRules;
 import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.player.HandCards;
-import unibs.pajc.uno.model.player.Player;
 
 public class TableView extends JFrame
 {
@@ -35,24 +34,25 @@ public class TableView extends JFrame
 
 	// Most important panels (player one cards, player two cards and the center
 	// panel)
-	private JPanel panelPlayerOne;
-	private JPanel panelPlayerTwo;
+	private JPanel panelActualPlayer;
+	private JPanel panelAdversaryPlayer;
 	private JPanel centerPanel;
 
 	private JPanel midTable;
 	private JPanel panelChat;
-	private JTextArea textArea;
-	private JButton btnNewButton;
+	private JPanel panelPlaced;
 	private JPanel panel;
 
-	private JLayeredPane handCardsView;
-	JTextArea textAreaChat;
-	JButton btnSendMessage;
-	JSeparator separator;
+	private JTextArea textArea;
+	private JButton btnNewButton;
 
-	JButton sayUnoButtonPlayerTwo;
-	JButton sayUnoButtonPlayerOne;
-	private JPanel panelPlaced;
+	private JLayeredPane handCardsView;
+	private JTextArea textAreaChat;
+	private JButton btnSendMessage;
+	private JSeparator separator;
+
+	private JButton sayUnoButtonPlayerTwo;
+	private JButton sayUnoButtonPlayerOne;
 
 	/**
 	 * Constructor to create the form.
@@ -89,24 +89,24 @@ public class TableView extends JFrame
 		contentPane.add(centerPanel);
 		centerPanel.setLayout(null);
 
-		panelPlayerOne = new JPanel();
-		panelPlayerOne
+		panelActualPlayer = new JPanel();
+		panelActualPlayer
 				.setBorder(new TitledBorder(null, namePlayerOne, TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelPlayerOne.setBounds(6, 454, 936, 200);
-		panelPlayerOne.setOpaque(false);
+		panelActualPlayer.setBounds(6, 454, 936, 200);
+		panelActualPlayer.setOpaque(false);
 
 		handCardsView = new JLayeredPane();
 		handCardsView.setPreferredSize(new Dimension(600, 175));
 		handCardsView.setOpaque(false);
 
-		centerPanel.add(panelPlayerOne);
+		centerPanel.add(panelActualPlayer);
 
-		panelPlayerTwo = new JPanel();
-		panelPlayerTwo.setOpaque(false);
-		panelPlayerTwo
+		panelAdversaryPlayer = new JPanel();
+		panelAdversaryPlayer.setOpaque(false);
+		panelAdversaryPlayer
 				.setBorder(new TitledBorder(null, namePlayerTwo, TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelPlayerTwo.setBounds(6, 6, 936, 200);
-		centerPanel.add(panelPlayerTwo);
+		panelAdversaryPlayer.setBounds(6, 6, 936, 200);
+		centerPanel.add(panelAdversaryPlayer);
 
 		midTable = new JPanel();
 		midTable.setOpaque(false);
@@ -157,7 +157,7 @@ public class TableView extends JFrame
 		panelChat = new JPanel();
 		panelChat.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Chat",
 				TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelChat.setBounds(966, 6, 249, 660);
+		panelChat.setBounds(966, 141, 249, 525);
 		contentPane.add(panelChat);
 		panelChat.setLayout(null);
 
@@ -165,25 +165,31 @@ public class TableView extends JFrame
 		textAreaChat.setLineWrap(true);
 		textAreaChat.setEditable(false);
 		textAreaChat.setRows(1);
-		textAreaChat.setBounds(16, 32, 216, 523);
+		textAreaChat.setBounds(16, 31, 216, 395);
 		panelChat.add(textAreaChat);
 
 		btnSendMessage = new JButton("Send");
-		btnSendMessage.setBounds(159, 595, 73, 37);
+		btnSendMessage.setBounds(159, 472, 73, 37);
 		panelChat.add(btnSendMessage);
 
 		txtSendMessageField = new JTextField();
-		txtSendMessageField.setBounds(17, 591, 130, 43);
+		txtSendMessageField.setBounds(17, 468, 130, 43);
 		panelChat.add(txtSendMessageField);
 		txtSendMessageField.setColumns(10);
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(16, 567, 216, 12);
+		separator.setBounds(16, 444, 216, 12);
 		panelChat.add(separator);
+
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(966, 6, 249, 124);
+		contentPane.add(panel_1);
 	}
 
 	/**
-	 * 
+	 * Sets "say uno" buttons invisible. "say uno" buttons are visible only when a
+	 * player only has one card left. If the user doesn't say "uno" (doesn't press
+	 * the button), two cards are added to his hand.
 	 */
 	public void makeSayUnoButtonVisibile()
 	{
@@ -192,7 +198,9 @@ public class TableView extends JFrame
 	}
 
 	/**
-	 * 
+	 * Sets "say uno" buttons invisible. "say uno" buttons are visible only when a
+	 * player only has one card left. If the user doesn't say "uno" (doesn't press
+	 * the button), two cards are added to his hand.
 	 */
 	public void makeSayUnoButtonInvisible()
 	{
@@ -202,9 +210,29 @@ public class TableView extends JFrame
 
 	/**
 	 * 
+	 * Method to load all cards.
+	 * 
 	 * @param handCards
+	 * @param players
 	 */
-	public void loadCards(HandCards handCards)
+	public void loadCards(HandCards cards, int playingPlayer)
+	{
+		if (playingPlayer == 0)
+		{
+			addCardsToView(cards, panelActualPlayer);
+		}
+		else
+		{
+			addCardsToView(cards, panelAdversaryPlayer);
+		}
+	}
+
+	/**
+	 * 
+	 * @param handCards
+	 * @param panelToAddCards
+	 */
+	public void addCardsToView(HandCards handCards, JPanel panelToAddCards)
 	{
 		handCardsView.removeAll();
 
@@ -226,7 +254,7 @@ public class TableView extends JFrame
 		}
 
 		handCardsView.revalidate();
-		panelPlayerOne.add(handCardsView);
+		panelToAddCards.add(handCardsView);
 	}
 
 	/**
@@ -268,19 +296,9 @@ public class TableView extends JFrame
 
 	/**
 	 * 
-	 * @param handCards
-	 * @param players
-	 */
-	public void loadCards(Player[] players)
-	{
-
-	}
-
-	/**
-	 * 
 	 */
 	public void addCardToView()
 	{
-		panelPlayerOne.add(new CardBackView());
+
 	}
 }
