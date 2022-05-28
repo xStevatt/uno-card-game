@@ -1,7 +1,8 @@
 package unibs.pajc.uno.controller;
 
+import java.util.Random;
+
 import unibs.pajc.uno.model.GameModel;
-import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.view.TableView;
 
@@ -12,22 +13,38 @@ public class LocalPlayerController
 
 	public LocalPlayerController(String playerOneName, String playerTwoName)
 	{
+		// INITS MODEL
 		model = new GameModel();
 		initModel(playerOneName, playerTwoName);
 
-		Card randomCard = model.getCardsDeck().getRandomCard();
-		gameView = new TableView(playerOneName, playerTwoName, randomCard);
+		// INITS VIEW
+		gameView = new TableView(playerOneName, playerTwoName, model.getUsedCards().getLastCardUsed());
 		initView();
 
+		// START RUNNING GAME
 		// runGame();
 	}
 
 	public void runGame()
 	{
+		int turn = new Random().nextInt(1);
+
 		while (!model.isGameOver())
 		{
-
+			if (turn == 0)
+			{
+				disableViewUser(1);
+			}
+			else
+			{
+				disableViewUser(0);
+			}
 		}
+	}
+
+	public void disableViewUser(int playerIndex)
+	{
+
 	}
 
 	public void updateView(Player playerOne, Player playerTwo)
@@ -49,5 +66,7 @@ public class LocalPlayerController
 	{
 		gameView.setVisible(true);
 		gameView.setResizable(false);
+		gameView.loadCards(model.getPlayers()[0].getHandCards(), 0);
+		gameView.loadCards(model.getPlayers()[0].getHandCards(), 1);
 	}
 }

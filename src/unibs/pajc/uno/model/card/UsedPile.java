@@ -19,6 +19,6 @@ public class UsedPile
 
 	public Card getLastCardUsed()
 	{
-		return usedCards.get(usedCards.size());
+		return usedCards.get(usedCards.size() - 1);
 	}
 }

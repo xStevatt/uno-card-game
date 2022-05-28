@@ -33,6 +33,7 @@ public class GameModel
 	 */
 	public GameModel()
 	{
+		this.maxNumberOfPlayers = GameRules.DEFAULT_NUMBER_OF_PLAYERS;
 		players = new Player[GameRules.DEFAULT_NUMBER_OF_PLAYERS];
 		initGameElements();
 	}
@@ -46,10 +47,9 @@ public class GameModel
 	public void initGameElements()
 	{
 		cardsDeck = new CardDeck();
-		usedCards = new UsedPile();
-
 		cardsDeck.initCardDeck();
-		usedCards.initUsedCardsDeck(Card card);
+
+		usedCards = new UsedPile(cardsDeck.getRandomCard());
 	}
 
 	public void initPlayer(String name, Card[] cards)
@@ -68,6 +68,7 @@ public class GameModel
 		{
 			players[numberOfPlayers] = player;
 			numberOfPlayers++;
+			System.out.print("Player added: " + player.getNamePlayer() + " , index: " + numberOfPlayers);
 		}
 	}
 

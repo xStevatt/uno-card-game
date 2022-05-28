@@ -3,6 +3,7 @@ package unibs.pajc.uno.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -42,6 +43,7 @@ public class TableView extends JFrame
 	private JPanel panelChat;
 	private JPanel panelPlaced;
 	private JPanel panel;
+	private JPanel panelDeck;
 
 	private JTextArea textArea;
 	private JButton btnNewButton;
@@ -96,14 +98,16 @@ public class TableView extends JFrame
 				.setBorder(new TitledBorder(null, namePlayerOne, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelActualPlayer.setBounds(6, 454, 936, 200);
 		panelActualPlayer.setOpaque(false);
+		panelActualPlayer.setLayout(new GridBagLayout());
 
 		handCardsViewActual = new JLayeredPane();
-		handCardsViewActual.setPreferredSize(new Dimension(600, 175));
+		handCardsViewActual.setPreferredSize(new Dimension(920, 175));
 		handCardsViewActual.setOpaque(false);
 
 		handCardsViewAdversary = new JLayeredPane();
-		handCardsViewAdversary.setPreferredSize(new Dimension(600, 175));
+		handCardsViewAdversary.setPreferredSize(new Dimension(920, 175));
 		handCardsViewAdversary.setOpaque(false);
+		panelActualPlayer.setLayout(new GridBagLayout());
 
 		centerPanel.add(panelActualPlayer);
 
@@ -112,7 +116,14 @@ public class TableView extends JFrame
 		panelAdversaryPlayer
 				.setBorder(new TitledBorder(null, namePlayerTwo, TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panelAdversaryPlayer.setBounds(6, 6, 936, 200);
+
 		centerPanel.add(panelAdversaryPlayer);
+		GridBagLayout gbl_panelAdversaryPlayer = new GridBagLayout();
+		gbl_panelAdversaryPlayer.columnWidths = new int[] { 0 };
+		gbl_panelAdversaryPlayer.rowHeights = new int[] { 0 };
+		gbl_panelAdversaryPlayer.columnWeights = new double[] { Double.MIN_VALUE };
+		gbl_panelAdversaryPlayer.rowWeights = new double[] { Double.MIN_VALUE };
+		panelAdversaryPlayer.setLayout(gbl_panelAdversaryPlayer);
 
 		midTable = new JPanel();
 		midTable.setOpaque(false);
@@ -145,13 +156,15 @@ public class TableView extends JFrame
 		sayUnoButtonPlayerTwo.setBounds(6, 6, 135, 39);
 		midTable.add(sayUnoButtonPlayerTwo);
 
-		JPanel panelDeck = new JPanel();
+		panelDeck = new JPanel();
 		// +5 is due to card's border
 		panelDeck.setBounds(331, 30, 100 + 5, 150 + 5);
 		midTable.add(panelDeck);
 		panelDeck.setOpaque(false);
 
-		panelDeck.add(new CardBackView());
+		panelDeck.
+
+				panelDeck.add(new CardBackView());
 
 		panelPlaced = new JPanel();
 		// +5 is due to card's border
@@ -190,6 +203,30 @@ public class TableView extends JFrame
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(966, 6, 249, 124);
 		contentPane.add(panel_1);
+	}
+
+	public void disableViewPlayer(int index)
+	{
+		if (index == 0)
+		{
+
+		}
+		else
+		{
+
+		}
+	}
+
+	public void enableViewPlayer(int index)
+	{
+		if (index == 0)
+		{
+
+		}
+		else
+		{
+
+		}
 	}
 
 	/**
@@ -258,9 +295,9 @@ public class TableView extends JFrame
 
 		int i = 0;
 
-		for (var card : handCards.getCardList())
+		for (Card card : handCards.getCardList())
 		{
-			var cardView = new CardView(card);
+			CardView cardView = new CardView(card);
 
 			cardView.setBounds(originPoint.x, originPoint.y, cardView.getDimension().width,
 					cardView.getDimension().height);
@@ -302,13 +339,94 @@ public class TableView extends JFrame
 	 */
 	private int calculateOffset(int width, int totalCards)
 	{
+		// OFFSET MASSIMO
 		if (totalCards <= GameRules.DEFAULT_NUMBER_OF_CARDS)
 		{
-			return 71;
+			return 80;
 		}
 		else
 		{
 			return (width - 100) / (totalCards - 1);
 		}
+	}
+
+	public JPanel getMidTable()
+	{
+		return midTable;
+	}
+
+	public void setMidTable(JPanel midTable)
+	{
+		this.midTable = midTable;
+	}
+
+	public JPanel getPanelPlaced()
+	{
+		return panelPlaced;
+	}
+
+	public void setPanelPlaced(JPanel panelPlaced)
+	{
+		this.panelPlaced = panelPlaced;
+	}
+
+	public JPanel getPanelDeck()
+	{
+		return panelDeck;
+	}
+
+	public void setPanelDeck(JPanel panelDeck)
+	{
+		this.panelDeck = panelDeck;
+	}
+
+	public JLayeredPane getHandCardsViewActual()
+	{
+		return handCardsViewActual;
+	}
+
+	public void setHandCardsViewActual(JLayeredPane handCardsViewActual)
+	{
+		this.handCardsViewActual = handCardsViewActual;
+	}
+
+	public JLayeredPane getHandCardsViewAdversary()
+	{
+		return handCardsViewAdversary;
+	}
+
+	public void setHandCardsViewAdversary(JLayeredPane handCardsViewAdversary)
+	{
+		this.handCardsViewAdversary = handCardsViewAdversary;
+	}
+
+	public JButton getBtnSendMessage()
+	{
+		return btnSendMessage;
+	}
+
+	public void setBtnSendMessage(JButton btnSendMessage)
+	{
+		this.btnSendMessage = btnSendMessage;
+	}
+
+	public JButton getSayUnoButtonPlayerTwo()
+	{
+		return sayUnoButtonPlayerTwo;
+	}
+
+	public void setSayUnoButtonPlayerTwo(JButton sayUnoButtonPlayerTwo)
+	{
+		this.sayUnoButtonPlayerTwo = sayUnoButtonPlayerTwo;
+	}
+
+	public JButton getSayUnoButtonPlayerOne()
+	{
+		return sayUnoButtonPlayerOne;
+	}
+
+	public void setSayUnoButtonPlayerOne(JButton sayUnoButtonPlayerOne)
+	{
+		this.sayUnoButtonPlayerOne = sayUnoButtonPlayerOne;
 	}
 }
