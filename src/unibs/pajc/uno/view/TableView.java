@@ -46,7 +46,9 @@ public class TableView extends JFrame
 	private JTextArea textArea;
 	private JButton btnNewButton;
 
-	private JLayeredPane handCardsView;
+	private JLayeredPane handCardsViewActual;
+	private JLayeredPane handCardsViewAdversary;
+
 	private JTextArea textAreaChat;
 	private JButton btnSendMessage;
 	private JSeparator separator;
@@ -95,9 +97,13 @@ public class TableView extends JFrame
 		panelActualPlayer.setBounds(6, 454, 936, 200);
 		panelActualPlayer.setOpaque(false);
 
-		handCardsView = new JLayeredPane();
-		handCardsView.setPreferredSize(new Dimension(600, 175));
-		handCardsView.setOpaque(false);
+		handCardsViewActual = new JLayeredPane();
+		handCardsViewActual.setPreferredSize(new Dimension(600, 175));
+		handCardsViewActual.setOpaque(false);
+
+		handCardsViewAdversary = new JLayeredPane();
+		handCardsViewAdversary.setPreferredSize(new Dimension(600, 175));
+		handCardsViewAdversary.setOpaque(false);
 
 		centerPanel.add(panelActualPlayer);
 
@@ -219,11 +225,11 @@ public class TableView extends JFrame
 	{
 		if (playingPlayer == 0)
 		{
-			addCardsToView(cards, panelActualPlayer);
+			addCardsToView(cards, panelActualPlayer, handCardsViewActual);
 		}
-		else
+		if (playingPlayer == 1)
 		{
-			addCardsToView(cards, panelAdversaryPlayer);
+			addCardsToView(cards, panelAdversaryPlayer, handCardsViewAdversary);
 		}
 	}
 
@@ -232,12 +238,12 @@ public class TableView extends JFrame
 	 * @param handCards
 	 * @param panelToAddCards
 	 */
-	public void addCardsToView(HandCards handCards, JPanel panelToAddCards)
+	public void addCardsToView(HandCards handCards, JPanel panelToAddCards, JLayeredPane cardsView)
 	{
-		handCardsView.removeAll();
+		cardsView.removeAll();
 
-		Point originPoint = getFirstCardPoint(handCards.getNumberOfCards());
-		int offset = calculateOffset(handCardsView.getWidth(), handCards.getNumberOfCards());
+		Point originPoint = getFirstCardPoint(handCards.getNumberOfCards(), cardsView);
+		int offset = calculateOffset(cardsView.getWidth(), handCards.getNumberOfCards());
 
 		int i = 0;
 
@@ -247,14 +253,14 @@ public class TableView extends JFrame
 
 			cardView.setBounds(originPoint.x, originPoint.y, cardView.getDimension().width,
 					cardView.getDimension().height);
-			handCardsView.add(cardView, i++);
-			handCardsView.moveToFront(cardView);
+			cardsView.add(cardView, i++);
+			cardsView.moveToFront(cardView);
 
 			originPoint.x += offset;
 		}
 
-		handCardsView.revalidate();
-		panelToAddCards.add(handCardsView);
+		cardsView.revalidate();
+		panelToAddCards.add(cardsView);
 	}
 
 	/**
@@ -262,7 +268,7 @@ public class TableView extends JFrame
 	 * @param totalCards
 	 * @return
 	 */
-	private Point getFirstCardPoint(int totalCards)
+	private Point getFirstCardPoint(int totalCards, JLayeredPane handCardsView)
 	{
 		Point p = new Point(0, 20);
 		if (totalCards < GameRules.DEFAULT_NUMBER_OF_CARDS)
@@ -292,13 +298,5 @@ public class TableView extends JFrame
 		{
 			return (width - 100) / (totalCards - 1);
 		}
-	}
-
-	/**
-	 * 
-	 */
-	public void addCardToView()
-	{
-
 	}
 }
