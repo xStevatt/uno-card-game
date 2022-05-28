@@ -33,6 +33,9 @@ public class CardBackView extends JPanel
 		return dimension;
 	}
 
+	/**
+	 * 
+	 */
 	private void initView()
 	{
 		setPreferredSize(dimension);
@@ -50,6 +53,11 @@ public class CardBackView extends JPanel
 		drawWhiteOvalInCenter(g2);
 	}
 
+	/**
+	 * 
+	 * @param g2
+	 * @param cardColor
+	 */
 	private void fillBackground(Graphics2D g2, Color cardColor)
 	{
 		g2.setColor(Color.BLACK);
@@ -59,6 +67,10 @@ public class CardBackView extends JPanel
 		g2.fillRect(margin, margin, cardWidth - 2 * margin, cardHeight - 2 * margin);
 	}
 
+	/**
+	 * 
+	 * @param g2
+	 */
 	private void drawWhiteOvalInCenter(Graphics2D g2)
 	{
 		var transformer = g2.getTransform();

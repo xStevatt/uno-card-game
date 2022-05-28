@@ -20,6 +20,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
@@ -62,6 +63,8 @@ public class TableView extends JFrame
 	private JButton sayUnoButtonPlayerOne;
 	private JLabel lblNewLabel;
 	private JLabel matchDescriptor;
+
+	private JLabel lblStopWatch;
 
 	private boolean isGameLocal = true;
 
@@ -219,21 +222,59 @@ public class TableView extends JFrame
 
 		matchDescriptor = new JLabel(namePlayerOne + " vs " + namePlayerTwo);
 		matchDescriptor.setHorizontalAlignment(SwingConstants.CENTER);
-		matchDescriptor.setBounds(16, 66, 227, 52);
+		matchDescriptor.setBounds(16, 66, 227, 16);
 		panel_1.add(matchDescriptor);
 
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(16, 49, 227, 12);
 		panel_1.add(separator_1);
+
+		lblStopWatch = new JLabel("00:00:00");
+		lblStopWatch.setHorizontalAlignment(SwingConstants.CENTER);
+		lblStopWatch.setBounds(6, 94, 237, 16);
+		panel_1.add(lblStopWatch);
+
+		initTimer();
+	}
+
+	public void initTimer()
+	{
+		Timer timer = new Timer(1000, new ActionListener()
+		{
+			int elapsedTime = 0;
+			int seconds = 0;
+			int minutes = 0;
+			int hours = 0;
+
+			String seconds_string = String.format("%02d", seconds);
+			String minutes_string = String.format("%02d", minutes);
+			String hours_string = String.format("%02d", hours);
+
+			public void actionPerformed(ActionEvent e)
+			{
+				elapsedTime = elapsedTime + 1000;
+				hours = (elapsedTime / 3600000);
+				minutes = (elapsedTime / 60000) % 60;
+				seconds = (elapsedTime / 1000) % 60;
+				seconds_string = String.format("%02d", seconds);
+				minutes_string = String.format("%02d", minutes);
+				hours_string = String.format("%02d", hours);
+				lblStopWatch.setText(hours_string + ":" + minutes_string + ":" + seconds_string);
+			}
+		});
+
+		timer.setCoalesce(true);
+		timer.start();
 	}
 
 	public void disableViewPlayer(int index)
 	{
 		if (index == 0)
 		{
+			System.out.println(handCardsViewActual.getComponentCount());
 			for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
 			{
-				System.out.println("Changing cards");
+				System.out.println("Here...");
 				((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(false);
 			}
 		}
@@ -250,7 +291,23 @@ public class TableView extends JFrame
 
 	public void enableViewPlayer(int index)
 	{
+		if (index == 0)
+		{
+			for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
+			{
+				System.out.println("Here...");
+				((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(true);
+			}
+		}
 
+		if (index == 1)
+		{
+			for (int i = 0; i < handCardsViewAdversary.getComponentCount(); i++)
+			{
+				System.out.println("Changing cards");
+				((CardView) handCardsViewAdversary.getComponent(i)).setShouldAnimationsMove(true);
+			}
+		}
 	}
 
 	/**

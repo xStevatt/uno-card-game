@@ -1,5 +1,7 @@
 package unibs.pajc.uno.model;
 
+import java.util.ArrayList;
+
 import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardDeck;
 import unibs.pajc.uno.model.card.NumberCard;
@@ -11,9 +13,11 @@ public class GameModel
 {
 	private CardDeck cardsDeck;
 	private UsedPile usedCards;
-	private Player players[];
+
+	private ArrayList<Player> players;
+	private int numberOfPlayers;
 	private int maxNumberOfPlayers;
-	private int numberOfPlayers = 0;
+
 	private boolean gameOver = false;
 
 	/**
@@ -24,7 +28,7 @@ public class GameModel
 	public GameModel(int maxNumberOfPlayers)
 	{
 		this.maxNumberOfPlayers = maxNumberOfPlayers;
-		players = new Player[maxNumberOfPlayers];
+		players = new ArrayList<Player>(maxNumberOfPlayers);
 		initGameElements();
 	}
 
@@ -34,7 +38,7 @@ public class GameModel
 	public GameModel()
 	{
 		this.maxNumberOfPlayers = GameRules.DEFAULT_NUMBER_OF_PLAYERS;
-		players = new Player[GameRules.DEFAULT_NUMBER_OF_PLAYERS];
+		players = new ArrayList<Player>(maxNumberOfPlayers);
 		initGameElements();
 	}
 
@@ -54,22 +58,14 @@ public class GameModel
 
 	public void initPlayer(String name, Card[] cards)
 	{
-		if (numberOfPlayers < maxNumberOfPlayers - 1)
-		{
-			players[numberOfPlayers] = new Player(name, cards, numberOfPlayers);
-			numberOfPlayers++;
-			System.out.println("Player added");
-		}
+		players.add(new Player(name, cards, numberOfPlayers));
+		numberOfPlayers++;
 	}
 
 	public void initPlayer(Player player)
 	{
-		if (numberOfPlayers < maxNumberOfPlayers - 1)
-		{
-			players[numberOfPlayers] = player;
-			numberOfPlayers++;
-			System.out.print("Player added: " + player.getNamePlayer() + " , index: " + numberOfPlayers);
-		}
+		players.add(player);
+		numberOfPlayers++;
 	}
 
 	/**
@@ -151,7 +147,7 @@ public class GameModel
 	{
 		for (int i = 0; i < numberOfPlayers; i++)
 		{
-			if (players[i].getHandCards().getNumberOfCards() == 0)
+			if (players.get(i).getHandCards().getNumberOfCards() == 0)
 			{
 				this.gameOver = true;
 			}
@@ -230,12 +226,12 @@ public class GameModel
 		this.usedCards = usedCards;
 	}
 
-	public Player[] getPlayers()
+	public ArrayList<Player> getPlayers()
 	{
 		return players;
 	}
 
-	public void setPlayers(Player[] players)
+	public void setPlayers(ArrayList<Player> players)
 	{
 		this.players = players;
 	}

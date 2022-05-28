@@ -27,36 +27,45 @@ public class LocalPlayerController
 
 	public void runGame()
 	{
-		int turn = new Random().nextInt(1);
-
-		while (!model.isGameOver())
+		new Thread(new Runnable()
 		{
-			if (turn == 0)
+			@Override
+			public void run()
 			{
-				gameView.disableViewPlayer(1);
+				int turn = new Random().nextInt(1);
 
-				try
+				while (!model.isGameOver())
 				{
+					if (turn == 0)
+					{
+						gameView.disableViewPlayer(1);
+					}
+					else
+					{
+						gameView.disableViewPlayer(0);
+					}
 
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
+					try
+					{
+						Thread.sleep(10000);
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					if (turn == 0)
+						turn = 1;
+					else
+						turn = 0;
+
+					gameView.enableViewPlayer(0);
+					gameView.enableViewPlayer(1);
+					updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 				}
 			}
-			else
-			{
-				gameView.disableViewPlayer(0);
-			}
-
-			updateView(model.getPlayers()[0], model.getPlayers()[1]);
-		}
-	}
-
-	public void updateView(Player playerOne, Player playerTwo)
-	{
-		gameView.loadCards(playerOne.getHandCards(), 0);
-		gameView.loadCards(playerTwo.getHandCards(), 1);
+		}).start();
 	}
 
 	public void initModel(String playerOneName, String playerTwoName)
@@ -68,11 +77,17 @@ public class LocalPlayerController
 		model.initPlayer(playerTwo);
 	}
 
+	public void updateView(Player playerOne, Player playerTwo)
+	{
+		gameView.loadCards(playerOne.getHandCards(), 0);
+		gameView.loadCards(playerTwo.getHandCards(), 1);
+	}
+
 	public void initView()
 	{
 		gameView.setVisible(true);
 		gameView.setResizable(false);
-		gameView.loadCards(model.getPlayers()[0].getHandCards(), 0);
-		gameView.loadCards(model.getPlayers()[0].getHandCards(), 1);
+		gameView.loadCards(model.getPlayers().get(0).getHandCards(), 0);
+		gameView.loadCards(model.getPlayers().get(1).getHandCards(), 1);
 	}
 }
