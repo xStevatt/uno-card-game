@@ -1,7 +1,5 @@
 package unibs.pajc.uno.controller;
 
-import java.util.Random;
-
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.view.TableView;
@@ -22,27 +20,18 @@ public class LocalPlayerController
 		initView();
 
 		// START RUNNING GAME
-		// runGame();
+		runGame();
 	}
 
 	public void runGame()
 	{
-		int turn = new Random().nextInt(1);
+		// int turn = new Random().nextInt(1);
+
+		int turn = 1;
 
 		int i = 0;
 
-		while (i < 3)
-		{
-			if (turn == 0)
-			{
-				gameView.disableViewPlayer(1);
-			}
-			else
-			{
-				gameView.disableViewPlayer(0);
-			}
-			i++;
-		}
+		gameView.disableViewPlayer(turn);
 	}
 
 	public void updateView(Player playerOne, Player playerTwo)

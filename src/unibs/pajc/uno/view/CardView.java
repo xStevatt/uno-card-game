@@ -26,6 +26,8 @@ public class CardView extends JPanel
 	private final int cardHeight = 150;
 	private static final int margin = 5;
 
+	private boolean shouldAnimationsMove = true;
+
 	private final Dimension dimension = new Dimension(cardWidth, cardHeight);
 
 	private final Border defaultBorder = BorderFactory.createEtchedBorder(JComponent.WHEN_FOCUSED, Color.white,
@@ -144,17 +146,33 @@ public class CardView extends JPanel
 	{
 		setBorder(focusedBorder);
 
-		Point p = getLocation();
-		p.y -= 20;
-		setLocation(p);
+		if (shouldAnimationsMove)
+		{
+			Point p = getLocation();
+			p.y -= 20;
+			setLocation(p);
+		}
 	}
 
 	private void removeHoverEffect()
 	{
 		setBorder(defaultBorder);
 
-		Point p = getLocation();
-		p.y += 20;
-		setLocation(p);
+		if (shouldAnimationsMove)
+		{
+			Point p = getLocation();
+			p.y += 20;
+			setLocation(p);
+		}
+	}
+
+	public boolean isShouldAnimationsMove()
+	{
+		return shouldAnimationsMove;
+	}
+
+	public void setShouldAnimationsMove(boolean shouldAnimationsMove)
+	{
+		this.shouldAnimationsMove = shouldAnimationsMove;
 	}
 }

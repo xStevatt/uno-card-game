@@ -229,24 +229,26 @@ public class TableView extends JFrame
 	{
 		if (index == 0)
 		{
-			panelActualPlayer.setFocusable(false);
+			for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
+			{
+				System.out.println("Changing cards");
+				((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(false);
+			}
 		}
-		else
+
+		if (index == 1)
 		{
-			panelAdversaryPlayer.setFocusable(false);
+			for (int i = 0; i < handCardsViewAdversary.getComponentCount(); i++)
+			{
+				System.out.println("Changing cards");
+				((CardView) handCardsViewAdversary.getComponent(i)).setShouldAnimationsMove(false);
+			}
 		}
 	}
 
 	public void enableViewPlayer(int index)
 	{
-		if (index == 0)
-		{
-			panelActualPlayer.setFocusable(true);
-		}
-		else
-		{
-			panelAdversaryPlayer.setFocusable(true);
-		}
+
 	}
 
 	/**
@@ -369,6 +371,8 @@ public class TableView extends JFrame
 			return (width - 100) / (totalCards - 1);
 		}
 	}
+
+	// GETTING AND SETTERS
 
 	public JPanel getMidTable()
 	{
