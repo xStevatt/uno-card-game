@@ -63,6 +63,8 @@ public class TableView extends JFrame
 	private JLabel lblNewLabel;
 	private JLabel matchDescriptor;
 
+	private boolean isGameLocal = true;
+
 	/**
 	 * Constructor to create the form.
 	 * 
