@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
-public class WrongInput extends JDialog
+public class DialogWrongInput extends JDialog
 {
 
 	private final JPanel contentPanel = new JPanel();
@@ -19,7 +19,7 @@ public class WrongInput extends JDialog
 	/**
 	 * Create the dialog.
 	 */
-	public WrongInput()
+	public DialogWrongInput()
 	{
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());

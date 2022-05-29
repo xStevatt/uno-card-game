@@ -33,7 +33,7 @@ public class ServerController
 	 * @param IP_ADDRESS
 	 * @param PORT
 	 */
-	public ServerController(TableView view, GameModel model, String IP_ADDRESS, int PORT)
+	public ServerController(String IP_ADDRESS, int PORT)
 	{
 		this.model = model;
 		this.view = view;

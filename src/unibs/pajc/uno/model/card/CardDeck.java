@@ -46,8 +46,8 @@ public class CardDeck
 			for (var i = 0; i < GameRules.NUMBER_OF_ACTIONS_CARDS_PER_COLOR; i++)
 			{
 				cardDeck.add(new ActionCard(CardType.SKIP, cardColor));
-				cardDeck.add(new ActionCard(CardType.SKIP, cardColor));
-				cardDeck.add(new ActionCard(CardType.SKIP, cardColor));
+				cardDeck.add(new ActionCard(CardType.REVERSE, cardColor));
+				cardDeck.add(new ActionCard(CardType.WILD_DRAW_TWO, cardColor));
 			}
 		}
 	}
