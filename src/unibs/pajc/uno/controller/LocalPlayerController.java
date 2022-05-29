@@ -4,6 +4,7 @@ import java.util.Random;
 
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.model.player.Player;
+import unibs.pajc.uno.view.DialogSelectNewColor;
 import unibs.pajc.uno.view.TableView;
 
 public class LocalPlayerController
@@ -47,6 +48,8 @@ public class LocalPlayerController
 
 					try
 					{
+						new DialogSelectNewColor().show();
+
 						Thread.sleep(10000);
 					}
 					catch (InterruptedException e)
