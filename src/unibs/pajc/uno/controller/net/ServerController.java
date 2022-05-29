@@ -60,7 +60,7 @@ public class ServerController
 
 	public void initGame()
 	{
-		view = new TableView("", "", null);
+		view = new TableView("", "", null, false);
 		view.setVisible(true);
 
 		while (!model.isGameOver())

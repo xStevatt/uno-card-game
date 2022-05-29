@@ -9,6 +9,9 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -66,6 +69,8 @@ public class TableView extends JFrame
 
 	private JLabel lblStopWatch;
 
+	private ArrayList<CardView> listCardsView;
+
 	private boolean isGameLocal = true;
 
 	/**
@@ -75,9 +80,11 @@ public class TableView extends JFrame
 	 * @param namePlayerTwo
 	 * @param firstRandomCard
 	 */
-	public TableView(String namePlayerOne, String namePlayerTwo, Card firstRandomCard)
+	public TableView(String namePlayerOne, String namePlayerTwo, Card firstRandomCard, boolean isGameLocal)
 	{
 		super("Uno - cards game");
+		this.isGameLocal = isGameLocal;
+
 		setTitle("Uno - card's game");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1221, 700);
@@ -197,6 +204,7 @@ public class TableView extends JFrame
 
 		btnSendMessage = new JButton("Send");
 		btnSendMessage.setBounds(159, 472, 73, 37);
+
 		panelChat.add(btnSendMessage);
 
 		txtSendMessageField = new JTextField();
@@ -233,6 +241,24 @@ public class TableView extends JFrame
 		lblStopWatch.setHorizontalAlignment(SwingConstants.CENTER);
 		lblStopWatch.setBounds(6, 94, 237, 16);
 		panel_1.add(lblStopWatch);
+
+		if (isGameLocal)
+		{
+			btnSendMessage.setEnabled(false);
+			txtSendMessageField.setEditable(false);
+			textAreaChat.setEnabled(true);
+
+			textAreaChat.addMouseListener(new MouseAdapter()
+			{
+				@Override
+				public void mouseEntered(MouseEvent e)
+				{
+					btnSendMessage.setToolTipText("Chat is disabled as you're playing a local game.");
+					txtSendMessageField.setToolTipText("Chat is disabled as you're playing a local game.");
+					panelChat.setToolTipText("Chat is disabled as you're playing a local game.");
+				}
+			});
+		}
 
 		initTimer();
 	}
@@ -366,6 +392,7 @@ public class TableView extends JFrame
 			cardView.setBounds(originPoint.x, originPoint.y, cardView.getDimension().width,
 					cardView.getDimension().height);
 			cardsView.add(cardView, i++);
+
 			cardsView.moveToFront(cardView);
 
 			originPoint.x += offset;
@@ -415,6 +442,29 @@ public class TableView extends JFrame
 	}
 
 	// GETTING AND SETTERS
+
+	public ArrayList<CardView> getAllCards(int indexPlayer)
+	{
+		ArrayList<CardView> list = new ArrayList<CardView>();
+
+		if (indexPlayer == 0)
+		{
+			for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
+			{
+				list.add((CardView) handCardsViewActual.getComponent(i));
+			}
+		}
+
+		if (indexPlayer == 1)
+		{
+			for (int i = 0; i < handCardsViewAdversary.getComponentCount(); i++)
+			{
+				list.add((CardView) handCardsViewActual.getComponent(i));
+			}
+		}
+
+		return list;
+	}
 
 	public JPanel getMidTable()
 	{

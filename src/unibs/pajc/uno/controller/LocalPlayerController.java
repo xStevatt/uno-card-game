@@ -19,7 +19,7 @@ public class LocalPlayerController
 		initModel(playerOneName, playerTwoName);
 
 		// INITS VIEW
-		gameView = new TableView(playerOneName, playerTwoName, model.getUsedCards().getLastCardUsed());
+		gameView = new TableView(playerOneName, playerTwoName, model.getUsedCards().getLastCardUsed(), true);
 		initView();
 
 		// START RUNNING GAME
@@ -40,10 +40,20 @@ public class LocalPlayerController
 					if (turn == 0)
 					{
 						gameView.enableViewPlayer(1, false);
+
+						for (int i = 0; i < gameView.getAllCards(turn).size(); i++)
+						{
+							gameView.getAllCards(turn).get(i).addMouseListener(gameView.getAllCards(turn).get(i));
+						}
 					}
 					else
 					{
 						gameView.enableViewPlayer(0, false);
+
+						for (int i = 0; i < gameView.getAllCards(turn).size(); i++)
+						{
+							gameView.getAllCards(turn).get(i).addMouseListener(gameView.getAllCards(turn).get(i));
+						}
 					}
 
 					try
