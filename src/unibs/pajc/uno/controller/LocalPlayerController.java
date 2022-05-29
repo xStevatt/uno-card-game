@@ -38,11 +38,11 @@ public class LocalPlayerController
 				{
 					if (turn == 0)
 					{
-						gameView.disableViewPlayer(1);
+						gameView.enableViewPlayer(1, false);
 					}
 					else
 					{
-						gameView.disableViewPlayer(0);
+						gameView.enableViewPlayer(0, false);
 					}
 
 					try
@@ -60,8 +60,9 @@ public class LocalPlayerController
 					else
 						turn = 0;
 
-					gameView.enableViewPlayer(0);
-					gameView.enableViewPlayer(1);
+					gameView.enableViewPlayer(0, true);
+					gameView.enableViewPlayer(1, true);
+
 					updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 				}
 			}

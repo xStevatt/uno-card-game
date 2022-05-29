@@ -8,8 +8,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -23,6 +21,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import unibs.pajc.uno.view.PlayerDetailsInfoOffline;
 import unibs.pajc.uno.view.PlayerDetailsInfoOnline;
+import unibs.pajc.uno.view.events.HoverButtonEvent;
 
 /**
  * Enum describing card types
@@ -41,10 +40,10 @@ public class MainApp extends JFrame
 	private JPanel mainContainer;
 
 	private JPanel newGameButtonPanel;
-	private JButton newLocalGameButton;
+	private JButton newOnlineGameButton;
 
 	private JPanel newOnlineGamePanel;
-	private JButton newOnlineGameButton;
+	private JButton newLocalGameButton;
 
 	private JPanel AIGamePanel;
 	private JButton newAIGameButton;
@@ -129,17 +128,17 @@ public class MainApp extends JFrame
 
 	protected void initializeButtonsPanel()
 	{
-		newLocalGameButton = new JButton("Online Game");
-		newOnlineGameButton = new JButton("Offline Game");
+		newOnlineGameButton = new JButton("Online Game");
+		newLocalGameButton = new JButton("Offline Game");
 		newAIGameButton = new JButton("Against AI");
 
 		newGameButtonPanel = new JPanel(new GridLayout());
 		newGameButtonPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 40, 25));
-		newGameButtonPanel.add(newLocalGameButton);
+		newGameButtonPanel.add(newOnlineGameButton);
 
 		newOnlineGamePanel = new JPanel(new GridLayout(1, 1));
 		newOnlineGamePanel.setBorder(BorderFactory.createEmptyBorder(30, 25, 40, 25));
-		newOnlineGamePanel.add(newOnlineGameButton);
+		newOnlineGamePanel.add(newLocalGameButton);
 
 		AIGamePanel = new JPanel(new GridLayout());
 		AIGamePanel.setBorder(BorderFactory.createEmptyBorder(30, 25, 40, 40));
@@ -170,12 +169,12 @@ public class MainApp extends JFrame
 
 		// STARTING A NEW GAME WHEN BUTTON IS CLICKED
 
-		newOnlineGameButton.addActionListener(new ActionListener()
+		newLocalGameButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println("Start a new local game");
+				System.out.println("Start a new local game!");
 				setVisible(false);
 				playerInfoFrameOffline = new PlayerDetailsInfoOffline();
 
@@ -185,12 +184,12 @@ public class MainApp extends JFrame
 			}
 		});
 
-		newLocalGameButton.addActionListener(new ActionListener()
+		newOnlineGameButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println("Start a new local game");
+				System.out.println("Start a new LAN game!");
 				setVisible(false);
 				playerInfoFrameOnline = new PlayerDetailsInfoOnline();
 
@@ -216,43 +215,12 @@ public class MainApp extends JFrame
 
 		// ADDING MOUSE LISTENER TO CHANGE TEXT WHEN BUTTON IS HOVERED
 
-		newLocalGameButton.addMouseListener(new MouseAdapter()
-		{
-			public void mouseEntered(MouseEvent e)
-			{
-				descriptorLabel.setText("Start a singleplayer game.");
-			}
+		newOnlineGameButton
+				.addMouseListener(new HoverButtonEvent("Start a singleplayer game.", TITLE, descriptorLabel));
 
-			public void mouseExited(MouseEvent e)
-			{
-				descriptorLabel.setText(TITLE);
-			}
-		});
+		newLocalGameButton.addMouseListener(new HoverButtonEvent("Start a multiplayer game.", TITLE, descriptorLabel));
 
-		newOnlineGameButton.addMouseListener(new MouseAdapter()
-		{
-			public void mouseEntered(MouseEvent e)
-			{
-				descriptorLabel.setText("Start a multiplayer game.");
-			}
+		newLocalGameButton.addMouseListener(new HoverButtonEvent("Start a game against AI", TITLE, descriptorLabel));
 
-			public void mouseExited(MouseEvent e)
-			{
-				descriptorLabel.setText(TITLE);
-			}
-		});
-
-		newAIGameButton.addMouseListener(new MouseAdapter()
-		{
-			public void mouseEntered(MouseEvent e)
-			{
-				descriptorLabel.setText("Start a game against AI");
-			}
-
-			public void mouseExited(MouseEvent e)
-			{
-				descriptorLabel.setText(TITLE);
-			}
-		});
 	}
 }

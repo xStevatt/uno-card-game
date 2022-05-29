@@ -71,14 +71,13 @@ public class GameModel
 	/**
 	 * 
 	 */
-	public void determineEffectsOfCard(Card card, int index)
+	public void evalMossa(Card card, int index)
 	{
 		switch (card.getCardType())
 		{
 		case NUMBER:
 			break;
 		case WILD_COLOR:
-
 			break;
 		case WILD_DRAW_FOUR:
 			break;

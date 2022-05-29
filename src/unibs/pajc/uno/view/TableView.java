@@ -237,6 +237,9 @@ public class TableView extends JFrame
 		initTimer();
 	}
 
+	/**
+	 * Inits game timer. Timer starts at 00:00:00 and stops when game is over.
+	 */
 	public void initTimer()
 	{
 		Timer timer = new Timer(1000, new ActionListener()
@@ -271,14 +274,13 @@ public class TableView extends JFrame
 	 * 
 	 * @param index
 	 */
-	public void disableViewPlayer(int index)
+	public void enableViewPlayer(int index, boolean enabled)
 	{
 		if (index == 0)
 		{
-			System.out.println(handCardsViewActual.getComponentCount());
 			for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
 			{
-				((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(false);
+				((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(enabled);
 			}
 		}
 
@@ -286,30 +288,7 @@ public class TableView extends JFrame
 		{
 			for (int i = 0; i < handCardsViewAdversary.getComponentCount(); i++)
 			{
-				((CardView) handCardsViewAdversary.getComponent(i)).setShouldAnimationsMove(false);
-			}
-		}
-	}
-
-	/**
-	 * 
-	 * @param index
-	 */
-	public void enableViewPlayer(int index)
-	{
-		if (index == 0)
-		{
-			for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
-			{
-				((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(true);
-			}
-		}
-
-		if (index == 1)
-		{
-			for (int i = 0; i < handCardsViewAdversary.getComponentCount(); i++)
-			{
-				((CardView) handCardsViewAdversary.getComponent(i)).setShouldAnimationsMove(true);
+				((CardView) handCardsViewAdversary.getComponent(i)).setShouldAnimationsMove(enabled);
 			}
 		}
 	}
