@@ -31,6 +31,8 @@ public class CardView extends JPanel implements MouseListener
 	private final int cardHeight = 150;
 	private static final int margin = 5;
 
+	private Card cardSelected;
+
 	private boolean shouldAnimationsMove = true;
 
 	private final Dimension dimension = new Dimension(cardWidth, cardHeight);
@@ -171,6 +173,16 @@ public class CardView extends JPanel implements MouseListener
 		}
 	}
 
+	public Card getCardSelected()
+	{
+		return cardSelected;
+	}
+
+	public void setCardSelected(Card cardSelected)
+	{
+		this.cardSelected = cardSelected;
+	}
+
 	public boolean isShouldAnimationsMove()
 	{
 		return shouldAnimationsMove;
@@ -184,7 +196,7 @@ public class CardView extends JPanel implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		System.out.println("Card" + card.getCardColor());
+		cardSelected = this.card;
 	}
 
 	@Override
@@ -204,8 +216,6 @@ public class CardView extends JPanel implements MouseListener
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
-		System.out.println("Card" + card.getCardColor());
-
 	}
 
 	@Override

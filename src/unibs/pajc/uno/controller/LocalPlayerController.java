@@ -4,6 +4,7 @@ import java.util.Random;
 
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.model.player.Player;
+import unibs.pajc.uno.view.CardView;
 import unibs.pajc.uno.view.DialogSelectNewColor;
 import unibs.pajc.uno.view.TableView;
 
@@ -43,6 +44,7 @@ public class LocalPlayerController
 
 						for (int i = 0; i < gameView.getAllCards(turn).size(); i++)
 						{
+							CardView cardView = gameView.getAllCards(turn).get(i);
 							gameView.getAllCards(turn).get(i).addMouseListener(gameView.getAllCards(turn).get(i));
 						}
 					}
