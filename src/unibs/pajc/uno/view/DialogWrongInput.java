@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
@@ -21,14 +22,15 @@ public class DialogWrongInput extends JDialog
 	 */
 	public DialogWrongInput()
 	{
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 373, 226);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(39, 6, 375, 55);
+		JLabel lblNewLabel = new JLabel("You have selected an invalid card");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(6, 6, 361, 42);
 		contentPanel.add(lblNewLabel);
 		{
 			JPanel buttonPane = new JPanel();
@@ -40,11 +42,6 @@ public class DialogWrongInput extends JDialog
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
 			}
 		}
 	}

@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import unibs.pajc.uno.model.card.Card;
+import unibs.pajc.uno.model.card.CardColor;
+import unibs.pajc.uno.model.card.NumberCard;
 
 public class CardView extends JPanel
 {
@@ -26,7 +28,7 @@ public class CardView extends JPanel
 	private final int cardHeight = 150;
 	private static final int margin = 5;
 
-	public static Card cardSelected;
+	public static Card cardSelected = new NumberCard(CardColor.RED, 1);
 	public static boolean isCardSelected = false;
 
 	private boolean shouldAnimationsMove = true;

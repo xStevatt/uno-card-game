@@ -19,6 +19,7 @@ public class CardDeck
 	public CardDeck()
 	{
 		cardDeck = new ArrayList<>(GameRules.DECK_CARD_NUMBER);
+		initCardDeck();
 	}
 
 	public void initCardDeck()

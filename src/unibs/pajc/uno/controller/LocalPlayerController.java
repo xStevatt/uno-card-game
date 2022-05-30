@@ -1,10 +1,11 @@
 package unibs.pajc.uno.controller;
 
+import javax.swing.JOptionPane;
+
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.view.CardBackView;
 import unibs.pajc.uno.view.CardView;
-import unibs.pajc.uno.view.DialogWrongInput;
 import unibs.pajc.uno.view.TableView;
 
 public class LocalPlayerController
@@ -35,7 +36,7 @@ public class LocalPlayerController
 			{
 				int turn = 0;
 
-				while (!model.isGameOver())
+				while (model.isGameOver() == false)
 				{
 					if (turn == 0)
 					{
@@ -55,19 +56,25 @@ public class LocalPlayerController
 							}
 							if (CardView.isCardSelected == true)
 							{
-								System.out.println("HERE");
+								System.out.println("You have selected a card.");
+
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
-									System.out.println("Ciao");
+									System.out.println("You have selected a valid card.");
 								}
 								else
 								{
-									new DialogWrongInput().setVisible(true);
+									JOptionPane.showMessageDialog(null, "Please select a valid card!", "Error",
+											JOptionPane.ERROR_MESSAGE);
 								}
 							}
 							if (CardBackView.isCardDrawnFromDeck == true)
 							{
 								System.out.println("Card is drawn");
+							}
+							else
+							{
+								System.out.println("Card is not drawn");
 							}
 
 							CardView.isCardSelected = false;
@@ -81,10 +88,10 @@ public class LocalPlayerController
 					}
 					updateView(model.getPlayers().get(0), model.getPlayers().get(1)); // UP. VIEW AFTER MODEL
 				}
+
+				System.out.println("Game is over, apparently");
 			}
 		}).start();
-
-		System.out.println("FINISHED");
 	}
 
 	public void initModel(String playerOneName, String playerTwoName)

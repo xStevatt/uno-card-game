@@ -61,8 +61,6 @@ public class GameModel
 	public void initGameElements()
 	{
 		cardsDeck = new CardDeck();
-		cardsDeck.initCardDeck();
-
 		usedCards = new UsedPile(cardsDeck.getRandomCard());
 	}
 
@@ -135,18 +133,15 @@ public class GameModel
 			if (card.getCardType() == CardType.WILD_DRAW_TWO || card.getCardType() == CardType.WILD_COLOR
 					|| card.getCardType() == CardType.WILD_DRAW_FOUR)
 			{
-				System.out.println("Card is valid.");
 				return isCardValid;
 			}
 			else
 			{
 				if ((usedCards.getLastCardUsed().getCardColor() == card.getCardColor()))
 				{
-					System.out.println("Card is valid.");
-
 					return isCardValid;
 				}
-				else if ((card instanceof NumberCard && usedCards.getLastCardUsed() instanceof NumberCard)
+				if ((card instanceof NumberCard && usedCards.getLastCardUsed() instanceof NumberCard)
 						&& ((NumberCard) card).getValue() == ((NumberCard) usedCards.getLastCardUsed()).getValue())
 				{
 					return isCardValid;
@@ -192,6 +187,7 @@ public class GameModel
 
 		for (Player player : players)
 		{
+			System.out.println(player.getNamePlayer() + "- cards: " + player.getHandCards().getNumberOfCards());
 			isGameOver = player.getHandCards().getNumberOfCards() == 0;
 		}
 
