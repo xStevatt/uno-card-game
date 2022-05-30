@@ -8,6 +8,7 @@ import unibs.pajc.uno.model.card.NumberCard;
 import unibs.pajc.uno.model.card.UsedPile;
 import unibs.pajc.uno.model.card.WildCard;
 import unibs.pajc.uno.model.player.Player;
+import unibs.pajc.uno.model.player.PlayerRoundIterator;
 
 public class GameModel
 {
@@ -17,8 +18,26 @@ public class GameModel
 	private ArrayList<Player> players;
 	private int numberOfPlayers;
 	private int maxNumberOfPlayers;
+	private PlayerRoundIterator turnIterator;
 
 	private boolean gameOver = false;
+
+	/**
+	 * Constructor to automatically set the default number of players
+	 */
+	public GameModel()
+	{
+		this(GameRules.DEFAULT_NUMBER_OF_PLAYERS);
+	}
+
+	/**
+	 * 
+	 * @param players
+	 */
+	public GameModel(ArrayList<Player> players)
+	{
+		this.players = players;
+	}
 
 	/**
 	 * Constructor that allows to set a custom number of players
@@ -28,16 +47,6 @@ public class GameModel
 	public GameModel(int maxNumberOfPlayers)
 	{
 		this.maxNumberOfPlayers = maxNumberOfPlayers;
-		players = new ArrayList<Player>(maxNumberOfPlayers);
-		initGameElements();
-	}
-
-	/**
-	 * Constructor to automatically set the default number of players
-	 */
-	public GameModel()
-	{
-		this.maxNumberOfPlayers = GameRules.DEFAULT_NUMBER_OF_PLAYERS;
 		players = new ArrayList<Player>(maxNumberOfPlayers);
 		initGameElements();
 	}
@@ -56,36 +65,53 @@ public class GameModel
 		usedCards = new UsedPile(cardsDeck.getRandomCard());
 	}
 
+	/**
+	 * Initializes the player without passing a Player object directly and creating
+	 * it from name and cards
+	 * 
+	 * @param name  name of the cards
+	 * @param cards the initial cards of the player
+	 */
 	public void initPlayer(String name, Card[] cards)
 	{
 		players.add(new Player(name, cards, numberOfPlayers));
 		numberOfPlayers++;
 	}
 
+	/**
+	 * 
+	 * @param player
+	 */
 	public void initPlayer(Player player)
 	{
 		players.add(player);
 		numberOfPlayers++;
 	}
 
-	/**
-	 * 
-	 */
 	public void evalMossa(Card card, int index)
 	{
+		players.get(index).removeCard(card);
+		usedCards.addCard(card);
+
 		switch (card.getCardType())
 		{
 		case NUMBER:
+			// Nothing needed
 			break;
 		case WILD_COLOR:
+
 			break;
 		case WILD_DRAW_FOUR:
+
 			break;
 		case WILD_DRAW_TWO:
+
 			break;
 		case SKIP:
+
 			break;
 		case REVERSE:
+
 			break;
 		}
 	}
@@ -103,12 +129,15 @@ public class GameModel
 
 		if (card instanceof WildCard)
 		{
+			System.out.println("Card is valid.");
 			return isCardValid;
 		}
 		else
 		{
 			if ((usedCards.getLastCardUsed().getCardColor() == card.getCardColor()))
 			{
+				System.out.println("Card is valid.");
+
 				return isCardValid;
 			}
 			else if ((card instanceof NumberCard && usedCards.getLastCardUsed() instanceof NumberCard)
@@ -131,6 +160,7 @@ public class GameModel
 	{
 		Player playerWinner = null;
 
+		// Checks if there's actually a winning player
 		for (Player player : players)
 		{
 			if (player.getHandCards().getNumberOfCards() == 0)
@@ -142,6 +172,12 @@ public class GameModel
 		return playerWinner;
 	}
 
+	/**
+	 * Returns if the game is over. If the game is over (a player has zero cards
+	 * left), then true is returned, false otherwise.
+	 * 
+	 * @return true if game is over, false otherwise
+	 */
 	public boolean isGameOver()
 	{
 		for (int i = 0; i < numberOfPlayers; i++)

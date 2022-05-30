@@ -86,9 +86,12 @@ public class CardView extends JPanel
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				cardSelected = card;
-				System.out.println("Card Selected" + cardSelected.getCardColor() == null ? "WilCard"
-						: cardSelected.getCardColor());
+				CardView.cardSelected = card;
+				if (cardSelected != null)
+				{
+					System.out.println("Card Selected" + cardSelected.getCardColor() == null ? "WilCard"
+							: cardSelected.getCardColor());
+				}
 			}
 		});
 	}

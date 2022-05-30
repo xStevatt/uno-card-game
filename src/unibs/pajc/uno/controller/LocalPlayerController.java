@@ -1,11 +1,10 @@
 package unibs.pajc.uno.controller;
 
-import java.util.Random;
-
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.view.CardBackView;
 import unibs.pajc.uno.view.CardView;
+import unibs.pajc.uno.view.DialogWrongInput;
 import unibs.pajc.uno.view.TableView;
 
 public class LocalPlayerController
@@ -34,7 +33,7 @@ public class LocalPlayerController
 			@Override
 			public void run()
 			{
-				int turn = new Random().nextInt(1);
+				int turn = 0;
 
 				while (!model.isGameOver())
 				{
@@ -42,20 +41,34 @@ public class LocalPlayerController
 					{
 						gameView.enableViewPlayer(1, false);
 
-						while (CardView.cardSelected == null || CardBackView.isCardDrawnFromDeck == false)
+						while (CardView.cardSelected == null && CardBackView.isCardDrawnFromDeck == false)
 						{
 							if (CardView.cardSelected != null)
 							{
-								// DISCARD CARD SELECTED
+								System.out.println("HERE");
+								if (model.isPlacedCardValid(CardView.cardSelected))
+								{
+									System.out.println("HERE");
+								}
+								else
+								{
+									new DialogWrongInput().setVisible(true);
+								}
 							}
 							else if (CardBackView.isCardDrawnFromDeck == true)
 							{
-								// CARD WAS DRAWN FROM DECK; MODEL MANAGES THIS
+
 							}
 						}
-						CardView.cardSelected = null; // RESETS CARD SELECTED
-						CardBackView.isCardDrawnFromDeck = false; // RESETS IF THE CARD WAS DRAWN FROM DECK
 					}
+					if (turn == 1)
+					{
+
+					}
+
+					CardView.cardSelected = null; // RESETS CARD SELECTED
+					CardBackView.isCardDrawnFromDeck = false; // RESETS IF THE CARD WAS DRAWN FROM DECK
+					updateView(model.getPlayers().get(0), model.getPlayers().get(1)); // UP. VIEW AFTER MODEL EVAL
 				}
 			}
 		}).start();
