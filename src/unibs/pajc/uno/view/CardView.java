@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
@@ -18,7 +17,7 @@ import javax.swing.border.Border;
 
 import unibs.pajc.uno.model.card.Card;
 
-public class CardView extends JPanel implements MouseListener
+public class CardView extends JPanel
 {
 	/**
 	 * 
@@ -31,7 +30,7 @@ public class CardView extends JPanel implements MouseListener
 	private final int cardHeight = 150;
 	private static final int margin = 5;
 
-	public static Card cardSelected = null;
+	public static Card cardSelected;
 
 	private boolean shouldAnimationsMove = true;
 
@@ -87,8 +86,9 @@ public class CardView extends JPanel implements MouseListener
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-
-				handleCardClick.accept(card);
+				cardSelected = card;
+				System.out.println("Card Selected" + cardSelected.getCardColor() == null ? "WilCard"
+						: cardSelected.getCardColor());
 			}
 		});
 	}
@@ -185,37 +185,4 @@ public class CardView extends JPanel implements MouseListener
 	{
 		this.shouldAnimationsMove = shouldAnimationsMove;
 	}
-
-	@Override
-	public void mouseClicked(MouseEvent e)
-	{
-		CardView.cardSelected = this.card;
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e)
-	{
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
 }

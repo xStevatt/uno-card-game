@@ -42,54 +42,20 @@ public class LocalPlayerController
 					{
 						gameView.enableViewPlayer(1, false);
 
-						for (int i = 0; i < gameView.getAllCards(turn).size(); i++)
+						while (CardView.cardSelected == null || CardBackView.isCardDrawnFromDeck == false)
 						{
-							CardView cardView = gameView.getAllCards(turn).get(i);
-							gameView.getAllCards(turn).get(i).addMouseListener(gameView.getAllCards(turn).get(i));
-						}
-
-						while (CardView.cardSelected == null && CardBackView.isCardDrawnFromDeck == false)
-						{
-							if (CardView.cardSelected != null && CardBackView.isCardDrawnFromDeck == false)
+							if (CardView.cardSelected != null)
 							{
-								System.out.print("Sadasdasd");
-								System.out.println(CardView.cardSelected.getCardColor() + " "
-										+ CardView.cardSelected.getCardType());
+								// DISCARD CARD SELECTED
 							}
-							if (CardView.cardSelected == null && CardBackView.isCardDrawnFromDeck == true)
+							else if (CardBackView.isCardDrawnFromDeck == true)
 							{
-								System.out.println("ciao");
+								// CARD WAS DRAWN FROM DECK; MODEL MANAGES THIS
 							}
 						}
+						CardView.cardSelected = null; // RESETS CARD SELECTED
+						CardBackView.isCardDrawnFromDeck = false; // RESETS IF THE CARD WAS DRAWN FROM DECK
 					}
-					else
-					{
-						gameView.enableViewPlayer(0, false);
-
-						for (int i = 0; i < gameView.getAllCards(turn).size(); i++)
-						{
-							gameView.getAllCards(turn).get(i).addMouseListener(gameView.getAllCards(turn).get(i));
-						}
-					}
-
-					if (turn == 0)
-						turn = 1;
-					else
-						turn = 0;
-
-					gameView.enableViewPlayer(0, true);
-					gameView.enableViewPlayer(1, true);
-
-					try
-					{
-						Thread.sleep(1000);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 				}
 			}
 		}).start();
