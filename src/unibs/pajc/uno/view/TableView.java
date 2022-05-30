@@ -33,6 +33,7 @@ import javax.swing.border.TitledBorder;
 import unibs.pajc.uno.model.GameRules;
 import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.player.HandCards;
+import unibs.pajc.uno.model.player.Player;
 
 public class TableView extends JFrame
 {
@@ -317,6 +318,11 @@ public class TableView extends JFrame
 				((CardView) handCardsViewAdversary.getComponent(i)).setShouldAnimationsMove(enabled);
 			}
 		}
+	}
+
+	public void updateView(Player playerOne, Player playerTwo, int player)
+	{
+		loadCards(null, player);
 	}
 
 	/**

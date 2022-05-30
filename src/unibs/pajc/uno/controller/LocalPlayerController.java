@@ -44,23 +44,14 @@ public class LocalPlayerController
 
 						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 						{
-							System.out.println(CardView.cardSelected.getCardType());
-							try
-							{
-								Thread.sleep(10000);
-							}
-							catch (InterruptedException e)
-							{
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+
 							if (CardView.isCardSelected == true)
 							{
-								System.out.println("You have selected a card.");
-
+								System.out.print("asdasd");
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
-									System.out.println("You have selected a valid card.");
+
+									model.evalMossa(CardView.cardSelected, turn);
 								}
 								else
 								{
@@ -70,11 +61,11 @@ public class LocalPlayerController
 							}
 							if (CardBackView.isCardDrawnFromDeck == true)
 							{
-								System.out.println("Card is drawn");
+
 							}
 							else
 							{
-								System.out.println("Card is not drawn");
+
 							}
 
 							CardView.isCardSelected = false;
@@ -86,6 +77,7 @@ public class LocalPlayerController
 						CardView.isCardSelected = false;
 						CardBackView.isCardDrawnFromDeck = false; // RESETS IF THE CARD WAS DRAWN FROM DECK // EVAL
 					}
+
 					updateView(model.getPlayers().get(0), model.getPlayers().get(1)); // UP. VIEW AFTER MODEL
 				}
 

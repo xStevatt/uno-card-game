@@ -132,22 +132,20 @@ public class GameModel
 		{
 			if (card.getCardType() == CardType.WILD_DRAW_TWO || card.getCardType() == CardType.WILD_COLOR
 					|| card.getCardType() == CardType.WILD_DRAW_FOUR)
+				return isCardValid;
+		}
+
+		else
+		{
+			if ((usedCards.getLastCardUsed().getCardColor() == card.getCardColor()))
 			{
 				return isCardValid;
 			}
-			else
+			if ((card instanceof NumberCard && usedCards.getLastCardUsed() instanceof NumberCard)
+					&& ((NumberCard) card).getValue() == ((NumberCard) usedCards.getLastCardUsed()).getValue())
 			{
-				if ((usedCards.getLastCardUsed().getCardColor() == card.getCardColor()))
-				{
-					return isCardValid;
-				}
-				if ((card instanceof NumberCard && usedCards.getLastCardUsed() instanceof NumberCard)
-						&& ((NumberCard) card).getValue() == ((NumberCard) usedCards.getLastCardUsed()).getValue())
-				{
-					return isCardValid;
-				}
+				return isCardValid;
 			}
-
 		}
 
 		return !isCardValid;
