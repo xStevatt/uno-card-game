@@ -23,20 +23,21 @@ public class GameModel
 	private boolean gameOver = false;
 
 	/**
-	 * Constructor to automatically set the default number of players
-	 */
-	public GameModel()
-	{
-		this(GameRules.DEFAULT_NUMBER_OF_PLAYERS);
-	}
-
-	/**
 	 * 
 	 * @param players
 	 */
 	public GameModel(ArrayList<Player> players)
 	{
 		this.players = players;
+		initGameElements();
+	}
+
+	/**
+	 * Constructor to automatically set the default number of players
+	 */
+	public GameModel()
+	{
+		this(GameRules.DEFAULT_NUMBER_OF_PLAYERS);
 	}
 
 	/**
@@ -187,7 +188,14 @@ public class GameModel
 	 */
 	public boolean isGameOver()
 	{
-		return false;
+		boolean isGameOver = false;
+
+		for (Player player : players)
+		{
+			isGameOver = player.getHandCards().getNumberOfCards() == 0;
+		}
+
+		return isGameOver;
 	}
 
 	/**

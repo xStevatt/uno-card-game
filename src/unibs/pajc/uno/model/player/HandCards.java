@@ -33,4 +33,9 @@ public class HandCards
 	{
 		return this.cardList;
 	}
+
+	public void removeAllCards()
+	{
+		cardList.removeAll(cardList);
+	}
 }

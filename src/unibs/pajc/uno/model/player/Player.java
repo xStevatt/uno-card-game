@@ -40,6 +40,11 @@ public class Player
 		this.handCards = handCards;
 	}
 
+	public void removeAllCards()
+	{
+
+	}
+
 	public int getIndex()
 	{
 		return index;
