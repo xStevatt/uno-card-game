@@ -23,7 +23,7 @@ public class CardView extends JPanel implements MouseListener
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1839155437060038053L;
+
 	private final Card card;
 	private final String value;
 
@@ -31,7 +31,7 @@ public class CardView extends JPanel implements MouseListener
 	private final int cardHeight = 150;
 	private static final int margin = 5;
 
-	private Card cardSelected;
+	public static Card cardSelected = null;
 
 	private boolean shouldAnimationsMove = true;
 
@@ -87,10 +87,8 @@ public class CardView extends JPanel implements MouseListener
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				if (handleCardClick != null)
-				{
-					handleCardClick.accept(card);
-				}
+
+				handleCardClick.accept(card);
 			}
 		});
 	}
@@ -178,11 +176,6 @@ public class CardView extends JPanel implements MouseListener
 		return cardSelected;
 	}
 
-	public void setCardSelected(Card cardSelected)
-	{
-		this.cardSelected = cardSelected;
-	}
-
 	public boolean isShouldAnimationsMove()
 	{
 		return shouldAnimationsMove;
@@ -196,7 +189,7 @@ public class CardView extends JPanel implements MouseListener
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		cardSelected = this.card;
+		CardView.cardSelected = this.card;
 	}
 
 	@Override

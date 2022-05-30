@@ -4,17 +4,21 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-public class CardBackView extends JPanel
+public class CardBackView extends JPanel implements MouseListener
 {
 	private final int cardWidth = 100;
 	private final int cardHeight = 150;
 	private static final int margin = 5;
+
+	public static boolean isCardDrawnFromDeck = false;
 
 	private final Dimension dimension = new Dimension(cardWidth, cardHeight);
 
@@ -80,4 +84,38 @@ public class CardBackView extends JPanel
 
 		g2.setTransform(transformer);
 	}
+
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+		isCardDrawnFromDeck = true;
+		System.out.println("Card taken from deck");
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e)
+	{
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
 }

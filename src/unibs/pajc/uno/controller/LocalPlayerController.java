@@ -4,8 +4,8 @@ import java.util.Random;
 
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.model.player.Player;
+import unibs.pajc.uno.view.CardBackView;
 import unibs.pajc.uno.view.CardView;
-import unibs.pajc.uno.view.DialogSelectNewColor;
 import unibs.pajc.uno.view.TableView;
 
 public class LocalPlayerController
@@ -47,6 +47,22 @@ public class LocalPlayerController
 							CardView cardView = gameView.getAllCards(turn).get(i);
 							gameView.getAllCards(turn).get(i).addMouseListener(gameView.getAllCards(turn).get(i));
 						}
+
+						while()
+						
+						while (CardView.cardSelected == null && CardBackView.isCardDrawnFromDeck == false)
+						{
+							if (CardView.cardSelected != null && CardBackView.isCardDrawnFromDeck == false)
+							{
+								System.out.print("Sadasdasd");
+								System.out.println(CardView.cardSelected.getCardColor() + " "
+										+ CardView.cardSelected.getCardType());
+							}
+							if (CardView.cardSelected == null && CardBackView.isCardDrawnFromDeck == true)
+							{
+								System.out.println("ciao");
+							}
+						}
 					}
 					else
 					{
@@ -58,18 +74,6 @@ public class LocalPlayerController
 						}
 					}
 
-					try
-					{
-						new DialogSelectNewColor().show();
-
-						Thread.sleep(10000);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
 					if (turn == 0)
 						turn = 1;
 					else
@@ -78,6 +82,15 @@ public class LocalPlayerController
 					gameView.enableViewPlayer(0, true);
 					gameView.enableViewPlayer(1, true);
 
+					try
+					{
+						Thread.sleep(1000);
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 				}
 			}
