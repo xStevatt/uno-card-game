@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardDeck;
+import unibs.pajc.uno.model.card.CardType;
 import unibs.pajc.uno.model.card.NumberCard;
 import unibs.pajc.uno.model.card.UsedPile;
-import unibs.pajc.uno.model.card.WildCard;
 import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.model.player.PlayerRoundIterator;
 
@@ -127,24 +127,31 @@ public class GameModel
 	{
 		boolean isCardValid = true;
 
-		if (card instanceof WildCard)
+		if (usedCards.getLastCardUsed().getCardType() == CardType.WILD_COLOR
+				|| usedCards.getLastCardUsed().getCardType() == CardType.WILD_DRAW_TWO
+				|| usedCards.getLastCardUsed().getCardType() == CardType.WILD_DRAW_FOUR)
 		{
-			System.out.println("Card is valid.");
-			return isCardValid;
-		}
-		else
-		{
-			if ((usedCards.getLastCardUsed().getCardColor() == card.getCardColor()))
+			if (card.getCardType() == CardType.WILD_DRAW_TWO || card.getCardType() == CardType.WILD_COLOR
+					|| card.getCardType() == CardType.WILD_DRAW_FOUR)
 			{
 				System.out.println("Card is valid.");
-
 				return isCardValid;
 			}
-			else if ((card instanceof NumberCard && usedCards.getLastCardUsed() instanceof NumberCard)
-					&& ((NumberCard) card).getValue() == ((NumberCard) usedCards.getLastCardUsed()).getValue())
+			else
 			{
-				return isCardValid;
+				if ((usedCards.getLastCardUsed().getCardColor() == card.getCardColor()))
+				{
+					System.out.println("Card is valid.");
+
+					return isCardValid;
+				}
+				else if ((card instanceof NumberCard && usedCards.getLastCardUsed() instanceof NumberCard)
+						&& ((NumberCard) card).getValue() == ((NumberCard) usedCards.getLastCardUsed()).getValue())
+				{
+					return isCardValid;
+				}
 			}
+
 		}
 
 		return !isCardValid;
@@ -180,15 +187,7 @@ public class GameModel
 	 */
 	public boolean isGameOver()
 	{
-		for (int i = 0; i < numberOfPlayers; i++)
-		{
-			if (players.get(i).getHandCards().getNumberOfCards() == 0)
-			{
-				this.gameOver = true;
-			}
-		}
-
-		return this.gameOver;
+		return false;
 	}
 
 	/**

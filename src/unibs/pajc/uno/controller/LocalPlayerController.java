@@ -41,37 +41,50 @@ public class LocalPlayerController
 					{
 						gameView.enableViewPlayer(1, false);
 
-						while (CardView.cardSelected == null && CardBackView.isCardDrawnFromDeck == false)
+						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 						{
-							if (CardView.cardSelected != null)
+							System.out.println(CardView.cardSelected.getCardType());
+							try
+							{
+								Thread.sleep(10000);
+							}
+							catch (InterruptedException e)
+							{
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							if (CardView.isCardSelected == true)
 							{
 								System.out.println("HERE");
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
-									System.out.println("HERE");
+									System.out.println("Ciao");
 								}
 								else
 								{
 									new DialogWrongInput().setVisible(true);
 								}
 							}
-							else if (CardBackView.isCardDrawnFromDeck == true)
+							if (CardBackView.isCardDrawnFromDeck == true)
 							{
-
+								System.out.println("Card is drawn");
 							}
+
+							CardView.isCardSelected = false;
+							CardBackView.isCardDrawnFromDeck = false; // RESETS IF THE CARD WAS DRAWN FROM DECK // EVAL
 						}
 					}
 					if (turn == 1)
 					{
-
+						CardView.isCardSelected = false;
+						CardBackView.isCardDrawnFromDeck = false; // RESETS IF THE CARD WAS DRAWN FROM DECK // EVAL
 					}
-
-					CardView.cardSelected = null; // RESETS CARD SELECTED
-					CardBackView.isCardDrawnFromDeck = false; // RESETS IF THE CARD WAS DRAWN FROM DECK
-					updateView(model.getPlayers().get(0), model.getPlayers().get(1)); // UP. VIEW AFTER MODEL EVAL
+					updateView(model.getPlayers().get(0), model.getPlayers().get(1)); // UP. VIEW AFTER MODEL
 				}
 			}
 		}).start();
+
+		System.out.println("FINISHED");
 	}
 
 	public void initModel(String playerOneName, String playerTwoName)

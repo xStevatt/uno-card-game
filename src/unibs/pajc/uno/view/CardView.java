@@ -19,10 +19,6 @@ import unibs.pajc.uno.model.card.Card;
 
 public class CardView extends JPanel
 {
-	/**
-	 * 
-	 */
-
 	private final Card card;
 	private final String value;
 
@@ -31,6 +27,7 @@ public class CardView extends JPanel
 	private static final int margin = 5;
 
 	public static Card cardSelected;
+	public static boolean isCardSelected = false;
 
 	private boolean shouldAnimationsMove = true;
 
@@ -87,11 +84,7 @@ public class CardView extends JPanel
 			public void mousePressed(MouseEvent e)
 			{
 				CardView.cardSelected = card;
-				if (cardSelected != null)
-				{
-					System.out.println("Card Selected" + cardSelected.getCardColor() == null ? "WilCard"
-							: cardSelected.getCardColor());
-				}
+				isCardSelected = true;
 			}
 		});
 	}
