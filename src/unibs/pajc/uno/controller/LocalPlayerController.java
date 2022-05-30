@@ -48,8 +48,6 @@ public class LocalPlayerController
 							gameView.getAllCards(turn).get(i).addMouseListener(gameView.getAllCards(turn).get(i));
 						}
 
-						while()
-						
 						while (CardView.cardSelected == null && CardBackView.isCardDrawnFromDeck == false)
 						{
 							if (CardView.cardSelected != null && CardBackView.isCardDrawnFromDeck == false)

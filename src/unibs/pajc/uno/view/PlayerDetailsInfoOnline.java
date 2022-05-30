@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import unibs.pajc.uno.controller.net.ClientController;
+import unibs.pajc.uno.controller.ClientController;
 
 public class PlayerDetailsInfoOnline extends JFrame
 {

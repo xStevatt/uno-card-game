@@ -1,4 +1,4 @@
-package unibs.pajc.uno.controller.net;
+package unibs.pajc.uno.controller;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

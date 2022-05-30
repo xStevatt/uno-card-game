@@ -1,4 +1,4 @@
-package unibs.pajc.uno.controller.net;
+package unibs.pajc.uno.controller;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
+import unibs.pajc.uno.controller.net.NetUtils;
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.view.TableView;
 
