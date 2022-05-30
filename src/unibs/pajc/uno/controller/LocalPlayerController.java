@@ -27,6 +27,29 @@ public class LocalPlayerController
 		runGame();
 	}
 
+	public void initModel(String playerOneName, String playerTwoName)
+	{
+		Player playerOne = new Player(playerOneName, model.generateStartingCards(), 0);
+		Player playerTwo = new Player(playerTwoName, model.generateStartingCards(), 1);
+
+		model.initPlayer(playerOne);
+		model.initPlayer(playerTwo);
+	}
+
+	public void initView()
+	{
+		gameView.setVisible(true);
+		gameView.setResizable(false);
+		gameView.loadCards(model.getPlayers().get(0).getHandCards(), 0);
+		gameView.loadCards(model.getPlayers().get(1).getHandCards(), 1);
+	}
+
+	public void updateView(Player playerOne, Player playerTwo)
+	{
+		gameView.loadCards(playerOne.getHandCards(), 0);
+		gameView.loadCards(playerTwo.getHandCards(), 1);
+	}
+
 	public void runGame()
 	{
 		new Thread(new Runnable()
@@ -44,13 +67,10 @@ public class LocalPlayerController
 
 						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 						{
-
 							if (CardView.isCardSelected == true)
 							{
-								System.out.print("asdasd");
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
-
 									model.evalMossa(CardView.cardSelected, turn);
 								}
 								else
@@ -84,28 +104,5 @@ public class LocalPlayerController
 				System.out.println("Game is over, apparently");
 			}
 		}).start();
-	}
-
-	public void initModel(String playerOneName, String playerTwoName)
-	{
-		Player playerOne = new Player(playerOneName, model.generateStartingCards(), 0);
-		Player playerTwo = new Player(playerTwoName, model.generateStartingCards(), 1);
-
-		model.initPlayer(playerOne);
-		model.initPlayer(playerTwo);
-	}
-
-	public void updateView(Player playerOne, Player playerTwo)
-	{
-		gameView.loadCards(playerOne.getHandCards(), 0);
-		gameView.loadCards(playerTwo.getHandCards(), 1);
-	}
-
-	public void initView()
-	{
-		gameView.setVisible(true);
-		gameView.setResizable(false);
-		gameView.loadCards(model.getPlayers().get(0).getHandCards(), 0);
-		gameView.loadCards(model.getPlayers().get(1).getHandCards(), 1);
 	}
 }
