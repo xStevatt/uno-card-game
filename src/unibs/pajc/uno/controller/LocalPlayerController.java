@@ -67,10 +67,12 @@ public class LocalPlayerController
 
 						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 						{
+							System.out.println("HERE");
 							if (CardView.isCardSelected == true)
 							{
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
+									System.out.print("HERE");
 									model.evalMossa(CardView.cardSelected, turn);
 								}
 								else

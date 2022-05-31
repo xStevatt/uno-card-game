@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardDeck;
-import unibs.pajc.uno.model.card.CardType;
 import unibs.pajc.uno.model.card.NumberCard;
 import unibs.pajc.uno.model.card.UsedPile;
 import unibs.pajc.uno.model.player.Player;
@@ -122,33 +121,30 @@ public class GameModel
 	 * 
 	 * @return
 	 */
-	public boolean isPlacedCardValid(Card card)
+	public boolean isPlacedCardValid(Card cardSelected, Card cardUsed)
 	{
 		boolean isCardValid = true;
 
-		if (usedCards.getLastCardUsed().getCardType() == CardType.WILD_COLOR
-				|| usedCards.getLastCardUsed().getCardType() == CardType.WILD_DRAW_TWO
-				|| usedCards.getLastCardUsed().getCardType() == CardType.WILD_DRAW_FOUR)
+		if (cardUsed.getCardColor() == null || cardSelected.getCardColor() == null)
 		{
-			if (card.getCardType() == CardType.WILD_DRAW_TWO || card.getCardType() == CardType.WILD_COLOR
-					|| card.getCardType() == CardType.WILD_DRAW_FOUR)
-				return isCardValid;
+			return isCardValid;
 		}
-
-		else
+		else if (cardUsed.getCardColor() == cardSelected.getCardColor())
 		{
-			if ((usedCards.getLastCardUsed().getCardColor() == card.getCardColor()))
-			{
-				return isCardValid;
-			}
-			if ((card instanceof NumberCard && usedCards.getLastCardUsed() instanceof NumberCard)
-					&& ((NumberCard) card).getValue() == ((NumberCard) usedCards.getLastCardUsed()).getValue())
-			{
-				return isCardValid;
-			}
+			return isCardValid;
+		}
+		else if ((cardUsed instanceof NumberCard && cardSelected instanceof NumberCard)
+				&& ((NumberCard) cardSelected).getValue() == ((NumberCard) cardSelected).getValue())
+		{
+			return isCardValid;
 		}
 
 		return !isCardValid;
+	}
+
+	public boolean isPlacedCardValid(Card cardSelected)
+	{
+		return isPlacedCardValid(cardSelected, usedCards.getLastCardUsed());
 	}
 
 	/**
@@ -241,6 +237,11 @@ public class GameModel
 	}
 
 	// GETTERS AND SETTERS
+
+	public Card getLastCardUsed()
+	{
+		return usedCards.getLastCardUsed();
+	}
 
 	public CardDeck getCardsDeck()
 	{

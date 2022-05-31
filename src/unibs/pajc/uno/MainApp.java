@@ -55,6 +55,7 @@ public class MainApp extends JFrame
 	{
 		EventQueue.invokeLater(new Runnable()
 		{
+			@Override
 			public void run()
 			{
 				try
