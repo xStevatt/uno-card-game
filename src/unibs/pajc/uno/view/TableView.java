@@ -73,6 +73,7 @@ public class TableView extends JFrame
 	private ArrayList<CardView> listCardsView;
 
 	private boolean isGameLocal = true;
+	private JLabel lblNewLabel_1;
 
 	/**
 	 * Constructor to create the form.
@@ -176,7 +177,7 @@ public class TableView extends JFrame
 
 		panelDeck = new JPanel();
 		// +5 is due to card's border
-		panelDeck.setBounds(331, 30, 100 + 5, 150 + 5);
+		panelDeck.setBounds(253, 30, 100 + 5, 150 + 5);
 		midTable.add(panelDeck);
 		panelDeck.setOpaque(false);
 
@@ -184,10 +185,16 @@ public class TableView extends JFrame
 
 		panelPlaced = new JPanel();
 		// +5 is due to card's border
-		panelPlaced.setBounds(471, 30, 100 + 5, 150 + 5);
+		panelPlaced.setBounds(397, 30, 100 + 5, 150 + 5);
 		panelPlaced.add(new CardDropped(firstRandomCard));
 		panelPlaced.setOpaque(false);
 		midTable.add(panelPlaced);
+
+		lblNewLabel_1 = new JLabel("Player turn");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setFont(new Font("Lucida Grande", Font.PLAIN, 17));
+		lblNewLabel_1.setBounds(572, 77, 313, 50);
+		midTable.add(lblNewLabel_1);
 
 		panelChat = new JPanel();
 		panelChat.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Chat",
@@ -322,7 +329,8 @@ public class TableView extends JFrame
 
 	public void updateView(Player playerOne, Player playerTwo, int player)
 	{
-		loadCards(null, player);
+		loadCards(playerOne.getHandCards(), player);
+		loadCards(playerTwo.getHandCards(), player);
 	}
 
 	/**
@@ -330,21 +338,10 @@ public class TableView extends JFrame
 	 * player only has one card left. If the user doesn't say "uno" (doesn't press
 	 * the button), two cards are added to his hand.
 	 */
-	public void makeSayUnoButtonVisibile()
+	public void makeSayUnoButtonVisibile(boolean visibility)
 	{
-		sayUnoButtonPlayerOne.setVisible(true);
-		sayUnoButtonPlayerTwo.setVisible(true);
-	}
-
-	/**
-	 * Sets "say uno" buttons invisible. "say uno" buttons are visible only when a
-	 * player only has one card left. If the user doesn't say "uno" (doesn't press
-	 * the button), two cards are added to his hand.
-	 */
-	public void makeSayUnoButtonInvisible()
-	{
-		sayUnoButtonPlayerOne.setVisible(false);
-		sayUnoButtonPlayerTwo.setVisible(false);
+		sayUnoButtonPlayerOne.setVisible(visibility);
+		sayUnoButtonPlayerTwo.setVisible(visibility);
 	}
 
 	/**

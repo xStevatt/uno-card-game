@@ -86,6 +86,21 @@ public class GameModel
 		numberOfPlayers++;
 	}
 
+	/**
+	 * 
+	 * @param player
+	 */
+	public void initPlayer(ArrayList<Player> playersToAdd)
+	{
+		players.addAll(playersToAdd);
+		numberOfPlayers += playersToAdd.size();
+	}
+
+	/**
+	 * 
+	 * @param card
+	 * @param index
+	 */
 	public void evalMossa(Card card, int index)
 	{
 		players.get(index).removeCard(card);
@@ -127,18 +142,34 @@ public class GameModel
 
 		if (cardUsed.getCardColor() == null || cardSelected.getCardColor() == null)
 		{
+			System.out.println(
+					"Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: " + cardUsed.getCardType());
+			System.out.println("Carta sele. - [Colore: " + cardSelected.getCardColor() + "]" + "Tipo: "
+					+ cardSelected.getCardType());
 			return isCardValid;
 		}
 		else if (cardUsed.getCardColor() == cardSelected.getCardColor())
 		{
+			System.out.println(
+					"Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: " + cardUsed.getCardType());
+			System.out.println("Carta sele. - [Colore: " + cardSelected.getCardColor() + "]" + "Tipo: "
+					+ cardSelected.getCardType());
 			return isCardValid;
 		}
 		else if ((cardUsed instanceof NumberCard && cardSelected instanceof NumberCard)
 				&& ((NumberCard) cardSelected).getValue() == ((NumberCard) cardSelected).getValue())
 		{
+			System.out.println(
+					"Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: " + cardUsed.getCardType());
+			System.out.println("Carta sele. - [Colore: " + cardSelected.getCardColor() + "]" + "Tipo: "
+					+ cardSelected.getCardType());
 			return isCardValid;
 		}
 
+		System.out
+				.println("Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: " + cardUsed.getCardType());
+		System.out.println(
+				"Carta sele. - [Colore: " + cardSelected.getCardColor() + "]" + "Tipo: " + cardSelected.getCardType());
 		return !isCardValid;
 	}
 

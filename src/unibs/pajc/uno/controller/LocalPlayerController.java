@@ -42,12 +42,16 @@ public class LocalPlayerController
 		gameView.setResizable(false);
 		gameView.loadCards(model.getPlayers().get(0).getHandCards(), 0);
 		gameView.loadCards(model.getPlayers().get(1).getHandCards(), 1);
+
+		gameView.setLocationRelativeTo(null);
 	}
 
 	public void updateView(Player playerOne, Player playerTwo)
 	{
 		gameView.loadCards(playerOne.getHandCards(), 0);
 		gameView.loadCards(playerTwo.getHandCards(), 1);
+		System.out.println("Last card used: " + model.getLastCardUsed());
+		gameView.changeDroppedCardView(model.getLastCardUsed());
 	}
 
 	public void runGame()
@@ -67,12 +71,20 @@ public class LocalPlayerController
 
 						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 						{
-							System.out.println("HERE");
+							try
+							{
+								Thread.sleep(1000);
+							}
+							catch (InterruptedException e)
+							{
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 							if (CardView.isCardSelected == true)
 							{
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
-									System.out.print("HERE");
 									model.evalMossa(CardView.cardSelected, turn);
 								}
 								else
@@ -83,15 +95,11 @@ public class LocalPlayerController
 							}
 							if (CardBackView.isCardDrawnFromDeck == true)
 							{
-
-							}
-							else
-							{
-
+								System.out.println("You have drawn a card from the deck.");
 							}
 
 							CardView.isCardSelected = false;
-							CardBackView.isCardDrawnFromDeck = false; // RESETS IF THE CARD WAS DRAWN FROM DECK // EVAL
+							CardBackView.isCardDrawnFromDeck = false;
 						}
 					}
 					if (turn == 1)
@@ -103,7 +111,7 @@ public class LocalPlayerController
 					updateView(model.getPlayers().get(0), model.getPlayers().get(1)); // UP. VIEW AFTER MODEL
 				}
 
-				System.out.println("Game is over, apparently");
+				JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer() + "vincitore");
 			}
 		}).start();
 	}
