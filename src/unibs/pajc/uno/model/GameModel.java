@@ -19,8 +19,6 @@ public class GameModel
 	private int maxNumberOfPlayers;
 	private PlayerRoundIterator turnIterator;
 
-	private boolean gameOver = false;
-
 	/**
 	 * 
 	 * @param players
@@ -98,6 +96,15 @@ public class GameModel
 
 	/**
 	 * 
+	 * @return
+	 */
+	public Card getCardFromDeck()
+	{
+		return cardsDeck.getRandomCard();
+	}
+
+	/**
+	 * 
 	 * @param card
 	 * @param index
 	 */
@@ -142,16 +149,18 @@ public class GameModel
 
 		if (cardUsed.getCardColor() == null || cardSelected.getCardColor() == null)
 		{
-			System.out.println(
-					"Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: " + cardUsed.getCardType());
+			System.out.print("HERE 1");
+			System.out.println(isCardValid + "Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: "
+					+ cardUsed.getCardType());
 			System.out.println("Carta sele. - [Colore: " + cardSelected.getCardColor() + "]" + "Tipo: "
 					+ cardSelected.getCardType());
 			return isCardValid;
 		}
 		else if (cardUsed.getCardColor() == cardSelected.getCardColor())
 		{
-			System.out.println(
-					"Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: " + cardUsed.getCardType());
+			System.out.print("HERE 2");
+			System.out.println(isCardValid + "Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: "
+					+ cardUsed.getCardType());
 			System.out.println("Carta sele. - [Colore: " + cardSelected.getCardColor() + "]" + "Tipo: "
 					+ cardSelected.getCardType());
 			return isCardValid;
@@ -159,8 +168,9 @@ public class GameModel
 		else if ((cardUsed instanceof NumberCard && cardSelected instanceof NumberCard)
 				&& ((NumberCard) cardSelected).getValue() == ((NumberCard) cardSelected).getValue())
 		{
-			System.out.println(
-					"Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: " + cardUsed.getCardType());
+			System.out.print("HERE 3");
+			System.out.println(isCardValid + "Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: "
+					+ cardUsed.getCardType());
 			System.out.println("Carta sele. - [Colore: " + cardSelected.getCardColor() + "]" + "Tipo: "
 					+ cardSelected.getCardType());
 			return isCardValid;
@@ -173,6 +183,11 @@ public class GameModel
 		return !isCardValid;
 	}
 
+	/**
+	 * 
+	 * @param cardSelected
+	 * @return
+	 */
 	public boolean isPlacedCardValid(Card cardSelected)
 	{
 		return isPlacedCardValid(cardSelected, usedCards.getLastCardUsed());
@@ -212,7 +227,6 @@ public class GameModel
 
 		for (Player player : players)
 		{
-			System.out.println(player.getNamePlayer() + "- cards: " + player.getHandCards().getNumberOfCards());
 			isGameOver = player.getHandCards().getNumberOfCards() == 0;
 		}
 
@@ -322,10 +336,5 @@ public class GameModel
 	public void setNumberOfPlayers(int numberOfPlayers)
 	{
 		this.numberOfPlayers = numberOfPlayers;
-	}
-
-	public void setGameOver(boolean gameOver)
-	{
-		this.gameOver = gameOver;
 	}
 }

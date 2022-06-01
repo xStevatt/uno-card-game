@@ -1,3 +1,4 @@
+
 package unibs.pajc.uno.controller;
 
 import javax.swing.JOptionPane;
@@ -20,7 +21,7 @@ public class LocalPlayerController
 		initModel(playerOneName, playerTwoName);
 
 		// INITS VIEW
-		gameView = new TableView(playerOneName, playerTwoName, model.getUsedCards().getLastCardUsed(), true);
+		gameView = new TableView(playerOneName, playerTwoName, false);
 		initView();
 
 		// START RUNNING GAME
@@ -42,6 +43,7 @@ public class LocalPlayerController
 		gameView.setResizable(false);
 		gameView.loadCards(model.getPlayers().get(0).getHandCards(), 0);
 		gameView.loadCards(model.getPlayers().get(1).getHandCards(), 1);
+		gameView.changeDroppedCardView(model.getCardFromDeck());
 
 		gameView.setLocationRelativeTo(null);
 	}
@@ -73,11 +75,10 @@ public class LocalPlayerController
 						{
 							try
 							{
-								Thread.sleep(1000);
+								Thread.sleep(500);
 							}
 							catch (InterruptedException e)
 							{
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 
@@ -86,6 +87,7 @@ public class LocalPlayerController
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
 									model.evalMossa(CardView.cardSelected, turn);
+									gameView.changeDroppedCardView(CardView.cardSelected);
 								}
 								else
 								{
@@ -97,17 +99,16 @@ public class LocalPlayerController
 							{
 								System.out.println("You have drawn a card from the deck.");
 							}
-
-							CardView.isCardSelected = false;
-							CardBackView.isCardDrawnFromDeck = false;
 						}
 					}
 					if (turn == 1)
 					{
-						CardView.isCardSelected = false;
-						CardBackView.isCardDrawnFromDeck = false; // RESETS IF THE CARD WAS DRAWN FROM DECK // EVAL
+
 					}
 
+					turn = turn == 0 ? 1 : 0;
+					CardView.isCardSelected = false;
+					CardBackView.isCardDrawnFromDeck = false;
 					updateView(model.getPlayers().get(0), model.getPlayers().get(1)); // UP. VIEW AFTER MODEL
 				}
 

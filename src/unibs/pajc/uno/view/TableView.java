@@ -38,6 +38,9 @@ import unibs.pajc.uno.model.player.Player;
 public class TableView extends JFrame
 {
 
+	public static boolean isLocalPlayerUnoButtonPressed = false;
+	public static boolean isAdversaryPlayerUnoButtonPressed = false;
+
 	private JPanel contentPane;
 	private JTextField txtSendMessageField;
 
@@ -74,6 +77,7 @@ public class TableView extends JFrame
 
 	private boolean isGameLocal = true;
 	private JLabel lblNewLabel_1;
+	private JLabel lblNewLabel_2;
 
 	/**
 	 * Constructor to create the form.
@@ -82,7 +86,7 @@ public class TableView extends JFrame
 	 * @param namePlayerTwo
 	 * @param firstRandomCard
 	 */
-	public TableView(String namePlayerOne, String namePlayerTwo, Card firstRandomCard, boolean isGameLocal)
+	public TableView(String namePlayerOne, String namePlayerTwo, boolean isGameLocal)
 	{
 		super("Uno - cards game");
 		this.isGameLocal = isGameLocal;
@@ -186,7 +190,6 @@ public class TableView extends JFrame
 		panelPlaced = new JPanel();
 		// +5 is due to card's border
 		panelPlaced.setBounds(397, 30, 100 + 5, 150 + 5);
-		panelPlaced.add(new CardDropped(firstRandomCard));
 		panelPlaced.setOpaque(false);
 		midTable.add(panelPlaced);
 
@@ -199,7 +202,7 @@ public class TableView extends JFrame
 		panelChat = new JPanel();
 		panelChat.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Chat",
 				TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelChat.setBounds(966, 141, 249, 525);
+		panelChat.setBounds(966, 201, 249, 465);
 		contentPane.add(panelChat);
 		panelChat.setLayout(null);
 
@@ -207,38 +210,38 @@ public class TableView extends JFrame
 		textAreaChat.setLineWrap(true);
 		textAreaChat.setEditable(false);
 		textAreaChat.setRows(1);
-		textAreaChat.setBounds(16, 31, 216, 395);
+		textAreaChat.setBounds(17, 24, 216, 341);
 		panelChat.add(textAreaChat);
 
 		btnSendMessage = new JButton("Send");
-		btnSendMessage.setBounds(159, 472, 73, 37);
+		btnSendMessage.setBounds(159, 405, 73, 37);
 
 		panelChat.add(btnSendMessage);
 
 		txtSendMessageField = new JTextField();
-		txtSendMessageField.setBounds(17, 468, 130, 43);
+		txtSendMessageField.setBounds(17, 401, 130, 43);
 		panelChat.add(txtSendMessageField);
 		txtSendMessageField.setColumns(10);
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(16, 444, 216, 12);
+		separator.setBounds(17, 377, 216, 12);
 		panelChat.add(separator);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(Color.DARK_GRAY));
-		panel_1.setBounds(966, 6, 249, 124);
+		panel_1.setBounds(966, 6, 249, 183);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
 		lblNewLabel = new JLabel("Uno Game");
-		lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(6, 14, 237, 23);
 		panel_1.add(lblNewLabel);
 
 		matchDescriptor = new JLabel(namePlayerOne + " vs " + namePlayerTwo);
 		matchDescriptor.setHorizontalAlignment(SwingConstants.CENTER);
-		matchDescriptor.setBounds(16, 66, 227, 16);
+		matchDescriptor.setBounds(16, 73, 227, 16);
 		panel_1.add(matchDescriptor);
 
 		JSeparator separator_1 = new JSeparator();
@@ -247,8 +250,24 @@ public class TableView extends JFrame
 
 		lblStopWatch = new JLabel("00:00:00");
 		lblStopWatch.setHorizontalAlignment(SwingConstants.CENTER);
-		lblStopWatch.setBounds(6, 94, 237, 16);
+		lblStopWatch.setBounds(6, 101, 237, 16);
 		panel_1.add(lblStopWatch);
+
+		JSeparator separator_1_1 = new JSeparator();
+		separator_1_1.setBounds(16, 126, 227, 12);
+		panel_1.add(separator_1_1);
+
+		JLabel lblPlayerTurn = new JLabel("Player's Turn");
+		lblPlayerTurn.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+		lblPlayerTurn.setHorizontalAlignment(SwingConstants.LEFT);
+		lblPlayerTurn.setBounds(106, 150, 137, 27);
+		panel_1.add(lblPlayerTurn);
+
+		lblNewLabel_2 = new JLabel("Turn:");
+		lblNewLabel_2.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		lblNewLabel_2.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewLabel_2.setBounds(6, 150, 88, 27);
+		panel_1.add(lblNewLabel_2);
 
 		if (isGameLocal)
 		{
@@ -269,6 +288,28 @@ public class TableView extends JFrame
 		}
 
 		initTimer();
+	}
+
+	/**
+	 * 
+	 * @param playerOne
+	 * @param playerTwo
+	 * @param lastCardUsed
+	 * @param currentPlayer
+	 */
+	public void updateView(Player playerOne, Player playerTwo, Card lastCardUsed, int currentPlayer)
+	{
+		if (currentPlayer == 0)
+		{
+			loadCards(playerOne.getHandCards(), currentPlayer);
+		}
+		if (currentPlayer == 1)
+		{
+			loadCards(playerTwo.getHandCards(), currentPlayer);
+		}
+
+		panelPlaced.removeAll();
+		panelPlaced.add(new CardView(lastCardUsed));
 	}
 
 	/**
@@ -327,12 +368,6 @@ public class TableView extends JFrame
 		}
 	}
 
-	public void updateView(Player playerOne, Player playerTwo, int player)
-	{
-		loadCards(playerOne.getHandCards(), player);
-		loadCards(playerTwo.getHandCards(), player);
-	}
-
 	/**
 	 * Sets "say uno" buttons invisible. "say uno" buttons are visible only when a
 	 * player only has one card left. If the user doesn't say "uno" (doesn't press
@@ -351,7 +386,11 @@ public class TableView extends JFrame
 	 */
 	public void changeDroppedCardView(Card card)
 	{
-		panelPlaced.add(new CardView(card));
+		panelPlaced.removeAll();
+		CardView cardToAdd = new CardView(card);
+		cardToAdd.setShouldAnimationsMove(false);
+
+		panelPlaced.add(cardToAdd);
 	}
 
 	/**
@@ -365,12 +404,21 @@ public class TableView extends JFrame
 	{
 		if (playingPlayer == 0)
 		{
+			handCardsViewActual.removeAll();
+			panelActualPlayer.removeAll();
 			addCardsToView(cards, panelActualPlayer, handCardsViewActual);
 		}
 		if (playingPlayer == 1)
 		{
+			handCardsViewAdversary.removeAll();
+			panelAdversaryPlayer.removeAll();
 			addCardsToView(cards, panelAdversaryPlayer, handCardsViewAdversary);
 		}
+
+		panelAdversaryPlayer.repaint();
+		panelAdversaryPlayer.repaint();
+		handCardsViewActual.repaint();
+		panelActualPlayer.repaint();
 	}
 
 	/**
@@ -381,8 +429,6 @@ public class TableView extends JFrame
 	 */
 	public void addCardsToView(HandCards handCards, JPanel panelToAddCards, JLayeredPane cardsView)
 	{
-		cardsView.removeAll();
-
 		Point originPoint = getFirstCardPoint(handCards.getNumberOfCards(), cardsView);
 		int offset = calculateOffset(cardsView.getWidth(), handCards.getNumberOfCards());
 
@@ -436,12 +482,13 @@ public class TableView extends JFrame
 		// OFFSET MASSIMO
 		if (totalCards <= GameRules.DEFAULT_NUMBER_OF_CARDS)
 		{
-			return 80;
+			return 71;
 		}
-		else
-		{
-			return (width - 100) / (totalCards - 1);
-		}
+		/*
+		 * else { return (width - 100) / (totalCards - 1); }
+		 */
+
+		return 71;
 	}
 
 	// GETTING AND SETTERS
