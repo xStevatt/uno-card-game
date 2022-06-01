@@ -73,6 +73,7 @@ public class LocalPlayerController
 				{
 					if (turn == 0)
 					{
+						System.out.print(model.getLastCardUsed().getCardColor());
 						gameView.enableViewPlayer(0, true);
 						gameView.enableViewPlayer(1, false);
 

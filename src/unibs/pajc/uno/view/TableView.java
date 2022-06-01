@@ -302,7 +302,7 @@ public class TableView extends JFrame
 		}
 
 		panelPlaced.removeAll();
-		panelPlaced.add(new CardView(lastCardUsed));
+		changeDroppedCardView(lastCardUsed);
 	}
 
 	/**

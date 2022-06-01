@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardDeck;
 import unibs.pajc.uno.model.card.CardType;
+import unibs.pajc.uno.model.card.NumberCard;
 import unibs.pajc.uno.model.card.UsedPile;
 import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.model.player.PlayerRoundIterator;
@@ -164,16 +165,22 @@ public class GameModel
 			isCardValid = true;
 		}
 
-		else if (cardSelected.getCardType() == cardUsed.getCardType()
-				&& cardSelected.getCardColor() == cardSelected.getCardColor())
+		if (cardSelected.getCardColor() == cardUsed.getCardColor())
 		{
 			System.out.println("HERE 2");
 			isCardValid = true;
 		}
 
-		else if (cardUsed.getCardType() == cardSelected.getCardType() && cardUsed.getCardType() == CardType.NUMBER)
+		if (cardSelected.getCardType() == cardUsed.getCardType() && cardSelected.getCardType() != CardType.NUMBER)
 		{
 			System.out.println("HERE 3");
+			isCardValid = true;
+		}
+
+		if (cardUsed.getCardType() == cardSelected.getCardType() && cardUsed.getCardType() == CardType.NUMBER
+				&& ((NumberCard) cardSelected).getValue() == ((NumberCard) cardUsed).getValue())
+		{
+			System.out.println("HERE 4");
 			isCardValid = true;
 		}
 
