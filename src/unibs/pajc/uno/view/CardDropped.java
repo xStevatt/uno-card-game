@@ -30,8 +30,6 @@ public class CardDropped extends JPanel
 	private final Border focusedBorder = BorderFactory.createEtchedBorder(JComponent.WHEN_FOCUSED, Color.black,
 			Color.gray);
 
-	private final Consumer<Card> handleCardClick;
-
 	public CardDropped(Card card)
 	{
 		this(card, null);
@@ -40,7 +38,6 @@ public class CardDropped extends JPanel
 	public CardDropped(Card card, Consumer<Card> onCardClick)
 	{
 		this.card = card;
-		this.handleCardClick = onCardClick;
 		this.value = Util.getValueToDisplay(card);
 
 		initView();

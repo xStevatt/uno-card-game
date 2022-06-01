@@ -31,7 +31,9 @@ import unibs.pajc.uno.view.events.HoverButtonEvent;
  */
 public class MainApp extends JFrame
 {
-	private static final String TITLE = "UnoPACJ, an opensource uno game made in Java";
+	private static final String APP_SIGNATURE = "Made by Stefano Valloncini, Yuhang Ye, Luigi Amarante";
+
+	private static final String DEFAULT_APP_TITLE = "UnoPAJC, a remake of the uno card game, in Java";
 
 	private JPanel bannerPanel;
 	private JLabel bannerLabel;
@@ -151,9 +153,8 @@ public class MainApp extends JFrame
 		buttonsPanel.add(newOnlineGamePanel);
 		buttonsPanel.add(AIGamePanel);
 
-		JLabel descriptorLabel = new JLabel("UnoPAJC, an opensource uno card game written in Java",
-				SwingConstants.CENTER);
-		JLabel authorLabel = new JLabel("Made by Stefano Valloncini, Yuhang Ye, Luigi Amarante", SwingConstants.CENTER);
+		JLabel descriptorLabel = new JLabel(DEFAULT_APP_TITLE, SwingConstants.CENTER);
+		JLabel authorLabel = new JLabel(APP_SIGNATURE, SwingConstants.CENTER);
 
 		JPanel descriptorPanelNorth = new JPanel();
 		descriptorPanelNorth.setBorder(BorderFactory.createEmptyBorder(10, 25, 1, 40));
@@ -216,12 +217,14 @@ public class MainApp extends JFrame
 
 		// ADDING MOUSE LISTENER TO CHANGE TEXT WHEN BUTTON IS HOVERED
 
-		newOnlineGameButton
-				.addMouseListener(new HoverButtonEvent("Start a singleplayer game.", TITLE, descriptorLabel));
+		newOnlineGameButton.addMouseListener(
+				new HoverButtonEvent("Start a singleplayer game.", DEFAULT_APP_TITLE, descriptorLabel));
 
-		newLocalGameButton.addMouseListener(new HoverButtonEvent("Start a multiplayer game.", TITLE, descriptorLabel));
+		newLocalGameButton.addMouseListener(
+				new HoverButtonEvent("Start a multiplayer game.", DEFAULT_APP_TITLE, descriptorLabel));
 
-		newLocalGameButton.addMouseListener(new HoverButtonEvent("Start a game against AI", TITLE, descriptorLabel));
+		newLocalGameButton
+				.addMouseListener(new HoverButtonEvent("Start a game against AI", DEFAULT_APP_TITLE, descriptorLabel));
 
 	}
 }

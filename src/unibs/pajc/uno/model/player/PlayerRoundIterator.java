@@ -24,6 +24,24 @@ public class PlayerRoundIterator
 
 	/**
 	 * 
+	 * @return
+	 */
+	public int getIndexCurrentPlayer()
+	{
+		return players.get(current).getIndex();
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public int getIndexNextPlayer()
+	{
+		return getNextIndex();
+	}
+
+	/**
+	 * 
 	 */
 	public void reverseDirection()
 	{

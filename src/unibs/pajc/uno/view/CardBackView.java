@@ -55,6 +55,20 @@ public class CardBackView extends JPanel
 				CardBackView.isCardDrawnFromDeck = true;
 				System.out.println("Card drawn");
 			}
+
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+				setBorder(focusedBorder);
+				setToolTipText("Draw a card!");
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+				setBorder(defaultBorder);
+				setToolTipText(null);
+			}
 		});
 	}
 

@@ -3,6 +3,7 @@ package unibs.pajc.uno.model;
 import java.util.ArrayList;
 
 import unibs.pajc.uno.model.card.Card;
+import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.card.CardDeck;
 import unibs.pajc.uno.model.card.CardType;
 import unibs.pajc.uno.model.card.NumberCard;
@@ -20,6 +21,8 @@ public class GameModel
 	private int maxNumberOfPlayers;
 	private PlayerRoundIterator turnIterator;
 
+	private CardColor currentCardColor;
+
 	/**
 	 * 
 	 * @param players
@@ -27,15 +30,9 @@ public class GameModel
 	public GameModel(ArrayList<Player> players)
 	{
 		this.players = players;
-		initGameElements();
-	}
+		turnIterator = new PlayerRoundIterator(players);
 
-	/**
-	 * Constructor to automatically set the default number of players
-	 */
-	public GameModel()
-	{
-		this(GameRules.DEFAULT_NUMBER_OF_PLAYERS);
+		initGameElements();
 	}
 
 	/**
@@ -48,7 +45,16 @@ public class GameModel
 		this.maxNumberOfPlayers = maxNumberOfPlayers;
 		players = new ArrayList<Player>(maxNumberOfPlayers);
 		PlayerRoundIterator roundIterator = new PlayerRoundIterator(players);
+
 		initGameElements();
+	}
+
+	/**
+	 * Constructor to automatically set the default number of players
+	 */
+	public GameModel()
+	{
+		this(GameRules.DEFAULT_NUMBER_OF_PLAYERS);
 	}
 
 	/**
@@ -111,36 +117,68 @@ public class GameModel
 	}
 
 	/**
+	 * Boolean variable assignments were left for clarity
 	 * 
 	 * @param card
-	 * @param index
+	 * @param index - if index is 1, then a new color must be chosen
 	 */
-	public void evalMossa(Card card, int index)
+	public boolean evalMossa(Card card, int index)
 	{
 		players.get(index).removeCard(card);
 		usedCards.addCard(card);
 
+		boolean newColorNeedsSelection = false;
+
 		switch (card.getCardType())
 		{
 		case NUMBER:
-			// Nothing needed
-			break;
-		case WILD_COLOR:
+
+			// NOTHING NEEDS TO BE DONE WHEN CARD PLACED IS A NUMBER
+			newColorNeedsSelection = false;
 
 			break;
+
+		case WILD_COLOR:
+
+			newColorNeedsSelection = true;
+
+			break;
+
 		case WILD_DRAW_FOUR:
+
+			for (int i = 0; i < 4; i++)
+			{
+				turnIterator.next().addCard(getCardFromDeck());
+			}
+
+			newColorNeedsSelection = true;
 
 			break;
 		case WILD_DRAW_TWO:
 
-			break;
-		case SKIP:
+			for (int i = 0; i < 2; i++)
+			{
+				turnIterator.next().addCard(getCardFromDeck());
+			}
+
+			newColorNeedsSelection = false;
 
 			break;
+
+		case SKIP:
+
+			newColorNeedsSelection = false;
+
+			break;
+
 		case REVERSE:
+
+			newColorNeedsSelection = false;
 
 			break;
 		}
+
+		return newColorNeedsSelection;
 	}
 
 	/**
@@ -154,33 +192,25 @@ public class GameModel
 	{
 		boolean isCardValid = false;
 
-		System.out.println("Card selected by user \n" + "Color: " + cardSelected.getCardColor() + "\n Tipo: "
-				+ cardSelected.getCardType() + "\n");
-		System.out.println("Card selected by table \n" + "Color: " + cardUsed.getCardColor() + "\n Tipo: "
-				+ cardUsed.getCardType() + "\n");
-
 		if (cardSelected.isCardSpecialWild() || cardUsed.isCardSpecialWild())
 		{
-			System.out.println("HERE 1");
-			isCardValid = true;
+			if (cardSelected.getCardColor() == currentCardColor)
+				isCardValid = true;
 		}
 
 		if (cardSelected.getCardColor() == cardUsed.getCardColor())
 		{
-			System.out.println("HERE 2");
 			isCardValid = true;
 		}
 
 		if (cardSelected.getCardType() == cardUsed.getCardType() && cardSelected.getCardType() != CardType.NUMBER)
 		{
-			System.out.println("HERE 3");
 			isCardValid = true;
 		}
 
 		if (cardUsed.getCardType() == cardSelected.getCardType() && cardUsed.getCardType() == CardType.NUMBER
 				&& ((NumberCard) cardSelected).getValue() == ((NumberCard) cardUsed).getValue())
 		{
-			System.out.println("HERE 4");
 			isCardValid = true;
 		}
 
@@ -290,6 +320,26 @@ public class GameModel
 	public Card getLastCardUsed()
 	{
 		return usedCards.getLastCardUsed();
+	}
+
+	public PlayerRoundIterator getTurnIterator()
+	{
+		return turnIterator;
+	}
+
+	public void setTurnIterator(PlayerRoundIterator turnIterator)
+	{
+		this.turnIterator = turnIterator;
+	}
+
+	public CardColor getCurrentCardColor()
+	{
+		return currentCardColor;
+	}
+
+	public void setCurrentCardColor(CardColor currentCardColor)
+	{
+		this.currentCardColor = currentCardColor;
 	}
 
 	public CardDeck getCardsDeck()
