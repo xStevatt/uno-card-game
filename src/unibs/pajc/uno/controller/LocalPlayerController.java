@@ -107,6 +107,7 @@ public class LocalPlayerController
 					}
 
 					turn = turn == 0 ? 1 : 0;
+
 					CardView.isCardSelected = false;
 					CardBackView.isCardDrawnFromDeck = false;
 					updateView(model.getPlayers().get(0), model.getPlayers().get(1)); // UP. VIEW AFTER MODEL

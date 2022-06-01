@@ -46,6 +46,7 @@ public class GameModel
 	{
 		this.maxNumberOfPlayers = maxNumberOfPlayers;
 		players = new ArrayList<Player>(maxNumberOfPlayers);
+		PlayerRoundIterator roundIterator = new PlayerRoundIterator(players);
 		initGameElements();
 	}
 
@@ -92,6 +93,11 @@ public class GameModel
 	{
 		players.addAll(playersToAdd);
 		numberOfPlayers += playersToAdd.size();
+	}
+
+	public int getNextTurn()
+	{
+
 	}
 
 	/**
