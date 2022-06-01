@@ -366,10 +366,12 @@ public class TableView extends JFrame
 	 * player only has one card left. If the user doesn't say "uno" (doesn't press
 	 * the button), two cards are added to his hand.
 	 */
-	public void makeSayUnoButtonVisibile(boolean visibility)
+	public void setSayUnoButtonVisibile(boolean visibility, int indexPlayer)
 	{
-		sayUnoButtonPlayerOne.setVisible(visibility);
-		sayUnoButtonPlayerTwo.setVisible(visibility);
+		if (indexPlayer == 0)
+			sayUnoButtonPlayerOne.setVisible(visibility);
+		else
+			sayUnoButtonPlayerTwo.setVisible(visibility);
 	}
 
 	/**

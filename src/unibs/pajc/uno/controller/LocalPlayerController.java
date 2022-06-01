@@ -112,6 +112,12 @@ public class LocalPlayerController
 						gameView.enableViewPlayer(1, true);
 					}
 
+					// CHECKS NUMBER CARDS
+					if (model.getPlayers().get(turn).getHandCards().getNumberOfCards() == 1)
+					{
+						gameView.setSayUnoButtonVisibile(true, turn);
+					}
+
 					// RESETS FLAGS
 					CardView.isCardSelected = false;
 					CardBackView.isCardDrawnFromDeck = false;
@@ -122,7 +128,11 @@ public class LocalPlayerController
 
 					// UPDATES VIEW
 					updateView(model.getPlayers().get(0), model.getPlayers().get(1));
-					turn = turn == 0 ? 1 : 0;
+
+					if (turn == 0)
+						turn = 1;
+					else
+						turn = 0;
 				}
 
 				JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer() + "vincitore");
