@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardDeck;
-import unibs.pajc.uno.model.card.NumberCard;
+import unibs.pajc.uno.model.card.CardType;
 import unibs.pajc.uno.model.card.UsedPile;
 import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.model.player.PlayerRoundIterator;
@@ -151,42 +151,33 @@ public class GameModel
 	 */
 	public boolean isPlacedCardValid(Card cardSelected, Card cardUsed)
 	{
-		boolean isCardValid = true;
+		boolean isCardValid = false;
 
-		if (cardUsed.getCardColor() == null || cardSelected.getCardColor() == null)
+		System.out.println("Card selected by user \n" + "Color: " + cardSelected.getCardColor() + "\n Tipo: "
+				+ cardSelected.getCardType() + "\n");
+		System.out.println("Card selected by table \n" + "Color: " + cardUsed.getCardColor() + "\n Tipo: "
+				+ cardUsed.getCardType() + "\n");
+
+		if (cardSelected.isCardSpecialWild() || cardUsed.isCardSpecialWild())
 		{
-			System.out.print("HERE 1");
-			System.out.println(isCardValid + "Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: "
-					+ cardUsed.getCardType());
-			System.out.println("Carta sele. - [Colore: " + cardSelected.getCardColor() + "]" + "Tipo: "
-					+ cardSelected.getCardType());
-			return isCardValid;
-		}
-		else if (cardUsed.getCardColor() == cardSelected.getCardColor())
-		{
-			System.out.print("HERE 2");
-			System.out.println(isCardValid + "Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: "
-					+ cardUsed.getCardType());
-			System.out.println("Carta sele. - [Colore: " + cardSelected.getCardColor() + "]" + "Tipo: "
-					+ cardSelected.getCardType());
-			return isCardValid;
-		}
-		else if ((cardUsed instanceof NumberCard && cardSelected instanceof NumberCard)
-				&& ((NumberCard) cardSelected).getValue() == ((NumberCard) cardSelected).getValue())
-		{
-			System.out.print("HERE 3");
-			System.out.println(isCardValid + "Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: "
-					+ cardUsed.getCardType());
-			System.out.println("Carta sele. - [Colore: " + cardSelected.getCardColor() + "]" + "Tipo: "
-					+ cardSelected.getCardType());
-			return isCardValid;
+			System.out.println("HERE 1");
+			isCardValid = true;
 		}
 
-		System.out
-				.println("Carta usata - [Colore: " + cardUsed.getCardColor() + "]" + "Tipo: " + cardUsed.getCardType());
-		System.out.println(
-				"Carta sele. - [Colore: " + cardSelected.getCardColor() + "]" + "Tipo: " + cardSelected.getCardType());
-		return !isCardValid;
+		else if (cardSelected.getCardType() == cardUsed.getCardType()
+				&& cardSelected.getCardColor() == cardSelected.getCardColor())
+		{
+			System.out.println("HERE 2");
+			isCardValid = true;
+		}
+
+		else if (cardUsed.getCardType() == cardSelected.getCardType() && cardUsed.getCardType() == CardType.NUMBER)
+		{
+			System.out.println("HERE 3");
+			isCardValid = true;
+		}
+
+		return isCardValid;
 	}
 
 	/**

@@ -11,4 +11,6 @@ public interface Card
 	public CardType getCardType();
 
 	public CardColor getCardColor();
+
+	public boolean isCardSpecialWild();
 }

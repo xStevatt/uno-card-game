@@ -2,10 +2,12 @@ package unibs.pajc.uno.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -50,7 +52,7 @@ public class CardBackView extends JPanel
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				CardBackView.isCardDrawnFromDeck = true; 
+				CardBackView.isCardDrawnFromDeck = true;
 				System.out.println("Card drawn");
 			}
 		});
@@ -65,6 +67,7 @@ public class CardBackView extends JPanel
 
 		fillBackground(g2, Color.BLACK);
 		drawWhiteOvalInCenter(g2);
+		drawValueInCenter(g2);
 	}
 
 	/**
@@ -93,5 +96,23 @@ public class CardBackView extends JPanel
 		g2.fillOval(0, cardHeight / 4, cardWidth * 3 / 5, cardHeight);
 
 		g2.setTransform(transformer);
+	}
+
+	private void drawValueInCenter(Graphics2D g2)
+	{
+		// var defaultFont = new Font(Util.DEFAULT_FONT, Font.BOLD, cardWidth / 2 + 5);
+		var defaultFont = new Font(Util.DEFAULT_FONT, Font.BOLD, cardWidth / 3);
+		var fontMetrics = this.getFontMetrics(defaultFont);
+		int stringWidth = fontMetrics.stringWidth("Uno") / 2;
+		int fontHeight = defaultFont.getSize() / 2;
+
+		g2.setColor(Color.white);
+
+		AffineTransform affineTransform = new AffineTransform();
+		affineTransform.rotate(Math.toRadians(-8), 0, 0);
+		Font rotatedFont = defaultFont.deriveFont(affineTransform);
+
+		g2.setFont(rotatedFont);
+		g2.drawString("Uno", cardWidth / 2 - stringWidth, cardHeight / 2 + fontHeight);
 	}
 }

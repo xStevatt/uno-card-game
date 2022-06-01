@@ -127,7 +127,7 @@ public class TableView extends JFrame
 		handCardsViewActual.setOpaque(false);
 
 		handCardsViewAdversary = new JLayeredPane();
-		handCardsViewAdversary.setPreferredSize(new Dimension(925, 175));
+		handCardsViewAdversary.setPreferredSize(new Dimension(940, 175));
 		handCardsViewAdversary.setOpaque(false);
 		panelActualPlayer.setLayout(new GridBagLayout());
 
@@ -408,6 +408,7 @@ public class TableView extends JFrame
 			addCardsToView(cards, panelAdversaryPlayer, handCardsViewAdversary);
 		}
 
+		// REPAINTS ALL COMPONENTS
 		panelAdversaryPlayer.repaint();
 		panelAdversaryPlayer.repaint();
 		handCardsViewActual.repaint();
@@ -441,6 +442,7 @@ public class TableView extends JFrame
 		}
 
 		cardsView.revalidate();
+		// ADDS CARDS PANEL TO OUTSIDE COMPONENT
 		panelToAddCards.add(cardsView);
 	}
 
@@ -473,7 +475,7 @@ public class TableView extends JFrame
 	{
 		if (totalCards <= GameRules.DEFAULT_NUMBER_OF_CARDS)
 		{
-			return 105;
+			return 120;
 		}
 		else
 		{
@@ -483,7 +485,7 @@ public class TableView extends JFrame
 
 	}
 
-	// GETTING AND SETTERS
+	// GETTERS AND SETTERS
 
 	public ArrayList<CardView> getAllCards(int indexPlayer)
 	{

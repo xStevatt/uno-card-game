@@ -25,4 +25,9 @@ public class ActionCard extends AbstractCard
 		return cardColor;
 	}
 
+	@Override
+	public boolean isCardSpecialWild()
+	{
+		return this.cardType == CardType.WILD_COLOR || this.cardType == CardType.WILD_DRAW_FOUR;
+	}
 }

@@ -42,13 +42,13 @@ public class CardDeck
 
 	public void initActionCards()
 	{
-		for (CardColor cardColor : CardColor.values())
+		for (CardColor color : CardColor.values())
 		{
 			for (var i = 0; i < GameRules.NUMBER_OF_ACTIONS_CARDS_PER_COLOR; i++)
 			{
-				cardDeck.add(new ActionCard(CardType.SKIP, cardColor));
-				cardDeck.add(new ActionCard(CardType.REVERSE, cardColor));
-				cardDeck.add(new ActionCard(CardType.WILD_DRAW_TWO, cardColor));
+				cardDeck.add(new ActionCard(CardType.SKIP, color));
+				cardDeck.add(new ActionCard(CardType.REVERSE, color));
+				cardDeck.add(new ActionCard(CardType.WILD_DRAW_TWO, color));
 			}
 		}
 	}

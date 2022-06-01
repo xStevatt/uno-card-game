@@ -41,8 +41,12 @@ public class LocalPlayerController
 	{
 		gameView.setVisible(true);
 		gameView.setResizable(false);
+
+		// LOADS GAME CARDS
 		gameView.loadCards(model.getPlayers().get(0).getHandCards(), 0);
 		gameView.loadCards(model.getPlayers().get(1).getHandCards(), 1);
+
+		// LOADS LAST CARD DROPPED
 		gameView.changeDroppedCardView(model.getCardFromDeck());
 
 		gameView.setLocationRelativeTo(null);
@@ -52,7 +56,7 @@ public class LocalPlayerController
 	{
 		gameView.loadCards(playerOne.getHandCards(), 0);
 		gameView.loadCards(playerTwo.getHandCards(), 1);
-		System.out.println("Last card used: " + model.getLastCardUsed());
+
 		gameView.changeDroppedCardView(model.getLastCardUsed());
 	}
 
@@ -69,6 +73,7 @@ public class LocalPlayerController
 				{
 					if (turn == 0)
 					{
+						gameView.enableViewPlayer(0, true);
 						gameView.enableViewPlayer(1, false);
 
 						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
@@ -87,7 +92,6 @@ public class LocalPlayerController
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
 									model.evalMossa(CardView.cardSelected, turn);
-									gameView.changeDroppedCardView(CardView.cardSelected);
 								}
 								else
 								{
@@ -107,13 +111,17 @@ public class LocalPlayerController
 						gameView.enableViewPlayer(1, true);
 					}
 
+					// RESETS FLAGS
 					CardView.isCardSelected = false;
 					CardBackView.isCardDrawnFromDeck = false;
 
+					// RESETS GAME VIEW
 					gameView.enableViewPlayer(0, false);
 					gameView.enableViewPlayer(1, false);
 
-					updateView(model.getPlayers().get(0), model.getPlayers().get(1)); // UP. VIEW AFTER MODEL
+					// UPDATES VIEW
+					updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+					turn = turn == 0 ? 1 : 0;
 				}
 
 				JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer() + "vincitore");
