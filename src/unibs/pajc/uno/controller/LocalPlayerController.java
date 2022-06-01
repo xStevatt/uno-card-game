@@ -47,7 +47,7 @@ public class LocalPlayerController
 		gameView.loadCards(model.getPlayers().get(1).getHandCards(), 1);
 
 		// LOADS LAST CARD DROPPED
-		gameView.changeDroppedCardView(model.getCardFromDeck());
+		gameView.changeDroppedCardView(model.getLastCardUsed());
 
 		gameView.setLocationRelativeTo(null);
 	}

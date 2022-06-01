@@ -190,6 +190,7 @@ public class TableView extends JFrame
 		// +5 is due to card's border
 		panelPlaced.setBounds(455, 30, 100 + 5, 150 + 5);
 		panelPlaced.setOpaque(false);
+		panelPlaced.setEnabled(false);
 		midTable.add(panelPlaced);
 
 		panelChat = new JPanel();
@@ -382,8 +383,7 @@ public class TableView extends JFrame
 	public void changeDroppedCardView(Card card)
 	{
 		panelPlaced.removeAll();
-		CardView cardToAdd = new CardView(card);
-		cardToAdd.setShouldAnimationsMove(false);
+		UsedCardView cardToAdd = new UsedCardView(card);
 
 		panelPlaced.add(cardToAdd);
 	}

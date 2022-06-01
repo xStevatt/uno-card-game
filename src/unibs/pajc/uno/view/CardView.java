@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -21,36 +20,28 @@ import unibs.pajc.uno.model.card.NumberCard;
 
 public class CardView extends JPanel
 {
-	private final Card card;
-	private final String value;
+	public static Card cardSelected = new NumberCard(CardColor.RED, 1);
+	public static boolean isCardSelected = false;
+
+	protected final Card card;
+	protected final String value;
 
 	private final int cardWidth = 100;
 	private final int cardHeight = 150;
 	private static final int margin = 5;
 
-	public static Card cardSelected = new NumberCard(CardColor.RED, 1);
-	public static boolean isCardSelected = false;
+	protected boolean shouldAnimationsMove = true;
 
-	private boolean shouldAnimationsMove = true;
+	protected final Dimension dimension = new Dimension(cardWidth, cardHeight);
 
-	private final Dimension dimension = new Dimension(cardWidth, cardHeight);
-
-	private final Border defaultBorder = BorderFactory.createEtchedBorder(JComponent.WHEN_FOCUSED, Color.white,
+	protected final Border defaultBorder = BorderFactory.createEtchedBorder(JComponent.WHEN_FOCUSED, Color.white,
 			Color.gray);
-	private final Border focusedBorder = BorderFactory.createEtchedBorder(JComponent.WHEN_FOCUSED, Color.black,
+	protected final Border focusedBorder = BorderFactory.createEtchedBorder(JComponent.WHEN_FOCUSED, Color.black,
 			Color.gray);
-
-	private final Consumer<Card> handleCardClick;
 
 	public CardView(Card card)
 	{
-		this(card, null);
-	}
-
-	public CardView(Card card, Consumer<Card> onCardClick)
-	{
 		this.card = card;
-		this.handleCardClick = onCardClick;
 		this.value = Util.getValueToDisplay(card);
 
 		initView();
