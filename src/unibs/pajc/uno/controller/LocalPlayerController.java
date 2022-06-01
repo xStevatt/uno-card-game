@@ -21,7 +21,7 @@ public class LocalPlayerController
 		initModel(playerOneName, playerTwoName);
 
 		// INITS VIEW
-		gameView = new TableView(playerOneName, playerTwoName, false);
+		gameView = new TableView(playerOneName, playerTwoName, true);
 		initView();
 
 		// START RUNNING GAME
@@ -97,19 +97,22 @@ public class LocalPlayerController
 							}
 							if (CardBackView.isCardDrawnFromDeck == true)
 							{
-								System.out.println("You have drawn a card from the deck.");
+								model.getPlayers().get(turn).addCard(model.getCardFromDeck());
 							}
 						}
 					}
 					if (turn == 1)
 					{
-
+						gameView.enableViewPlayer(0, false);
+						gameView.enableViewPlayer(1, true);
 					}
-
-					turn = turn == 0 ? 1 : 0;
 
 					CardView.isCardSelected = false;
 					CardBackView.isCardDrawnFromDeck = false;
+
+					gameView.enableViewPlayer(0, false);
+					gameView.enableViewPlayer(1, false);
+
 					updateView(model.getPlayers().get(0), model.getPlayers().get(1)); // UP. VIEW AFTER MODEL
 				}
 

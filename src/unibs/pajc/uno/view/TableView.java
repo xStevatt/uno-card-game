@@ -76,7 +76,6 @@ public class TableView extends JFrame
 	private ArrayList<CardView> listCardsView;
 
 	private boolean isGameLocal = true;
-	private JLabel lblNewLabel_1;
 	private JLabel lblNewLabel_2;
 
 	/**
@@ -93,7 +92,7 @@ public class TableView extends JFrame
 
 		setTitle("Uno - card's game");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1221, 700);
+		setBounds(100, 100, 1300, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -112,23 +111,23 @@ public class TableView extends JFrame
 		};
 		centerPanel.setBackground(Color.GREEN);
 		centerPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		centerPanel.setBounds(6, 6, 948, 660);
+		centerPanel.setBounds(6, 6, 1027, 660);
 		contentPane.add(centerPanel);
 		centerPanel.setLayout(null);
 
 		panelActualPlayer = new JPanel();
 		panelActualPlayer
 				.setBorder(new TitledBorder(null, namePlayerOne, TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelActualPlayer.setBounds(6, 454, 936, 200);
+		panelActualPlayer.setBounds(6, 454, 1015, 200);
 		panelActualPlayer.setOpaque(false);
 		panelActualPlayer.setLayout(new GridBagLayout());
 
 		handCardsViewActual = new JLayeredPane();
-		handCardsViewActual.setPreferredSize(new Dimension(920, 175));
+		handCardsViewActual.setPreferredSize(new Dimension(940, 175));
 		handCardsViewActual.setOpaque(false);
 
 		handCardsViewAdversary = new JLayeredPane();
-		handCardsViewAdversary.setPreferredSize(new Dimension(920, 175));
+		handCardsViewAdversary.setPreferredSize(new Dimension(925, 175));
 		handCardsViewAdversary.setOpaque(false);
 		panelActualPlayer.setLayout(new GridBagLayout());
 
@@ -138,7 +137,7 @@ public class TableView extends JFrame
 		panelAdversaryPlayer.setOpaque(false);
 		panelAdversaryPlayer
 				.setBorder(new TitledBorder(null, namePlayerTwo, TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelAdversaryPlayer.setBounds(6, 6, 936, 200);
+		panelAdversaryPlayer.setBounds(6, 6, 1015, 200);
 
 		centerPanel.add(panelAdversaryPlayer);
 		GridBagLayout gbl_panelAdversaryPlayer = new GridBagLayout();
@@ -151,7 +150,7 @@ public class TableView extends JFrame
 		midTable = new JPanel();
 		midTable.setOpaque(false);
 		midTable.setBorder(new LineBorder(Color.DARK_GRAY));
-		midTable.setBounds(6, 218, 936, 224);
+		midTable.setBounds(73, 218, 869, 224);
 		centerPanel.add(midTable);
 		midTable.setLayout(null);
 
@@ -164,7 +163,7 @@ public class TableView extends JFrame
 			}
 		});
 		sayUnoButtonPlayerOne.setVisible(false);
-		sayUnoButtonPlayerOne.setBounds(795, 179, 135, 39);
+		sayUnoButtonPlayerOne.setBounds(728, 179, 135, 39);
 		midTable.add(sayUnoButtonPlayerOne);
 
 		sayUnoButtonPlayerTwo = new JButton("SAY UNO!");
@@ -181,7 +180,7 @@ public class TableView extends JFrame
 
 		panelDeck = new JPanel();
 		// +5 is due to card's border
-		panelDeck.setBounds(253, 30, 100 + 5, 150 + 5);
+		panelDeck.setBounds(304, 30, 100 + 5, 150 + 5);
 		midTable.add(panelDeck);
 		panelDeck.setOpaque(false);
 
@@ -189,20 +188,14 @@ public class TableView extends JFrame
 
 		panelPlaced = new JPanel();
 		// +5 is due to card's border
-		panelPlaced.setBounds(397, 30, 100 + 5, 150 + 5);
+		panelPlaced.setBounds(455, 30, 100 + 5, 150 + 5);
 		panelPlaced.setOpaque(false);
 		midTable.add(panelPlaced);
-
-		lblNewLabel_1 = new JLabel("Player turn");
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setFont(new Font("Lucida Grande", Font.PLAIN, 17));
-		lblNewLabel_1.setBounds(572, 77, 313, 50);
-		midTable.add(lblNewLabel_1);
 
 		panelChat = new JPanel();
 		panelChat.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Chat",
 				TitledBorder.CENTER, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panelChat.setBounds(966, 201, 249, 465);
+		panelChat.setBounds(1045, 201, 249, 465);
 		contentPane.add(panelChat);
 		panelChat.setLayout(null);
 
@@ -229,7 +222,7 @@ public class TableView extends JFrame
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new LineBorder(Color.DARK_GRAY));
-		panel_1.setBounds(966, 6, 249, 183);
+		panel_1.setBounds(1045, 6, 249, 183);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
@@ -459,14 +452,13 @@ public class TableView extends JFrame
 	private Point getFirstCardPoint(int totalCards, JLayeredPane handCardsView)
 	{
 		Point p = new Point(0, 20);
-		if (totalCards < GameRules.DEFAULT_NUMBER_OF_CARDS)
-		{
-			var width = handCardsView.getWidth() == 0 ? handCardsView.getPreferredSize().width
-					: handCardsView.getWidth();
 
-			var offset = calculateOffset(width, totalCards);
-			p.x = (width - offset * totalCards) / 2;
-		}
+		// var width = handCardsView.getWidth() == 0 ?
+		// handCardsView.getPreferredSize().width : handCardsView.getWidth();
+
+		// var offset = calculateOffset(width, totalCards);
+		// p.x = (width - offset * totalCards) / 2;
+
 		return p;
 	}
 
@@ -479,16 +471,16 @@ public class TableView extends JFrame
 	 */
 	private int calculateOffset(int width, int totalCards)
 	{
-		// OFFSET MASSIMO
 		if (totalCards <= GameRules.DEFAULT_NUMBER_OF_CARDS)
 		{
-			return 71;
+			return 105;
 		}
-		/*
-		 * else { return (width - 100) / (totalCards - 1); }
-		 */
+		else
+		{
+			System.out.println((width - 100) / (totalCards - 1));
+			return (width - 100) / (totalCards - 1);
+		}
 
-		return 71;
 	}
 
 	// GETTING AND SETTERS

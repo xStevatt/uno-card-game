@@ -95,9 +95,9 @@ public class GameModel
 		numberOfPlayers += playersToAdd.size();
 	}
 
-	public int getNextTurn()
+	public Player getCurrentPlayer()
 	{
-
+		return turnIterator.getCurrentPlayer();
 	}
 
 	/**

@@ -42,7 +42,7 @@ public class Player
 
 	public void removeAllCards()
 	{
-
+		handCards.removeAllCards();
 	}
 
 	public int getIndex()

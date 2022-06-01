@@ -44,7 +44,7 @@ public class PlayerRoundIterator
 	 * 
 	 * @return
 	 */
-	private int getNextIndex()
+	public int getNextIndex()
 	{
 		int increment = direction == Direction.CLOCKWISE ? 1 : -1;
 		return (players.size() + current + increment) % players.size();
