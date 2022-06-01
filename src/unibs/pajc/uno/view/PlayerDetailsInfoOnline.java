@@ -1,5 +1,6 @@
 package unibs.pajc.uno.view;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -7,6 +8,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
@@ -16,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import unibs.pajc.uno.controller.ClientController;
+import unibs.pajc.uno.controller.ServerController;
 
 public class PlayerDetailsInfoOnline extends JFrame
 {
@@ -42,7 +45,7 @@ public class PlayerDetailsInfoOnline extends JFrame
 	public PlayerDetailsInfoOnline()
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 290);
+		setBounds(100, 100, 450, 305);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -59,18 +62,46 @@ public class PlayerDetailsInfoOnline extends JFrame
 		btnNewGameButton = new JButton("Start Game");
 		btnNewGameButton.addActionListener(new ActionListener()
 		{
+			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// if()
+				int portNumber = 0;
+
+				try
+				{
+					portNumber = Integer.parseInt(txtPort.getText());
+				}
+				catch (NumberFormatException e1)
+				{
+					JOptionPane.showMessageDialog(null, "Please insert a valid port!", "Error",
+							JOptionPane.ERROR_MESSAGE);
+
+					portNumber = 0;
+				}
 
 				if (rdbtnClient.isSelected())
 				{
-					new ClientController(txtIPAddress.getText(), Integer.parseInt(txtPort.getText()),
-							txtName.getText());
+					if (portNumber != 0 || txtIPAddress.getText().length() == 0 || txtName.getText().length() == 0)
+					{
+						new ClientController(txtIPAddress.getText(), portNumber, txtName.getText());
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Please insert a valid data!", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
 				}
 				if (rdbtnServer.isSelected())
 				{
-					// new ServerController();
+					if (portNumber != 0 || txtIPAddress.getText().length() == 0 || txtName.getText().length() == 0)
+					{
+						new ServerController(txtIPAddress.getText(), portNumber, txtName.getText());
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "Please insert a valid data!", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		});
@@ -124,12 +155,14 @@ public class PlayerDetailsInfoOnline extends JFrame
 		txtPort.setColumns(10);
 
 		JLabel lblNewLabel_1 = new JLabel("Your nickname:");
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.TRAILING);
-		lblNewLabel_1.setBounds(91, 219, 117, 16);
+		lblNewLabel_1.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setBounds(58, 216, 150, 37);
 		contentPane.add(lblNewLabel_1);
 
 		txtName = new JTextField();
-		txtName.setBounds(220, 214, 130, 26);
+		txtName.setHorizontalAlignment(SwingConstants.CENTER);
+		txtName.setBounds(220, 214, 208, 42);
 		contentPane.add(txtName);
 		txtName.setColumns(10);
 

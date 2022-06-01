@@ -6,8 +6,9 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import unibs.pajc.uno.controller.net.NetUtils;
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.view.TableView;
 
@@ -25,6 +26,8 @@ public class ServerController
 	private TableView view;
 	private GameModel model;
 
+	private String playerName;
+
 	/**
 	 * 
 	 * Constructor containing IP address and port inserted by the user
@@ -34,40 +37,17 @@ public class ServerController
 	 * @param IP_ADDRESS
 	 * @param PORT
 	 */
-	public ServerController(String IP_ADDRESS, int PORT)
+	public ServerController(String IP_ADDRESS, int PORT, String playerName)
 	{
-		this.model = model;
-		this.view = view;
-
 		this.IP_ADDRESS = IP_ADDRESS;
 		this.PORT = PORT;
-	}
 
-	/**
-	 * 
-	 * Sets default IP address and port
-	 * 
-	 * @param view
-	 * @param model
-	 */
-	public ServerController(TableView view, GameModel model)
-	{
-		this.view = view;
-		this.model = model;
+		this.playerName = playerName;
+		System.out.println(playerName);
 
-		this.IP_ADDRESS = NetUtils.DEFAULT_IP_ADDRESS;
-		this.PORT = NetUtils.DEFAULT_PORT;
-	}
-
-	public void initGame()
-	{
-		view = new TableView("", "", false);
-		view.setVisible(true);
-
-		while (!model.isGameOver())
-		{
-
-		}
+		ExecutorService executor = Executors.newFixedThreadPool(2);
+		executor.execute(this::startServer);
+		executor.execute(this::listenToClient);
 	}
 
 	public boolean startServer()
@@ -76,22 +56,30 @@ public class ServerController
 
 		try (ServerSocket serverSocket = new ServerSocket(PORT_NUMBER))
 		{
-			serverSocket.setSoTimeout(10000);
+			System.out.print("[SERVER] - Trying to launch server");
+			serverSocket.setSoTimeout(100000);
 
 			client = serverSocket.accept();
 			objOutputStream = new ObjectOutputStream(client.getOutputStream());
 			objInputStream = new ObjectInputStream(client.getInputStream());
 
 			isConnected = true;
+			System.out.println("[CLIENT] - " + isConnected);
+
+			if (isConnected)
+			{
+				objOutputStream.writeObject(playerName);
+			}
 		}
 		catch (SocketTimeoutException e)
 		{
 			System.err.println("Communication time-out: " + e);
+			System.exit(0);
 		}
 		catch (IOException e)
 		{
 			System.err.println("Some communication error happened: " + e);
-
+			System.exit(0);
 		}
 
 		return isConnected;
@@ -99,7 +87,22 @@ public class ServerController
 
 	public void listenToClient()
 	{
-
+		while (true)
+		{
+			try
+			{
+				objInputStream.readObject();
+			}
+			catch (IOException e)
+			{
+				System.out.println("Errors in listening to client");
+			}
+			catch (ClassNotFoundException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void sendToClient()

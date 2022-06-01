@@ -17,22 +17,33 @@ public class ClientController
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
 
+	private final String IP_ADDRESS;
+	private final int port;
+	private final String playerName;
+
 	private ExecutorService executor;
 
 	private TableView view;
 	private GameModel model;
 
-	public ClientController(String IP, int port, String playerName)
+	public ClientController(String IP_ADDRESS, int port, String playerName)
+	{
+		this.IP_ADDRESS = IP_ADDRESS;
+		this.port = port;
+		this.playerName = playerName;
+
+		ExecutorService executor = Executors.newCachedThreadPool();
+		executor.execute(this::connectToServer);
+	}
+
+	public void initView()
 	{
 
 	}
 
-	private void initializeGame()
+	public void initModel()
 	{
-		connectToServer();
 
-		executor = Executors.newFixedThreadPool(2);
-		executor.execute(this::listenToServer);
 	}
 
 	/**
@@ -47,19 +58,46 @@ public class ClientController
 		{
 			clientSocket = new Socket("127.0.0.1", ServerController.PORT_NUMBER);
 
+			System.out.println("[CLIENT] - Trying to connect to server");
+
 			objInputStream = new ObjectInputStream(clientSocket.getInputStream());
 			objOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
 
 			isConnected = true;
-			initializeGame();
+			System.out.println("[CLIENT] - " + isConnected);
+
+			if (isConnected)
+			{
+				initView();
+
+				String initPlayer = "";
+
+				try
+				{
+					while (initPlayer.equals(""))
+					{
+						initPlayer = (String) objInputStream.readObject();
+					}
+				}
+				catch (Exception e)
+				{
+					System.out.print("Error while getting init details");
+				}
+
+				System.out.print("Server name: " + initPlayer);
+				listenToServer();
+			}
+			// initializeGame();
 		}
 		catch (UnknownHostException e)
 		{
 			System.err.println("IP address of the host could not be determined : " + e.toString());
+			System.exit(0);
 		}
 		catch (IOException e)
 		{
 			System.err.println("Error in creating socket: " + e.toString());
+			System.exit(0);
 		}
 
 		return isConnected;
