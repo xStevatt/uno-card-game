@@ -152,6 +152,8 @@ public class ServerController
 			{
 				Object objReceived;
 
+				System.out.println("LMAO");
+
 				objReceived = objInputStream.readObject();
 
 				if (objReceived instanceof String && ((String) objReceived).length() > 0)

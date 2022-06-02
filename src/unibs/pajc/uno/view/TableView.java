@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -216,7 +217,13 @@ public class TableView extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				String messageInput = txtSendMessageField.getText();
 
+				if (messageInput.length() > 0)
+				{
+					message = messageInput;
+					System.out.println(message);
+				}
 			}
 		});
 		btnSendMessage.setBounds(159, 405, 73, 37);
@@ -227,6 +234,10 @@ public class TableView extends JFrame
 		txtSendMessageField.setBounds(17, 401, 130, 43);
 		panelChat.add(txtSendMessageField);
 		txtSendMessageField.setColumns(10);
+
+		JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		panelChat.add(scroll);
 
 		JSeparator separator = new JSeparator();
 		separator.setBounds(17, 377, 216, 12);
@@ -278,7 +289,8 @@ public class TableView extends JFrame
 		{
 			btnSendMessage.setEnabled(false);
 			txtSendMessageField.setEditable(false);
-			textAreaChat.setEnabled(true);
+			textAreaChat.setEnabled(false);
+			scroll.setEnabled(false);
 
 			textAreaChat.addMouseListener(new MouseAdapter()
 			{
@@ -510,6 +522,8 @@ public class TableView extends JFrame
 		String formattedDate = time.format(myFormatObj);
 
 		textAreaChat.append("\n" + formattedDate + " " + playerName + ": " + message);
+
+		message = "";
 	}
 
 	// GETTERS AND SETTERS
@@ -535,6 +549,11 @@ public class TableView extends JFrame
 		}
 
 		return list;
+	}
+
+	public String getMessage()
+	{
+		return message;
 	}
 
 	public JPanel getMidTable()

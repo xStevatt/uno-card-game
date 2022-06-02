@@ -146,6 +146,22 @@ public class ClientController
 					{
 						e.printStackTrace();
 					}
+
+					String message = view.getMessage();
+
+					if (view.getMessage().length() > 0)
+					{
+						try
+						{
+							objOutputStream.writeObject(message);
+							view.addChatMessage(message, playerNameClient);
+						}
+						catch (IOException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 				}
 			}
 		});
