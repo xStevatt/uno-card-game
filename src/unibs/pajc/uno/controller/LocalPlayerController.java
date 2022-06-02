@@ -73,7 +73,6 @@ public class LocalPlayerController
 				{
 					if (turn == 0)
 					{
-						System.out.print(model.getLastCardUsed().getCardColor());
 						gameView.enableViewPlayer(0, true);
 						gameView.enableViewPlayer(1, false);
 
@@ -110,6 +109,35 @@ public class LocalPlayerController
 					{
 						gameView.enableViewPlayer(0, false);
 						gameView.enableViewPlayer(1, true);
+
+						try
+						{
+							Thread.sleep(500);
+						}
+						catch (InterruptedException e)
+						{
+							e.printStackTrace();
+						}
+
+						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
+						{
+							if (CardView.isCardSelected == true)
+							{
+								if (model.isPlacedCardValid(CardView.cardSelected))
+								{
+									model.evalMossa(CardView.cardSelected, turn);
+								}
+								else
+								{
+									JOptionPane.showMessageDialog(null, "Please select a valid card!", "Error",
+											JOptionPane.ERROR_MESSAGE);
+								}
+							}
+							if (CardBackView.isCardDrawnFromDeck == true)
+							{
+								model.getPlayers().get(turn).addCard(model.getCardFromDeck());
+							}
+						}
 					}
 
 					// CHECKS NUMBER CARDS
