@@ -21,7 +21,7 @@ public class GameModel
 	private int maxNumberOfPlayers;
 	private PlayerRoundIterator turnIterator;
 
-	private CardColor currentCardColor;
+	private CardColor currentCardColor = null;
 
 	/**
 	 * 
@@ -211,10 +211,17 @@ public class GameModel
 	{
 		boolean isCardValid = false;
 
+		if (cardUsed.isCardSpecialWild() && cardSelected.isCardSpecialWild())
+		{
+			isCardValid = true;
+		}
+
 		if (cardSelected.isCardSpecialWild() || cardUsed.isCardSpecialWild())
 		{
-			if (cardSelected.getCardColor() == currentCardColor)
+			if (cardUsed.isCardSpecialWild() && cardSelected.getCardColor() == currentCardColor)
+			{
 				isCardValid = true;
+			}
 		}
 
 		if (cardSelected.getCardColor() == cardUsed.getCardColor())
