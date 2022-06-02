@@ -5,8 +5,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.view.TableView;
@@ -14,14 +12,15 @@ import unibs.pajc.uno.view.TableView;
 public class ClientController
 {
 	private Socket clientSocket;
+	private final String IP_ADDRESS;
+	private final int port;
+	private boolean isConnected = false;
+
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
 
-	private final String IP_ADDRESS;
-	private final int port;
-	private final String playerName;
-
-	private ExecutorService executor;
+	private final String playerNameClient;
+	private String playerNameServer;
 
 	private TableView view;
 	private GameModel model;
@@ -30,20 +29,14 @@ public class ClientController
 	{
 		this.IP_ADDRESS = IP_ADDRESS;
 		this.port = port;
-		this.playerName = playerName;
+		this.playerNameClient = playerName;
 
-		ExecutorService executor = Executors.newCachedThreadPool();
-		executor.execute(this::connectToServer);
-	}
-
-	public void initView()
-	{
-
-	}
-
-	public void initModel()
-	{
-
+		if (connectToServer())
+		{
+			view = new TableView(playerNameServer, playerNameClient, true);
+			view.setVisible(true);
+			view.setResizable(false);
+		}
 	}
 
 	/**
@@ -52,11 +45,9 @@ public class ClientController
 	 */
 	private boolean connectToServer()
 	{
-		boolean isConnected = false;
-
 		try
 		{
-			clientSocket = new Socket("127.0.0.1", ServerController.PORT_NUMBER);
+			clientSocket = new Socket(IP_ADDRESS, port);
 
 			System.out.println("[CLIENT] - Trying to connect to server");
 
@@ -68,23 +59,19 @@ public class ClientController
 
 			if (isConnected)
 			{
-				initView();
-
-				String initPlayer = "";
-
 				try
 				{
-					while (initPlayer.equals(""))
+					while (playerNameServer == null)
 					{
-						initPlayer = (String) objInputStream.readObject();
+						playerNameServer = (String) objInputStream.readObject();
 					}
 				}
 				catch (Exception e)
 				{
-					System.out.print("Error while getting init details");
+					System.out.println("Error while getting init details");
+					e.printStackTrace();
 				}
 
-				System.out.print("Server name: " + initPlayer);
 				listenToServer();
 			}
 			// initializeGame();
@@ -105,20 +92,47 @@ public class ClientController
 
 	private void listenToServer()
 	{
-		while (!clientSocket.isClosed())
+		Thread listeningThread = new Thread(new Runnable()
 		{
-			try
+			@Override
+			public void run()
 			{
-				if (objInputStream.readObject() != null && (objInputStream.readObject() instanceof String))
+				while (isConnected)
 				{
-					System.out.println("Ciao");
+					try
+					{
+						Object objReceived = objInputStream.readObject();
+
+						if (objReceived instanceof String && ((String) objReceived).length() > 0)
+						{
+							System.out.println("Message received from server: " + ((String) objReceived));
+						}
+					}
+					catch (IOException e)
+					{
+						System.out.println("Errors in listening to server");
+					}
+					catch (ClassNotFoundException e)
+					{
+						e.printStackTrace();
+					}
 				}
 			}
-			catch (ClassNotFoundException | IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		});
+
+		listeningThread.start();
+	}
+
+	private void sendToServer(Object objToSend)
+	{
+		try
+		{
+			objOutputStream.writeObject(objToSend);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
