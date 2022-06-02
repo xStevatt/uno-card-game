@@ -76,8 +76,11 @@ public class CardView extends JPanel
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				CardView.cardSelected = card;
-				isCardSelected = true;
+				if (shouldAnimationsMove)
+				{
+					CardView.cardSelected = card;
+					isCardSelected = true;
+				}
 			}
 		});
 	}

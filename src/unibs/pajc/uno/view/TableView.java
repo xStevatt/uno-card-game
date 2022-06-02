@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
@@ -77,6 +79,8 @@ public class TableView extends JFrame
 
 	private boolean isGameLocal = true;
 	private JLabel lblNewLabel_2;
+
+	private String message = "";
 
 	/**
 	 * Constructor to create the form.
@@ -208,6 +212,13 @@ public class TableView extends JFrame
 		panelChat.add(textAreaChat);
 
 		btnSendMessage = new JButton("Send");
+		btnSendMessage.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+
+			}
+		});
 		btnSendMessage.setBounds(159, 405, 73, 37);
 
 		panelChat.add(btnSendMessage);
@@ -487,6 +498,20 @@ public class TableView extends JFrame
 
 	}
 
+	/**
+	 * 
+	 * @param message
+	 * @param playerName
+	 */
+	public void addChatMessage(String message, String playerName)
+	{
+		LocalDateTime time = LocalDateTime.now();
+		DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm");
+		String formattedDate = time.format(myFormatObj);
+
+		textAreaChat.append("\n" + formattedDate + " " + playerName + ": " + message);
+	}
+
 	// GETTERS AND SETTERS
 
 	public ArrayList<CardView> getAllCards(int indexPlayer)
@@ -591,4 +616,4 @@ public class TableView extends JFrame
 	{
 		this.sayUnoButtonPlayerOne = sayUnoButtonPlayerOne;
 	}
-}
+};

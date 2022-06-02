@@ -1,5 +1,6 @@
 package unibs.pajc.uno.controller.net;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -21,6 +22,8 @@ public class ClientController
 
 	private final String playerNameClient;
 	private String playerNameServer;
+
+	private Object objReceived = null;
 
 	private TableView view;
 	private GameModel model;
@@ -124,21 +127,23 @@ public class ClientController
 				{
 					try
 					{
-						Object objReceived = objInputStream.readObject();
+						objReceived = objInputStream.readObject();
 
 						if (objReceived instanceof String && ((String) objReceived).length() > 0)
 						{
 							System.out.println("Message received from server: " + ((String) objReceived));
 						}
 					}
-					catch (IOException e)
+					catch (EOFException e)
 					{
-						System.out.println("Errors in listening to server");
-						e.printStackTrace();
+
 					}
 					catch (ClassNotFoundException e)
 					{
-						System.out.println("Errors in listening to server");
+						e.printStackTrace();
+					}
+					catch (IOException e)
+					{
 						e.printStackTrace();
 					}
 				}
