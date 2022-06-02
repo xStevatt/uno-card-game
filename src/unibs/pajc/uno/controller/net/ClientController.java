@@ -1,4 +1,4 @@
-package unibs.pajc.uno.controller;
+package unibs.pajc.uno.controller.net;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -35,14 +35,23 @@ public class ClientController
 
 		connectToServer();
 
-		System.out.print("Here: " + isConnected);
+		try
+		{
+			Thread.sleep(NetUtils.DEFAULT_CLIENT_TIME_OUT);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+
 		if (isConnected)
 		{
-			System.out.println("HERE - CDASDASDASD");
-			view = new TableView(playerNameServer, playerNameClient, false);
+			view = new TableView(playerNameServer, playerNameClient, NetUtils.ONLINE_GAME);
 			view.setVisible(true);
 			view.setResizable(false);
 		}
+
+		listenToServer();
 	}
 
 	/**
@@ -85,8 +94,6 @@ public class ClientController
 							System.out.println("Error while getting init details");
 							e.printStackTrace();
 						}
-
-						listenToServer();
 					}
 					// initializeGame();
 				}
@@ -127,9 +134,11 @@ public class ClientController
 					catch (IOException e)
 					{
 						System.out.println("Errors in listening to server");
+						e.printStackTrace();
 					}
 					catch (ClassNotFoundException e)
 					{
+						System.out.println("Errors in listening to server");
 						e.printStackTrace();
 					}
 				}

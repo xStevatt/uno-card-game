@@ -1,4 +1,4 @@
-package unibs.pajc.uno.controller;
+package unibs.pajc.uno.controller.net;
 
 import java.io.EOFException;
 import java.io.IOException;
@@ -39,9 +39,19 @@ public class ServerController
 
 		startServer();
 
+		try
+		{
+			Thread.sleep(10000);
+		}
+		catch (InterruptedException e1)
+		{
+			e1.printStackTrace();
+		}
+
+		System.out.println(isConnected);
 		if (isConnected)
 		{
-			view = new TableView(playerNameServer, playerNameClient, true);
+			view = new TableView(playerNameServer, playerNameClient, NetUtils.ONLINE_GAME);
 			view.setVisible(true);
 			view.setResizable(false);
 		}
@@ -76,7 +86,7 @@ public class ServerController
 				{
 					System.out.print("[SERVER] - Trying to launch server");
 
-					serverSocket.setSoTimeout(100000);
+					serverSocket.setSoTimeout(NetUtils.DEFAULT_SERVER_TIME_OUT);
 
 					client = serverSocket.accept();
 					objOutputStream = new ObjectOutputStream(client.getOutputStream());
@@ -92,8 +102,19 @@ public class ServerController
 							objOutputStream.writeObject(playerNameServer);
 							playerNameClient = (String) objInputStream.readObject();
 
+							try
+							{
+								Thread.sleep(1000);
+							}
+							catch (InterruptedException e)
+							{
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+
 							while (playerNameClient.equals(""))
 							{
+								System.out.print("HERE ->>> ");
 								playerNameClient = (String) objInputStream.readObject();
 							}
 						}
