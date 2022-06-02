@@ -52,6 +52,9 @@ public class CardView extends JPanel
 		return dimension;
 	}
 
+	/**
+	 * 
+	 */
 	private void initView()
 	{
 		setPreferredSize(dimension);
@@ -78,6 +81,7 @@ public class CardView extends JPanel
 			{
 				if (shouldAnimationsMove)
 				{
+					System.out.println("asdasd");
 					CardView.cardSelected = card;
 					isCardSelected = true;
 				}

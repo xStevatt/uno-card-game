@@ -4,9 +4,11 @@ package unibs.pajc.uno.controller;
 import javax.swing.JOptionPane;
 
 import unibs.pajc.uno.model.GameModel;
+import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.view.CardBackView;
 import unibs.pajc.uno.view.CardView;
+import unibs.pajc.uno.view.DialogSelectNewColor;
 import unibs.pajc.uno.view.TableView;
 
 public class LocalPlayerController
@@ -71,7 +73,7 @@ public class LocalPlayerController
 
 				while (model.isGameOver() == false)
 				{
-					if (turn == 0)
+					if (model.getCurrentPlayer().getIndex() == 0)
 					{
 						gameView.enableViewPlayer(0, true);
 						gameView.enableViewPlayer(1, false);
@@ -80,7 +82,7 @@ public class LocalPlayerController
 						{
 							try
 							{
-								Thread.sleep(500);
+								Thread.sleep(1);
 							}
 							catch (InterruptedException e)
 							{
@@ -91,59 +93,76 @@ public class LocalPlayerController
 							{
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
-									model.evalMossa(CardView.cardSelected, turn);
+									boolean newColorSelection = model.evalMossa(CardView.cardSelected);
+
+									if (newColorSelection)
+									{
+										DialogSelectNewColor dialogColor = new DialogSelectNewColor();
+										CardColor cardColor = dialogColor.show();
+										model.setCurrentCardColor(cardColor);
+									}
 								}
 								else
 								{
 									JOptionPane.showMessageDialog(null, "Please select a valid card!", "Error",
 											JOptionPane.ERROR_MESSAGE);
+									CardView.isCardSelected = false;
 								}
 							}
 							if (CardBackView.isCardDrawnFromDeck == true)
 							{
-								model.getPlayers().get(turn).addCard(model.getCardFromDeck());
+								model.getCurrentPlayer().addCard(model.getCardFromDeck());
+								model.nextTurn();
 							}
 						}
 					}
-					if (turn == 1)
+					if (model.getCurrentPlayer().getIndex() == 1)
 					{
 						gameView.enableViewPlayer(0, false);
 						gameView.enableViewPlayer(1, true);
 
-						try
-						{
-							Thread.sleep(500);
-						}
-						catch (InterruptedException e)
-						{
-							e.printStackTrace();
-						}
-
 						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 						{
+							try
+							{
+								Thread.sleep(1);
+							}
+							catch (InterruptedException e)
+							{
+								e.printStackTrace();
+							}
 							if (CardView.isCardSelected == true)
 							{
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
-									model.evalMossa(CardView.cardSelected, turn);
+									boolean newColorSelection = model.evalMossa(CardView.cardSelected);
+
+									if (newColorSelection)
+									{
+										DialogSelectNewColor dialogColor = new DialogSelectNewColor();
+										CardColor cardColor = dialogColor.show();
+										model.setCurrentCardColor(cardColor);
+									}
 								}
 								else
 								{
 									JOptionPane.showMessageDialog(null, "Please select a valid card!", "Error",
 											JOptionPane.ERROR_MESSAGE);
+									CardView.isCardSelected = false;
 								}
 							}
 							if (CardBackView.isCardDrawnFromDeck == true)
 							{
-								model.getPlayers().get(turn).addCard(model.getCardFromDeck());
+								model.getCurrentPlayer().addCard(model.getCardFromDeck());
+								model.nextTurn();
 							}
 						}
 					}
 
 					// CHECKS NUMBER CARDS
-					if (model.getPlayers().get(turn).getHandCards().getNumberOfCards() == 1)
+					if (model.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
 					{
-						gameView.setSayUnoButtonVisibile(true, turn);
+						gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayer().getIndex());
 					}
 
 					// RESETS FLAGS
@@ -156,11 +175,6 @@ public class LocalPlayerController
 
 					// UPDATES VIEW
 					updateView(model.getPlayers().get(0), model.getPlayers().get(1));
-
-					if (turn == 0)
-						turn = 1;
-					else
-						turn = 0;
 				}
 
 				JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer() + "vincitore");

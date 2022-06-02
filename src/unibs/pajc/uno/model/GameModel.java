@@ -44,7 +44,7 @@ public class GameModel
 	{
 		this.maxNumberOfPlayers = maxNumberOfPlayers;
 		players = new ArrayList<Player>(maxNumberOfPlayers);
-		PlayerRoundIterator roundIterator = new PlayerRoundIterator(players);
+		turnIterator = new PlayerRoundIterator(players);
 
 		initGameElements();
 	}
@@ -107,6 +107,11 @@ public class GameModel
 		return turnIterator.getCurrentPlayer();
 	}
 
+	public void nextTurn()
+	{
+		turnIterator.next();
+	}
+
 	/**
 	 * 
 	 * @return
@@ -122,9 +127,9 @@ public class GameModel
 	 * @param card
 	 * @param index - if index is 1, then a new color must be chosen
 	 */
-	public boolean evalMossa(Card card, int index)
+	public boolean evalMossa(Card card)
 	{
-		players.get(index).removeCard(card);
+		turnIterator.getCurrentPlayer().removeCard(card);
 		usedCards.addCard(card);
 
 		boolean newColorNeedsSelection = false;
@@ -133,6 +138,7 @@ public class GameModel
 		{
 		case NUMBER:
 
+			turnIterator.next();
 			// NOTHING NEEDS TO BE DONE WHEN CARD PLACED IS A NUMBER
 			newColorNeedsSelection = false;
 
@@ -140,39 +146,52 @@ public class GameModel
 
 		case WILD_COLOR:
 
+			turnIterator.next();
+			// NEW COLOR NEEDS TO BE SELECTED
 			newColorNeedsSelection = true;
 
 			break;
 
 		case WILD_DRAW_FOUR:
 
+			turnIterator.next();
+			// ADD CARDS TO NEXT PLAYER
 			for (int i = 0; i < 4; i++)
 			{
-				turnIterator.next().addCard(getCardFromDeck());
+				turnIterator.getCurrentPlayer().addCard(getCardFromDeck());
 			}
 
+			// NEW COLOR NEEDS TO BE SELECTED
 			newColorNeedsSelection = true;
 
 			break;
 		case WILD_DRAW_TWO:
 
+			turnIterator.next();
+			// ADD CARDS TO NEXT PLAYER
 			for (int i = 0; i < 2; i++)
 			{
-				turnIterator.next().addCard(getCardFromDeck());
+				turnIterator.getCurrentPlayer().addCard(getCardFromDeck());
 			}
 
+			// NEW COLOR NEEDS TO BE SELECTED
 			newColorNeedsSelection = false;
 
 			break;
 
 		case SKIP:
 
+			// SKIPS ONE PLAYER
+			turnIterator.next();
+			turnIterator.next();
 			newColorNeedsSelection = false;
 
 			break;
 
 		case REVERSE:
 
+			// REVERSES ORDER
+			turnIterator.reverseDirection();
 			newColorNeedsSelection = false;
 
 			break;
