@@ -27,6 +27,8 @@ public class ServerController
 	private String playerNameServer;
 	private String playerNameClient;
 
+	private Thread serverThread;
+
 	public ServerController(String IP_ADDRESS, int PORT, String playerNameServer)
 	{
 		this.IP_ADDRESS = IP_ADDRESS;
@@ -35,16 +37,26 @@ public class ServerController
 		this.playerNameServer = playerNameServer;
 		System.out.println(playerNameServer);
 
-		if (startServer())
+		startServer();
+
+		if (isConnected)
 		{
 			view = new TableView(playerNameServer, playerNameClient, true);
 			view.setVisible(true);
 			view.setResizable(false);
 		}
 
-		new Thread(() -> {
-			listenToClient();
-		}).start();
+		try
+		{
+			new Thread(() -> {
+				listenToClient();
+			}).join();
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void startView()
@@ -53,57 +65,68 @@ public class ServerController
 		view.setVisible(true);
 	}
 
-	public boolean startServer()
+	public void startServer()
 	{
-		boolean isClientConnected = false;
-
-		try (ServerSocket serverSocket = new ServerSocket(PORT))
+		serverThread = new Thread(new Runnable()
 		{
-			System.out.print("[SERVER] - Trying to launch server");
-
-			System.out.println("HERE");
-
-			serverSocket.setSoTimeout(100000);
-			client = serverSocket.accept();
-			objOutputStream = new ObjectOutputStream(client.getOutputStream());
-			objInputStream = new ObjectInputStream(client.getInputStream());
-
-			isClientConnected = true;
-			System.out.println("[SERVER] - " + isConnected);
-
-			if (isClientConnected)
+			@Override
+			public void run()
 			{
-				try
+				try (ServerSocket serverSocket = new ServerSocket(PORT))
 				{
-					objOutputStream.writeObject(playerNameServer);
-					playerNameClient = (String) objInputStream.readObject();
+					System.out.print("[SERVER] - Trying to launch server");
+
+					serverSocket.setSoTimeout(100000);
+
+					client = serverSocket.accept();
+					objOutputStream = new ObjectOutputStream(client.getOutputStream());
+					objInputStream = new ObjectInputStream(client.getInputStream());
+
+					isConnected = true;
+					System.out.println("[SERVER] - CONNECTED TO CLIENT: " + isConnected);
+
+					if (isConnected)
+					{
+						try
+						{
+							objOutputStream.writeObject(playerNameServer);
+							playerNameClient = (String) objInputStream.readObject();
+
+							while (playerNameClient.equals(""))
+							{
+								playerNameClient = (String) objInputStream.readObject();
+							}
+						}
+						catch (NullPointerException e)
+						{
+							System.out.println("[SERVER] - No player init message received");
+						}
+						catch (ClassNotFoundException e)
+						{
+							e.printStackTrace();
+						}
+					}
 				}
-				catch (ClassNotFoundException e)
+				catch (SocketTimeoutException e)
 				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					System.err.println("Communication time-out: " + e);
+					System.exit(0);
+				}
+				catch (IOException e)
+				{
+					System.err.println("Some communication error happened: " + e);
+					System.exit(0);
 				}
 			}
-		}
-		catch (SocketTimeoutException e)
-		{
-			System.err.println("Communication time-out: " + e);
-			System.exit(0);
-		}
-		catch (IOException e)
-		{
-			System.err.println("Some communication error happened: " + e);
-			System.exit(0);
-		}
+		});
 
-		return isConnected;
+		serverThread.start();
 	}
 
 	public void listenToClient()
 	{
 		while (isConnected)
 		{
-			System.out.println("HERE");
 			try
 			{
 				Object objReceived;
@@ -119,6 +142,7 @@ public class ServerController
 			{
 				System.out.println("Client disconnected");
 				isConnected = false;
+				System.exit(0);
 			}
 			catch (IOException e)
 			{

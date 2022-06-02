@@ -25,15 +25,21 @@ public class ClientController
 	private TableView view;
 	private GameModel model;
 
+	private Thread clientThread;
+
 	public ClientController(String IP_ADDRESS, int port, String playerName)
 	{
 		this.IP_ADDRESS = IP_ADDRESS;
 		this.port = port;
 		this.playerNameClient = playerName;
 
-		if (connectToServer())
+		connectToServer();
+
+		System.out.print("Here: " + isConnected);
+		if (isConnected)
 		{
-			view = new TableView(playerNameServer, playerNameClient, true);
+			System.out.println("HERE - CDASDASDASD");
+			view = new TableView(playerNameServer, playerNameClient, false);
 			view.setVisible(true);
 			view.setResizable(false);
 		}
@@ -43,51 +49,61 @@ public class ClientController
 	 * 
 	 * @return true if client is successfully connected to the server
 	 */
-	private boolean connectToServer()
+	private void connectToServer()
 	{
-		try
+		clientThread = new Thread(new Runnable()
 		{
-			clientSocket = new Socket(IP_ADDRESS, port);
-
-			System.out.println("[CLIENT] - Trying to connect to server");
-
-			objInputStream = new ObjectInputStream(clientSocket.getInputStream());
-			objOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-
-			isConnected = true;
-			System.out.println("[CLIENT] - " + isConnected);
-
-			if (isConnected)
+			@Override
+			public void run()
 			{
 				try
 				{
-					while (playerNameServer == null)
+					clientSocket = new Socket(IP_ADDRESS, port);
+
+					System.out.println("[CLIENT] - Trying to connect to server");
+
+					objInputStream = new ObjectInputStream(clientSocket.getInputStream());
+					objOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+
+					isConnected = true;
+					System.out.println("[CLIENT] - CONNECTED TO SERVER: " + isConnected);
+
+					if (isConnected)
 					{
-						playerNameServer = (String) objInputStream.readObject();
+						try
+						{
+							objOutputStream.writeObject(playerNameClient);
+							playerNameServer = (String) objInputStream.readObject();
+
+							while (playerNameServer.equals(""))
+							{
+								playerNameServer = (String) objInputStream.readObject();
+							}
+						}
+						catch (Exception e)
+						{
+							System.out.println("Error while getting init details");
+							e.printStackTrace();
+						}
+
+						listenToServer();
 					}
+					// initializeGame();
 				}
-				catch (Exception e)
+				catch (UnknownHostException e)
 				{
-					System.out.println("Error while getting init details");
-					e.printStackTrace();
+					System.err.println("IP address of the host could not be determined : " + e.toString());
+					System.exit(0);
 				}
-
-				listenToServer();
+				catch (IOException e)
+				{
+					System.err.println("Error in creating socket: " + e.toString());
+					System.exit(0);
+				}
 			}
-			// initializeGame();
-		}
-		catch (UnknownHostException e)
-		{
-			System.err.println("IP address of the host could not be determined : " + e.toString());
-			System.exit(0);
-		}
-		catch (IOException e)
-		{
-			System.err.println("Error in creating socket: " + e.toString());
-			System.exit(0);
-		}
+		});
 
-		return isConnected;
+		clientThread.start();
 	}
 
 	private void listenToServer()

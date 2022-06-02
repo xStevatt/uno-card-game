@@ -138,10 +138,9 @@ public class CardView extends JPanel
 
 	private void showHoverEffect()
 	{
-		setBorder(focusedBorder);
-
 		if (shouldAnimationsMove)
 		{
+			setBorder(focusedBorder);
 			Point p = getLocation();
 			p.y -= 20;
 			setLocation(p);
@@ -150,10 +149,9 @@ public class CardView extends JPanel
 
 	private void removeHoverEffect()
 	{
-		setBorder(defaultBorder);
-
 		if (shouldAnimationsMove)
 		{
+			setBorder(defaultBorder);
 			Point p = getLocation();
 			p.y += 20;
 			setLocation(p);
