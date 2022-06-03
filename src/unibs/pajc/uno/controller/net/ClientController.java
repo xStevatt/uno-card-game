@@ -129,22 +129,22 @@ public class ClientController
 					{
 						objReceived = objInputStream.readObject();
 
-						if (objReceived instanceof String && ((String) objReceived).length() > 0)
+						if (objReceived != null && objReceived instanceof String && ((String) objReceived).length() > 0)
 						{
 							System.out.println("Message received from server: " + ((String) objReceived));
 						}
 					}
 					catch (EOFException e)
 					{
-
+						System.out.println("Ciao 1");
 					}
 					catch (ClassNotFoundException e)
 					{
-						e.printStackTrace();
+						System.out.println("Ciao 2");
 					}
 					catch (IOException e)
 					{
-						e.printStackTrace();
+						System.out.println("Ciao 3");
 					}
 
 					String message = view.getMessage();
@@ -158,7 +158,6 @@ public class ClientController
 						}
 						catch (IOException e)
 						{
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}

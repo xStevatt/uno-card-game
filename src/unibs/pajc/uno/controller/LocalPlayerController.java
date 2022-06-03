@@ -79,8 +79,15 @@ public class LocalPlayerController
 						// LOOP WAITING FOR A CARD TO BE SELECTED
 						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 						{
-							// THREAD SLEEP
-							System.out.println("");
+							try
+							{
+								Thread.sleep(100);
+							}
+							catch (InterruptedException e)
+							{
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 
 							if (CardView.isCardSelected == true)
 							{
@@ -114,10 +121,25 @@ public class LocalPlayerController
 						gameView.enableViewPlayer(0, false);
 						gameView.enableViewPlayer(1, true);
 
+						if (model.hasPlayerOneCard(model.getPlayers().get(model.getPreviousPlayerIndex())))
+						{
+							gameView.setSayUnoButtonVisibile(
+									model.hasPlayerOneCard(model.getPlayers().get(model.getPreviousPlayerIndex())),
+									model.getPreviousPlayerIndex());
+						}
+
 						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 						{
 							// THREAD SLEEP
-							System.out.println("");
+							try
+							{
+								Thread.sleep(100);
+							}
+							catch (InterruptedException e)
+							{
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 
 							if (CardView.isCardSelected == true)
 							{
@@ -147,13 +169,11 @@ public class LocalPlayerController
 						}
 					}
 
-					// NON VA BENE
-					if (model.hasPlayerOneCard())
-					{
-						gameView.setSayUnoButtonVisibile(model.hasPlayerOneCard(), model.getPreviousPlayerIndex());
-					}
+					// DISABLING BUTTONS
+					gameView.setSayUnoButtonVisibile(false, model.getPreviousPlayerIndex());
+					gameView.setSayUnoButtonVisibile(false, model.getCurrentPlayerIndex());
 
-					// RESETS FLAGS
+					// RESETTING FLAGS
 					CardView.isCardSelected = false;
 					CardBackView.isCardDrawnFromDeck = false;
 

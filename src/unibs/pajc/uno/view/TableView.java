@@ -367,6 +367,11 @@ public class TableView extends JFrame
 		timer.start();
 	}
 
+	public void setTurn(String currentTurn)
+	{
+
+	}
+
 	/**
 	 * 
 	 * @param index

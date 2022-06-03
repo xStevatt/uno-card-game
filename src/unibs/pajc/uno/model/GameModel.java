@@ -226,6 +226,19 @@ public class GameModel
 		return hasPlayerOneCard;
 	}
 
+	public boolean hasPlayerOneCard(Player player)
+	{
+		boolean hasPlayerOneCard = false;
+
+		if (player.getHandCards().getNumberOfCards() == 1)
+		{
+			System.out.println("Player has just one card");
+			hasPlayerOneCard = true;
+		}
+
+		return hasPlayerOneCard;
+	}
+
 	/**
 	 * If a player didn't say "uno", then two new cards are assigned to the player.
 	 */
@@ -397,6 +410,11 @@ public class GameModel
 		{
 			card[i] = cardsDeck.getRandomCard();
 		}
+	}
+
+	public int getCurrentPlayerIndex()
+	{
+		return turnIterator.getIndexCurrentPlayer();
 	}
 
 	// GETTERS AND SETTERS

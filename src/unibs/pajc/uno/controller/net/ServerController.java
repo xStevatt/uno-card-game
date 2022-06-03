@@ -41,14 +41,13 @@ public class ServerController
 
 		try
 		{
-			Thread.sleep(10000);
+			Thread.sleep(5000);
 		}
 		catch (InterruptedException e1)
 		{
 			e1.printStackTrace();
 		}
 
-		System.out.println(isConnected);
 		if (isConnected)
 		{
 			view = new TableView(playerNameServer, playerNameClient, NetUtils.ONLINE_GAME);
@@ -170,10 +169,13 @@ public class ServerController
 			catch (IOException e)
 			{
 				System.out.println("Errors in listening to client");
+				System.exit(0);
+
 			}
 			catch (ClassNotFoundException e)
 			{
-				e.printStackTrace();
+				System.out.print("Class not found");
+				System.exit(0);
 			}
 		}
 	}
@@ -186,7 +188,7 @@ public class ServerController
 		}
 		catch (IOException e)
 		{
-			System.out.println("Couldn't send to client");
+			System.out.println("Error while sending - Couldn't send object to client");
 			e.printStackTrace();
 		}
 	}
