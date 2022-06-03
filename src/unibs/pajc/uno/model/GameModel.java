@@ -226,6 +226,11 @@ public class GameModel
 		return hasPlayerOneCard;
 	}
 
+	/**
+	 * 
+	 * @param player
+	 * @return
+	 */
 	public boolean hasPlayerOneCard(Player player)
 	{
 		boolean hasPlayerOneCard = false;

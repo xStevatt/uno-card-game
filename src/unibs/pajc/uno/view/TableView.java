@@ -367,6 +367,16 @@ public class TableView extends JFrame
 		timer.start();
 	}
 
+	public void setLastUsedCard(Card cardUsed)
+	{
+		panelPlaced.removeAll();
+		panelPlaced.add(new CardView(cardUsed));
+	}
+
+	/**
+	 * 
+	 * @param currentTurn
+	 */
 	public void setTurn(String currentTurn)
 	{
 

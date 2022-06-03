@@ -66,6 +66,8 @@ public class ServerController
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		sendToClient("Ciao dal server");
 	}
 
 	public void startView()

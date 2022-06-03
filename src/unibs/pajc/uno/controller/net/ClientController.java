@@ -55,6 +55,8 @@ public class ClientController
 		}
 
 		listenToServer();
+
+		sendToServer("Ciao dal client");
 	}
 
 	/**
@@ -127,24 +129,31 @@ public class ClientController
 				{
 					try
 					{
+						Thread.sleep(1000);
+
 						objReceived = objInputStream.readObject();
 
 						if (objReceived != null && objReceived instanceof String && ((String) objReceived).length() > 0)
 						{
-							System.out.println("Message received from server: " + ((String) objReceived));
+							System.out.println("[CLIENT] - Message received from server: " + ((String) objReceived));
 						}
 					}
 					catch (EOFException e)
 					{
-						System.out.println("Ciao 1");
+
 					}
 					catch (ClassNotFoundException e)
 					{
-						System.out.println("Ciao 2");
+
 					}
 					catch (IOException e)
 					{
 						System.out.println("Ciao 3");
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 
 					String message = view.getMessage();
