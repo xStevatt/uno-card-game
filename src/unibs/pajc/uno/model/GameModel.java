@@ -363,7 +363,10 @@ public class GameModel
 
 		for (Player player : players)
 		{
-			isGameOver = player.getHandCards().getNumberOfCards() == 0;
+			if (player.getHandCards().getNumberOfCards() == 0)
+			{
+				return true;
+			}
 		}
 
 		return isGameOver;

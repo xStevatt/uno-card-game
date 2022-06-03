@@ -71,7 +71,7 @@ public class TableView extends JFrame
 
 	private JButton sayUnoButtonPlayerTwo;
 	private JButton sayUnoButtonPlayerOne;
-	private JLabel lblNewLabel;
+	private JLabel titleLabel;
 	private JLabel matchDescriptor;
 
 	private JLabel lblStopWatch;
@@ -82,7 +82,8 @@ public class TableView extends JFrame
 
 	private boolean unoButtonPressed = false;
 
-	private JLabel lblNewLabel_2;
+	private JLabel turnFinalLabel;
+	JLabel lblPlayerTurn;
 
 	private String message = "";
 
@@ -254,11 +255,11 @@ public class TableView extends JFrame
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
-		lblNewLabel = new JLabel("Uno Game");
-		lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(6, 14, 237, 23);
-		panel_1.add(lblNewLabel);
+		titleLabel = new JLabel("Uno Game");
+		titleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
+		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		titleLabel.setBounds(6, 14, 237, 23);
+		panel_1.add(titleLabel);
 
 		matchDescriptor = new JLabel(namePlayerOne + " vs " + namePlayerTwo);
 		matchDescriptor.setHorizontalAlignment(SwingConstants.CENTER);
@@ -278,17 +279,17 @@ public class TableView extends JFrame
 		separator_1_1.setBounds(16, 126, 227, 12);
 		panel_1.add(separator_1_1);
 
-		JLabel lblPlayerTurn = new JLabel("Player's Turn");
+		lblPlayerTurn = new JLabel("");
 		lblPlayerTurn.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		lblPlayerTurn.setHorizontalAlignment(SwingConstants.LEFT);
 		lblPlayerTurn.setBounds(106, 150, 137, 27);
 		panel_1.add(lblPlayerTurn);
 
-		lblNewLabel_2 = new JLabel("Turn:");
-		lblNewLabel_2.setFont(new Font("Lucida Grande", Font.BOLD, 15));
-		lblNewLabel_2.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel_2.setBounds(6, 150, 88, 27);
-		panel_1.add(lblNewLabel_2);
+		turnFinalLabel = new JLabel("Turn:");
+		turnFinalLabel.setFont(new Font("Lucida Grande", Font.BOLD, 15));
+		turnFinalLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		turnFinalLabel.setBounds(6, 150, 88, 27);
+		panel_1.add(turnFinalLabel);
 
 		if (isGameLocal)
 		{
@@ -379,7 +380,7 @@ public class TableView extends JFrame
 	 */
 	public void setTurn(String currentTurn)
 	{
-
+		lblPlayerTurn.setText(currentTurn);
 	}
 
 	/**

@@ -69,8 +69,11 @@ public class LocalPlayerController
 			@Override
 			public void run()
 			{
-				while (model.isGameOver() == false)
+				while (!model.isGameOver())
 				{
+					// SETTING TURN LABEL
+					gameView.setTurn(model.getCurrentPlayer().getNamePlayer());
+
 					if (model.hasPlayerOneCard(model.getPlayers().get(model.getPreviousPlayerIndex())))
 					{
 						gameView.setSayUnoButtonVisibile(true, model.getPreviousPlayerIndex());
@@ -204,7 +207,10 @@ public class LocalPlayerController
 					updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 				}
 
-				JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer() + "vincitore");
+				JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer()
+						+ " vincitore! Congratulazioni! Non hai vinto assolutamente nulla, se non un briciolo di misera gloria!");
+
+				gameView.dispose();
 			}
 		}).start();
 	}
