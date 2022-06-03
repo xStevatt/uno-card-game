@@ -76,16 +76,11 @@ public class LocalPlayerController
 						gameView.enableViewPlayer(0, true);
 						gameView.enableViewPlayer(1, false);
 
+						// LOOP WAITING FOR A CARD TO BE SELECTED
 						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 						{
-							try
-							{
-								Thread.sleep(1);
-							}
-							catch (InterruptedException e)
-							{
-								e.printStackTrace();
-							}
+							// THREAD SLEEP
+							System.out.println("");
 
 							if (CardView.isCardSelected == true)
 							{
@@ -121,24 +116,14 @@ public class LocalPlayerController
 
 						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 						{
-							try
-							{
-								Thread.sleep(1);
-							}
-							catch (InterruptedException e)
-							{
-								e.printStackTrace();
-							}
+							// THREAD SLEEP
+							System.out.println("");
+
 							if (CardView.isCardSelected == true)
 							{
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
 									boolean newColorSelection = model.evalMossa(CardView.cardSelected);
-
-									if (model.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
-									{
-										gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayer().getIndex());
-									}
 
 									if (newColorSelection)
 									{
@@ -162,20 +147,11 @@ public class LocalPlayerController
 						}
 					}
 
-					// CHECKS NUMBER CARDS
-					if (model.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
+					// NON VA BENE
+					if (model.hasPlayerOneCard())
 					{
-
+						gameView.setSayUnoButtonVisibile(model.hasPlayerOneCard(), model.getPreviousPlayerIndex());
 					}
-
-					if (gameView.isUnoButtonPressed())
-					{
-
-						gameView.setUnoButtonPressed(false);
-					}
-
-					gameView.setSayUnoButtonVisibile(false, 0);
-					gameView.setSayUnoButtonVisibile(false, 1);
 
 					// RESETS FLAGS
 					CardView.isCardSelected = false;

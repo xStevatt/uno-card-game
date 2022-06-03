@@ -107,6 +107,11 @@ public class GameModel
 		return turnIterator.getCurrentPlayer();
 	}
 
+	public int getPreviousPlayerIndex()
+	{
+		return turnIterator.getPreviousPlayerIndex();
+	}
+
 	public void nextTurn()
 	{
 		turnIterator.next();
@@ -209,15 +214,27 @@ public class GameModel
 	{
 		boolean hasPlayerOneCard = false;
 
-		for (int i = 0; i < i; i++)
+		for (int i = 0; i < players.size(); i++)
 		{
 			if (turnIterator.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
 			{
+				System.out.println("Player has just one card");
 				hasPlayerOneCard = true;
 			}
 		}
 
 		return hasPlayerOneCard;
+	}
+
+	/**
+	 * If a player didn't say "uno", then two new cards are assigned to the player.
+	 */
+	public void playerDidNotSayUno(int indexPlayer)
+	{
+		for (int i = 0; i < 2; i++)
+		{
+			players.get(indexPlayer).addCard(getCardFromDeck());
+		}
 	}
 
 	/**
@@ -230,6 +247,22 @@ public class GameModel
 	public boolean isPlacedCardValid(Card cardSelected, Card cardUsed)
 	{
 		boolean isCardValid = false;
+
+		if (cardUsed.isCardSpecialWild() && turnIterator.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
+		{
+			return false;
+		}
+
+		if (cardUsed.getCardType() == CardType.SKIP
+				&& turnIterator.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
+		{
+			return false;
+		}
+
+		if (cardUsed.isCardSpecialWild() && currentCardColor == null)
+		{
+			isCardValid = true;
+		}
 
 		if (cardUsed.isCardSpecialWild() && cardSelected.isCardSpecialWild())
 		{

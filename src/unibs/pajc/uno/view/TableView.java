@@ -399,7 +399,7 @@ public class TableView extends JFrame
 	{
 		if (indexPlayer == 0)
 			sayUnoButtonPlayerOne.setVisible(visibility);
-		else
+		if (indexPlayer == 1)
 			sayUnoButtonPlayerTwo.setVisible(visibility);
 	}
 
