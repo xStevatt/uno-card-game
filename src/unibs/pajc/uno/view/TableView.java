@@ -79,6 +79,9 @@ public class TableView extends JFrame
 	private ArrayList<CardView> listCardsView;
 
 	private boolean isGameLocal = true;
+
+	private boolean unoButtonPressed = false;
+
 	private JLabel lblNewLabel_2;
 
 	private String message = "";
@@ -164,6 +167,7 @@ public class TableView extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				unoButtonPressed = true;
 				System.out.println("UNO!");
 			}
 		});
@@ -176,6 +180,7 @@ public class TableView extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				unoButtonPressed = true;
 				System.out.println("UNO!");
 			}
 		});
@@ -549,6 +554,16 @@ public class TableView extends JFrame
 		}
 
 		return list;
+	}
+
+	public boolean isUnoButtonPressed()
+	{
+		return unoButtonPressed;
+	}
+
+	public void setUnoButtonPressed(boolean unoButtonPressed)
+	{
+		this.unoButtonPressed = unoButtonPressed;
 	}
 
 	public String getMessage()

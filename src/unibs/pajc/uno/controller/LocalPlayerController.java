@@ -69,8 +69,6 @@ public class LocalPlayerController
 			@Override
 			public void run()
 			{
-				int turn = 0;
-
 				while (model.isGameOver() == false)
 				{
 					if (model.getCurrentPlayer().getIndex() == 0)
@@ -137,6 +135,11 @@ public class LocalPlayerController
 								{
 									boolean newColorSelection = model.evalMossa(CardView.cardSelected);
 
+									if (model.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
+									{
+										gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayer().getIndex());
+									}
+
 									if (newColorSelection)
 									{
 										DialogSelectNewColor dialogColor = new DialogSelectNewColor();
@@ -162,8 +165,17 @@ public class LocalPlayerController
 					// CHECKS NUMBER CARDS
 					if (model.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
 					{
-						gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayer().getIndex());
+
 					}
+
+					if (gameView.isUnoButtonPressed())
+					{
+
+						gameView.setUnoButtonPressed(false);
+					}
+
+					gameView.setSayUnoButtonVisibile(false, 0);
+					gameView.setSayUnoButtonVisibile(false, 1);
 
 					// RESETS FLAGS
 					CardView.isCardSelected = false;

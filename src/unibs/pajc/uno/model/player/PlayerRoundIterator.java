@@ -6,6 +6,7 @@ public class PlayerRoundIterator
 {
 	private final ArrayList<Player> players;
 	private int current = 0;
+	private int previous = -1;
 	private Direction direction = Direction.CLOCKWISE;
 
 	public PlayerRoundIterator(ArrayList<Player> players)
@@ -64,6 +65,7 @@ public class PlayerRoundIterator
 	 */
 	public int getNextIndex()
 	{
+		previous = current;
 		int increment = direction == Direction.CLOCKWISE ? 1 : -1;
 		return (players.size() + current + increment) % players.size();
 	}

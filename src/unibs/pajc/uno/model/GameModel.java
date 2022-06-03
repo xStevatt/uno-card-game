@@ -201,6 +201,26 @@ public class GameModel
 	}
 
 	/**
+	 * Checks if current player only has one card
+	 * 
+	 * @return
+	 */
+	public boolean hasPlayerOneCard()
+	{
+		boolean hasPlayerOneCard = false;
+
+		for (int i = 0; i < i; i++)
+		{
+			if (turnIterator.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
+			{
+				hasPlayerOneCard = true;
+			}
+		}
+
+		return hasPlayerOneCard;
+	}
+
+	/**
 	 * Method that checks if the card that the user wants to place is valid. A card
 	 * that needs to be placed must be the same color of the last card that was
 	 * discarded in the used cards pile.
@@ -212,6 +232,11 @@ public class GameModel
 		boolean isCardValid = false;
 
 		if (cardUsed.isCardSpecialWild() && cardSelected.isCardSpecialWild())
+		{
+			isCardValid = true;
+		}
+
+		if (cardSelected.isCardSpecialWild())
 		{
 			isCardValid = true;
 		}
