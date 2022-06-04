@@ -133,6 +133,7 @@ public class ClientController
 
 						objReceived = objInputStream.readObject();
 
+						System.out.println("-> here");
 						if (objReceived != null && objReceived instanceof String && ((String) objReceived).length() > 0)
 						{
 							System.out.println("[CLIENT] - Message received from server: " + ((String) objReceived));
@@ -160,6 +161,17 @@ public class ClientController
 
 					if (view.getMessage().length() > 0)
 					{
+						try
+						{
+							// SLEEPS FOR 1000ms
+							Thread.sleep(1000);
+						}
+						catch (InterruptedException e1)
+						{
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+
 						try
 						{
 							objOutputStream.writeObject(message);

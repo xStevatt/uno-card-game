@@ -41,7 +41,7 @@ public class ServerController
 
 		try
 		{
-			Thread.sleep(5000);
+			Thread.sleep(NetUtils.DEFAULT_SERVER_TIME_OUT);
 		}
 		catch (InterruptedException e1)
 		{

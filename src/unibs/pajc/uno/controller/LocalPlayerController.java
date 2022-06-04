@@ -150,7 +150,8 @@ public class LocalPlayerController
 						if (model.hasPlayerOneCard(model.getPlayers().get(model.getPreviousPlayerIndex()))
 								&& gameView.isUnoButtonPressed() == false)
 						{
-							gameView.setUnoButtonPressed() = false;
+							model.playerDidNotSayUno(model.getPreviousPlayerIndex());
+							gameView.setUnoButtonPressed(false);
 						}
 
 						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
