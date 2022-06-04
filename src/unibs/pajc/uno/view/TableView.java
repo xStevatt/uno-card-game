@@ -67,25 +67,30 @@ public class TableView extends JFrame
 
 	private JTextArea textAreaChat;
 	private JButton btnSendMessage;
-	private JSeparator separator;
+	private JSeparator separatorChat;
 
 	private JButton sayUnoButtonPlayerTwo;
 	private JButton sayUnoButtonPlayerOne;
 	private JLabel titleLabel;
-	private JLabel matchDescriptor;
+	private JLabel lblMatchDescriptor;
 
 	private JLabel lblStopWatch;
-
-	private ArrayList<CardView> listCardsView;
 
 	private boolean isGameLocal = true;
 
 	private boolean unoButtonPressed = false;
 
 	private JLabel turnFinalLabel;
-	JLabel lblPlayerTurn;
+	private JLabel lblPlayerTurn;
 
 	private String message = "";
+
+	private JSeparator separatorInfo1;
+	private JSeparator separatorInfo2;
+
+	private JPanel panelInfo;
+	private JSeparator separator;
+	private JScrollPane scroll;
 
 	/**
 	 * Constructor to create the form.
@@ -241,55 +246,55 @@ public class TableView extends JFrame
 		panelChat.add(txtSendMessageField);
 		txtSendMessageField.setColumns(10);
 
-		JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+		scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		panelChat.add(scroll);
 
-		JSeparator separator = new JSeparator();
+		separator = new JSeparator();
 		separator.setBounds(17, 377, 216, 12);
 		panelChat.add(separator);
 
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new LineBorder(Color.DARK_GRAY));
-		panel_1.setBounds(1045, 6, 249, 183);
-		contentPane.add(panel_1);
-		panel_1.setLayout(null);
+		panelInfo = new JPanel();
+		panelInfo.setBorder(new LineBorder(Color.DARK_GRAY));
+		panelInfo.setBounds(1045, 6, 249, 183);
+		contentPane.add(panelInfo);
+		panelInfo.setLayout(null);
 
 		titleLabel = new JLabel("Uno Game");
 		titleLabel.setFont(new Font("Lucida Grande", Font.BOLD, 18));
 		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		titleLabel.setBounds(6, 14, 237, 23);
-		panel_1.add(titleLabel);
+		panelInfo.add(titleLabel);
 
-		matchDescriptor = new JLabel(namePlayerOne + " vs " + namePlayerTwo);
-		matchDescriptor.setHorizontalAlignment(SwingConstants.CENTER);
-		matchDescriptor.setBounds(16, 73, 227, 16);
-		panel_1.add(matchDescriptor);
+		lblMatchDescriptor = new JLabel(namePlayerOne + " vs " + namePlayerTwo);
+		lblMatchDescriptor.setHorizontalAlignment(SwingConstants.CENTER);
+		lblMatchDescriptor.setBounds(16, 73, 227, 16);
+		panelInfo.add(lblMatchDescriptor);
 
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(16, 49, 227, 12);
-		panel_1.add(separator_1);
+		separatorInfo1 = new JSeparator();
+		separatorInfo1.setBounds(16, 49, 227, 12);
+		panelInfo.add(separatorInfo1);
 
 		lblStopWatch = new JLabel("00:00:00");
 		lblStopWatch.setHorizontalAlignment(SwingConstants.CENTER);
 		lblStopWatch.setBounds(6, 101, 237, 16);
-		panel_1.add(lblStopWatch);
+		panelInfo.add(lblStopWatch);
 
-		JSeparator separator_1_1 = new JSeparator();
-		separator_1_1.setBounds(16, 126, 227, 12);
-		panel_1.add(separator_1_1);
+		separatorInfo2 = new JSeparator();
+		separatorInfo2.setBounds(16, 126, 227, 12);
+		panelInfo.add(separatorInfo2);
 
 		lblPlayerTurn = new JLabel("");
 		lblPlayerTurn.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		lblPlayerTurn.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPlayerTurn.setBounds(106, 150, 137, 27);
-		panel_1.add(lblPlayerTurn);
+		panelInfo.add(lblPlayerTurn);
 
 		turnFinalLabel = new JLabel("Turn:");
 		turnFinalLabel.setFont(new Font("Lucida Grande", Font.BOLD, 15));
 		turnFinalLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		turnFinalLabel.setBounds(6, 150, 88, 27);
-		panel_1.add(turnFinalLabel);
+		panelInfo.add(turnFinalLabel);
 
 		if (isGameLocal)
 		{

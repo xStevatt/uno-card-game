@@ -14,6 +14,7 @@ import unibs.pajc.uno.view.TableView;
 public class ServerController
 {
 	private Socket client;
+	private ServerSocket serverSocket;
 	private String IP_ADDRESS;
 	private int PORT;
 	private boolean isConnected = false;
@@ -38,6 +39,7 @@ public class ServerController
 		System.out.println(playerNameServer);
 
 		startServer();
+		listenToClient();
 
 		try
 		{
@@ -48,6 +50,8 @@ public class ServerController
 			e1.printStackTrace();
 		}
 
+		System.out.println("Is server connected?" + isConnected);
+
 		if (isConnected)
 		{
 			view = new TableView(playerNameServer, playerNameClient, NetUtils.ONLINE_GAME);
@@ -55,19 +59,6 @@ public class ServerController
 			view.setResizable(false);
 		}
 
-		try
-		{
-			new Thread(() -> {
-				listenToClient();
-			}).join();
-		}
-		catch (InterruptedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		sendToClient("Ciao dal server");
 	}
 
 	public void startView()
@@ -78,108 +69,101 @@ public class ServerController
 
 	public void startServer()
 	{
-		serverThread = new Thread(new Runnable()
+		try
 		{
-			@Override
-			public void run()
+			serverSocket = new ServerSocket(PORT);
+			System.out.print("[SERVER] - Trying to launch server");
+
+			serverSocket.setSoTimeout(NetUtils.DEFAULT_SERVER_TIME_OUT);
+
+			client = serverSocket.accept();
+			objOutputStream = new ObjectOutputStream(client.getOutputStream());
+			objInputStream = new ObjectInputStream(client.getInputStream());
+
+			isConnected = true;
+			System.out.println("[SERVER] - CONNECTED TO CLIENT: " + isConnected);
+
+			if (isConnected)
 			{
-				try (ServerSocket serverSocket = new ServerSocket(PORT))
+				try
 				{
-					System.out.print("[SERVER] - Trying to launch server");
+					objOutputStream.writeObject(playerNameServer);
+					playerNameClient = (String) objInputStream.readObject();
 
-					serverSocket.setSoTimeout(NetUtils.DEFAULT_SERVER_TIME_OUT);
-
-					client = serverSocket.accept();
-					objOutputStream = new ObjectOutputStream(client.getOutputStream());
-					objInputStream = new ObjectInputStream(client.getInputStream());
-
-					isConnected = true;
-					System.out.println("[SERVER] - CONNECTED TO CLIENT: " + isConnected);
-
-					if (isConnected)
+					try
 					{
-						try
-						{
-							objOutputStream.writeObject(playerNameServer);
-							playerNameClient = (String) objInputStream.readObject();
+						Thread.sleep(1000);
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
-							try
-							{
-								Thread.sleep(1000);
-							}
-							catch (InterruptedException e)
-							{
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-
-							while (playerNameClient.equals(""))
-							{
-								System.out.print("HERE ->>> ");
-								playerNameClient = (String) objInputStream.readObject();
-							}
-						}
-						catch (NullPointerException e)
-						{
-							System.out.println("[SERVER] - No player init message received");
-						}
-						catch (ClassNotFoundException e)
-						{
-							e.printStackTrace();
-						}
+					while (playerNameClient.equals(""))
+					{
+						System.out.print("HERE ->>> ");
+						playerNameClient = (String) objInputStream.readObject();
 					}
 				}
-				catch (SocketTimeoutException e)
+				catch (NullPointerException e)
 				{
-					System.err.println("Communication time-out: " + e);
-					System.exit(0);
+					System.out.println("[SERVER] - No player init message received");
 				}
-				catch (IOException e)
+				catch (ClassNotFoundException e)
 				{
-					System.err.println("Some communication error happened: " + e);
-					System.exit(0);
+					e.printStackTrace();
 				}
 			}
-		});
-
-		serverThread.start();
+		}
+		catch (SocketTimeoutException e)
+		{
+			System.err.println("Communication time-out: " + e);
+			System.exit(0);
+		}
+		catch (IOException e)
+		{
+			System.err.println("Some communication error happened: " + e);
+			System.exit(0);
+		}
 	}
 
 	public void listenToClient()
 	{
-		while (isConnected)
+		new Thread(new Runnable()
 		{
-			try
+			@Override
+			public void run()
 			{
-				Object objReceived;
-
-				System.out.println("LMAO");
-
-				objReceived = objInputStream.readObject();
-
-				if (objReceived instanceof String && ((String) objReceived).length() > 0)
+				while (true)
 				{
-					System.out.println("Message received from client: " + ((String) objReceived));
+					try
+					{
+						Object objReceived = objInputStream.readObject();
+
+						if (objReceived instanceof String && ((String) objReceived).length() > 0)
+						{
+							System.out.println("Message received from client: " + ((String) objReceived));
+						}
+					}
+					catch (EOFException e)
+					{
+
+					}
+					catch (IOException e)
+					{
+						System.out.println("Errors in listening to the client");
+						System.exit(0);
+
+					}
+					catch (ClassNotFoundException e)
+					{
+						System.out.print("Class not found");
+						System.exit(0);
+					}
 				}
 			}
-			catch (EOFException e)
-			{
-				System.out.println("Client disconnected");
-				isConnected = false;
-				System.exit(0);
-			}
-			catch (IOException e)
-			{
-				System.out.println("Errors in listening to client");
-				System.exit(0);
-
-			}
-			catch (ClassNotFoundException e)
-			{
-				System.out.print("Class not found");
-				System.exit(0);
-			}
-		}
+		}).start();
 	}
 
 	public void sendToClient(Object objToSend)

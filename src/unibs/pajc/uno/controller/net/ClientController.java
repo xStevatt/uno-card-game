@@ -53,10 +53,6 @@ public class ClientController
 			view.setVisible(true);
 			view.setResizable(false);
 		}
-
-		listenToServer();
-
-		sendToServer("Ciao dal client");
 	}
 
 	/**
@@ -116,6 +112,25 @@ public class ClientController
 		});
 
 		clientThread.start();
+
+		try
+		{
+			new Thread(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+
+					sendToServer("Ciao dal client");
+
+				}
+			}).join();
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void listenToServer()
