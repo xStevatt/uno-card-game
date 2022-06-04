@@ -78,11 +78,22 @@ public class LocalPlayerController
 					{
 						gameView.setSayUnoButtonVisibile(true, model.getPreviousPlayerIndex());
 					}
+					if (model.hasPlayerOneCard(model.getPlayers().get(model.getCurrentPlayerIndex())))
+					{
+						gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
+					}
 
 					if (model.getCurrentPlayer().getIndex() == 0)
 					{
 						gameView.enableViewPlayer(0, true);
 						gameView.enableViewPlayer(1, false);
+
+						if (model.hasPlayerOneCard(model.getPlayers().get(model.getPreviousPlayerIndex()))
+								&& gameView.isUnoButtonPressed() == false)
+						{
+							model.playerDidNotSayUno(model.getPreviousPlayerIndex());
+							gameView.setUnoButtonPressed(false);
+						}
 
 						// LOOP WAITING FOR A CARD TO BE SELECTED
 						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
@@ -136,11 +147,10 @@ public class LocalPlayerController
 						gameView.enableViewPlayer(0, false);
 						gameView.enableViewPlayer(1, true);
 
-						if (model.hasPlayerOneCard(model.getPlayers().get(model.getPreviousPlayerIndex())))
+						if (model.hasPlayerOneCard(model.getPlayers().get(model.getPreviousPlayerIndex()))
+								&& gameView.isUnoButtonPressed() == false)
 						{
-							gameView.setSayUnoButtonVisibile(
-									model.hasPlayerOneCard(model.getPlayers().get(model.getPreviousPlayerIndex())),
-									model.getPreviousPlayerIndex());
+							gameView.setUnoButtonPressed() = false;
 						}
 
 						while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)

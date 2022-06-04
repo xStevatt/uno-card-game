@@ -281,7 +281,7 @@ public class TableView extends JFrame
 
 		lblPlayerTurn = new JLabel("");
 		lblPlayerTurn.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
-		lblPlayerTurn.setHorizontalAlignment(SwingConstants.LEFT);
+		lblPlayerTurn.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPlayerTurn.setBounds(106, 150, 137, 27);
 		panel_1.add(lblPlayerTurn);
 
@@ -372,6 +372,7 @@ public class TableView extends JFrame
 	{
 		panelPlaced.removeAll();
 		panelPlaced.add(new CardView(cardUsed));
+		panelPlaced.repaint();
 	}
 
 	/**

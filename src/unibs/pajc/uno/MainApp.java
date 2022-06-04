@@ -32,7 +32,6 @@ import unibs.pajc.uno.view.events.HoverButtonEvent;
 public class MainApp extends JFrame
 {
 	private static final String APP_SIGNATURE = "Made by Stefano Valloncini, Yuhang Ye, Luigi Amarante";
-
 	private static final String DEFAULT_APP_TITLE = "UnoPAJC, a remake of the uno card game, in Java";
 
 	private JPanel bannerPanel;
