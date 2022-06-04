@@ -17,8 +17,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import unibs.pajc.uno.controller.net.ClientController;
-import unibs.pajc.uno.controller.net.ServerController;
+import unibs.pajc.uno.controller.net.NetClient;
+import unibs.pajc.uno.controller.net.NetServer;
 
 public class PlayerDetailsInfoOnline extends JFrame
 {
@@ -83,7 +83,7 @@ public class PlayerDetailsInfoOnline extends JFrame
 				{
 					if (portNumber != 0 || txtIPAddress.getText().length() == 0 || txtName.getText().length() == 0)
 					{
-						new ClientController(txtIPAddress.getText(), portNumber, txtName.getText());
+						new NetClient(txtIPAddress.getText(), portNumber, txtName.getText());
 					}
 					else
 					{
@@ -95,7 +95,7 @@ public class PlayerDetailsInfoOnline extends JFrame
 				{
 					if (portNumber != 0 || txtIPAddress.getText().length() == 0 || txtName.getText().length() == 0)
 					{
-						new ServerController(txtIPAddress.getText(), portNumber, txtName.getText());
+						new NetServer(txtIPAddress.getText(), portNumber, txtName.getText());
 					}
 					else
 					{

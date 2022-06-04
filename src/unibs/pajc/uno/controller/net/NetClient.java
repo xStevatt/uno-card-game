@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.view.TableView;
 
-public class ClientController
+public class NetClient
 {
 	private Socket clientSocket;
 	private final String IP_ADDRESS;
@@ -30,7 +30,7 @@ public class ClientController
 
 	private Thread clientThread;
 
-	public ClientController(String IP_ADDRESS, int port, String playerName)
+	public NetClient(String IP_ADDRESS, int port, String playerName)
 	{
 		this.IP_ADDRESS = IP_ADDRESS;
 		this.port = port;
@@ -40,12 +40,14 @@ public class ClientController
 
 		try
 		{
-			Thread.sleep(NetUtils.DEFAULT_CLIENT_TIME_OUT);
+			Thread.sleep(NetUtils.DEFAULT_SERVER_TIME_OUT);
 		}
 		catch (InterruptedException e)
 		{
 			e.printStackTrace();
 		}
+
+		listenToServer();
 
 		if (isConnected)
 		{
@@ -133,6 +135,9 @@ public class ClientController
 		}
 	}
 
+	/**
+	 * Makes the server listen to the client
+	 */
 	private void listenToServer()
 	{
 		Thread listeningThread = new Thread(new Runnable()
@@ -204,6 +209,11 @@ public class ClientController
 		listeningThread.start();
 	}
 
+	/**
+	 * Sends data to the server.
+	 * 
+	 * @param objToSend Object that has to be sent to the server
+	 */
 	private void sendToServer(Object objToSend)
 	{
 		try

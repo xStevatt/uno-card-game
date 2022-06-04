@@ -11,7 +11,7 @@ import java.net.SocketTimeoutException;
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.view.TableView;
 
-public class ServerController
+public class NetServer
 {
 	private Socket client;
 	private ServerSocket serverSocket;
@@ -30,7 +30,7 @@ public class ServerController
 
 	private Thread serverThread;
 
-	public ServerController(String IP_ADDRESS, int PORT, String playerNameServer)
+	public NetServer(String IP_ADDRESS, int PORT, String playerNameServer)
 	{
 		this.IP_ADDRESS = IP_ADDRESS;
 		this.PORT = PORT;
