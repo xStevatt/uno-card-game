@@ -1,4 +1,4 @@
-package unibs.pajc.uno.controller;
+package unibs.pajc.uno.controller.ai;
 
 import java.util.HashMap;
 
