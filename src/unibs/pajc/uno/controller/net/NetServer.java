@@ -8,9 +8,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-import unibs.pajc.uno.model.GameModel;
-import unibs.pajc.uno.view.TableView;
-
 public class NetServer
 {
 	private Socket client;
@@ -21,9 +18,6 @@ public class NetServer
 
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
-
-	private TableView view;
-	private GameModel model;
 
 	private String playerNameServer;
 	private String playerNameClient;
@@ -40,33 +34,11 @@ public class NetServer
 
 		startServer();
 		listenToClient();
-
-		try
-		{
-			Thread.sleep(NetUtils.DEFAULT_SERVER_TIME_OUT);
-		}
-		catch (InterruptedException e1)
-		{
-			e1.printStackTrace();
-		}
-
-		System.out.println("Is server connected?" + isConnected);
-
-		if (isConnected)
-		{
-			view = new TableView(playerNameServer, playerNameClient, NetUtils.ONLINE_GAME);
-			view.setVisible(true);
-			view.setResizable(false);
-		}
-
 	}
 
-	public void startView()
-	{
-		view = new TableView(null, null, true);
-		view.setVisible(true);
-	}
-
+	/**
+	 * Initializes the server
+	 */
 	public void startServer()
 	{
 		try
@@ -128,6 +100,9 @@ public class NetServer
 		}
 	}
 
+	/**
+	 * Method that starts listening to the client
+	 */
 	public void listenToClient()
 	{
 		new Thread(new Runnable()
@@ -140,6 +115,8 @@ public class NetServer
 					try
 					{
 						Object objReceived = objInputStream.readObject();
+
+						System.out.println(objReceived);
 
 						if (objReceived instanceof String && ((String) objReceived).length() > 0)
 						{
@@ -166,6 +143,11 @@ public class NetServer
 		}).start();
 	}
 
+	/**
+	 * Sends an object to the client
+	 * 
+	 * @param objToSend the object to send to the client
+	 */
 	public void sendToClient(Object objToSend)
 	{
 		try
@@ -177,5 +159,25 @@ public class NetServer
 			System.out.println("Error while sending - Couldn't send object to client");
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Returns if the server connected to the server
+	 * 
+	 * @return if the server is connected
+	 */
+	public boolean isConnected()
+	{
+		return isConnected;
+	}
+
+	/**
+	 * Returns the name of the client, received from the client
+	 * 
+	 * @return the String name of the client
+	 */
+	public String getClientName()
+	{
+		return playerNameClient;
 	}
 }

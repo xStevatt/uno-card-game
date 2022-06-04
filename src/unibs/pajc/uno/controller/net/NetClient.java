@@ -48,13 +48,7 @@ public class NetClient
 		}
 
 		listenToServer();
-
-		if (isConnected)
-		{
-			view = new TableView(playerNameServer, playerNameClient, NetUtils.ONLINE_GAME);
-			view.setVisible(true);
-			view.setResizable(false);
-		}
+		listenForNewMessagesToSend();
 	}
 
 	/**
@@ -115,24 +109,16 @@ public class NetClient
 
 		clientThread.start();
 
-		try
-		{
-			new Thread(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-
-					sendToServer("Ciao dal client");
-
-				}
-			}).join();
-		}
-		catch (InterruptedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		/*
+		 * try { new Thread(new Runnable() {
+		 * 
+		 * @Override public void run() {
+		 * 
+		 * sendToServer("Ciao dal client");
+		 * 
+		 * } }).join(); } catch (InterruptedException e) { // TODO Auto-generated catch
+		 * block e.printStackTrace(); }
+		 */
 	}
 
 	/**
@@ -161,11 +147,11 @@ public class NetClient
 					}
 					catch (EOFException e)
 					{
-
+						System.out.println("HERE");
 					}
 					catch (ClassNotFoundException e)
 					{
-
+						System.out.println("HERE");
 					}
 					catch (IOException e)
 					{
@@ -210,6 +196,25 @@ public class NetClient
 	}
 
 	/**
+	 * Listens for new messages to send
+	 */
+	public void listenForNewMessagesToSend()
+	{
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (!TableView.message.equals(""))
+				{
+					sendToServer(TableView.message);
+					TableView.message = "";
+				}
+			}
+		}).start();
+	}
+
+	/**
 	 * Sends data to the server.
 	 * 
 	 * @param objToSend Object that has to be sent to the server
@@ -222,8 +227,27 @@ public class NetClient
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Returns if the client is connected to the server
+	 * 
+	 * @return
+	 */
+	public boolean isConnected()
+	{
+		return isConnected;
+	}
+
+	/**
+	 * Returns the name of the server, received from the server
+	 * 
+	 * @return the String name of the client
+	 */
+	public String getServerName()
+	{
+		return playerNameServer;
 	}
 }

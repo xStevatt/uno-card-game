@@ -17,8 +17,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
-import unibs.pajc.uno.controller.net.NetClient;
-import unibs.pajc.uno.controller.net.NetServer;
+import unibs.pajc.uno.controller.OnlinePlayerController;
 
 public class PlayerDetailsInfoOnline extends JFrame
 {
@@ -81,9 +80,9 @@ public class PlayerDetailsInfoOnline extends JFrame
 
 				if (rdbtnClient.isSelected())
 				{
-					if (portNumber != 0 || txtIPAddress.getText().length() == 0 || txtName.getText().length() == 0)
+					if (portNumber != 0 || txtIPAddress.getText().length() == 0 || txtName.getText().length() > 0)
 					{
-						new NetClient(txtIPAddress.getText(), portNumber, txtName.getText());
+						new OnlinePlayerController(txtIPAddress.getText(), portNumber, txtName.getText(), false);
 					}
 					else
 					{
@@ -93,9 +92,9 @@ public class PlayerDetailsInfoOnline extends JFrame
 				}
 				if (rdbtnServer.isSelected())
 				{
-					if (portNumber != 0 || txtIPAddress.getText().length() == 0 || txtName.getText().length() == 0)
+					if (portNumber != 0 || txtIPAddress.getText().length() == 0 || txtName.getText().length() > 0)
 					{
-						new NetServer(txtIPAddress.getText(), portNumber, txtName.getText());
+						new OnlinePlayerController(txtIPAddress.getText(), portNumber, txtName.getText(), true);
 					}
 					else
 					{

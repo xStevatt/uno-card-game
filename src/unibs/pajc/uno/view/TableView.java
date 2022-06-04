@@ -83,7 +83,7 @@ public class TableView extends JFrame
 	private JLabel turnFinalLabel;
 	private JLabel lblPlayerTurn;
 
-	private String message = "";
+	public static String message = "";
 
 	private JSeparator separatorInfo1;
 	private JSeparator separatorInfo2;
