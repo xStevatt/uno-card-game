@@ -21,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
@@ -65,7 +66,7 @@ public class TableView extends JFrame
 	private JLayeredPane handCardsViewActual;
 	private JLayeredPane handCardsViewAdversary;
 
-	private JTextArea textAreaChat;
+	public static JTextArea textAreaChat;
 	private JButton btnSendMessage;
 	private JSeparator separatorChat;
 
@@ -232,8 +233,14 @@ public class TableView extends JFrame
 
 				if (messageInput.length() > 0)
 				{
-					message = messageInput;
-					System.out.println(message);
+					TableView.message = messageInput;
+					LocalDateTime time = LocalDateTime.now();
+					DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm");
+					String formattedDate = time.format(myFormatObj);
+
+					textAreaChat.append("\n" + formattedDate + " " + "name" + ": " + message);
+
+					message = "";
 				}
 			}
 		});
@@ -248,11 +255,15 @@ public class TableView extends JFrame
 
 		scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		panelChat.add(scroll);
+		textAreaChat.add(scroll);
 
 		separator = new JSeparator();
 		separator.setBounds(17, 377, 216, 12);
 		panelChat.add(separator);
+
+		JScrollBar scrollBar = new JScrollBar();
+		scrollBar.setBounds(218, 24, 15, 341);
+		panelChat.add(scrollBar);
 
 		panelInfo = new JPanel();
 		panelInfo.setBorder(new LineBorder(Color.DARK_GRAY));
@@ -300,7 +311,7 @@ public class TableView extends JFrame
 		{
 			btnSendMessage.setEnabled(false);
 			txtSendMessageField.setEditable(false);
-			textAreaChat.setEnabled(false);
+			textAreaChat.setEnabled(true);
 			scroll.setEnabled(false);
 
 			textAreaChat.addMouseListener(new MouseAdapter()
@@ -544,13 +555,7 @@ public class TableView extends JFrame
 	 */
 	public void addChatMessage(String message, String playerName)
 	{
-		LocalDateTime time = LocalDateTime.now();
-		DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm");
-		String formattedDate = time.format(myFormatObj);
 
-		textAreaChat.append("\n" + formattedDate + " " + playerName + ": " + message);
-
-		message = "";
 	}
 
 	// GETTERS AND SETTERS

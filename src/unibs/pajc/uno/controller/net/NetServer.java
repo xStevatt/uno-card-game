@@ -8,6 +8,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
+import javax.swing.JTextArea;
+
+import unibs.pajc.uno.view.TableView;
+
 public class NetServer
 {
 	private Socket client;
@@ -22,7 +26,7 @@ public class NetServer
 	private String playerNameServer;
 	private String playerNameClient;
 
-	private Thread serverThread;
+	private JTextArea areaText;
 
 	public NetServer(String IP_ADDRESS, int PORT, String playerNameServer)
 	{
@@ -31,6 +35,8 @@ public class NetServer
 
 		this.playerNameServer = playerNameServer;
 		System.out.println(playerNameServer);
+
+		areaText = TableView.textAreaChat;
 
 		startServer();
 		listenToClient();
@@ -144,6 +150,38 @@ public class NetServer
 	}
 
 	/**
+	 * 
+	 */
+	public void listenForNewMessagesToSend()
+	{
+		new Thread(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				while (true)
+				{
+					try
+					{
+						Thread.sleep(100);
+					}
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
+					if (!TableView.message.equals(""))
+					{
+						sendToClient(TableView.message);
+						System.out.println("Will it work...");
+						TableView.textAreaChat.setText("culo");
+						TableView.message = "";
+					}
+				}
+			}
+		}).start();
+	}
+
+	/**
 	 * Sends an object to the client
 	 * 
 	 * @param objToSend the object to send to the client
@@ -152,6 +190,7 @@ public class NetServer
 	{
 		try
 		{
+			System.out.println(TableView.message);
 			objOutputStream.writeObject(objToSend);
 		}
 		catch (IOException e)

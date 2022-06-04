@@ -205,10 +205,23 @@ public class NetClient
 			@Override
 			public void run()
 			{
-				if (!TableView.message.equals(""))
+				while (true)
 				{
-					sendToServer(TableView.message);
-					TableView.message = "";
+					try
+					{
+						Thread.sleep(100);
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					if (!TableView.message.equals(""))
+					{
+						sendToServer(TableView.message);
+						TableView.message = "";
+					}
 				}
 			}
 		}).start();
@@ -224,6 +237,11 @@ public class NetClient
 		try
 		{
 			objOutputStream.writeObject(objToSend);
+
+			if (objToSend instanceof String)
+			{
+				System.out.println("Message sent: " + (String) objToSend);
+			}
 		}
 		catch (IOException e)
 		{
