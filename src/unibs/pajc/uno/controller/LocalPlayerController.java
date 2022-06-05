@@ -76,6 +76,7 @@ public class LocalPlayerController
 
 					if (model.getCurrentPlayer().getIndex() == 0)
 					{
+						checkPlayerSaidUno();
 						gameView.enableViewPlayer(0, true);
 						gameView.enableViewPlayer(1, false);
 
@@ -94,6 +95,11 @@ public class LocalPlayerController
 
 							if (CardView.isCardSelected == true)
 							{
+								if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
+								{
+									model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+								}
+
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
 									gameView.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
@@ -115,6 +121,11 @@ public class LocalPlayerController
 							}
 							if (CardBackView.isCardDrawnFromDeck == true)
 							{
+								if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
+								{
+									model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+								}
+
 								model.getCurrentPlayer().addCard(model.getCardFromDeck());
 								model.nextTurn();
 							}
@@ -122,6 +133,7 @@ public class LocalPlayerController
 					}
 					if (model.getCurrentPlayer().getIndex() == 1)
 					{
+						checkPlayerSaidUno();
 						gameView.enableViewPlayer(0, false);
 						gameView.enableViewPlayer(1, true);
 
@@ -140,6 +152,11 @@ public class LocalPlayerController
 
 							if (CardView.isCardSelected == true)
 							{
+								if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
+								{
+									model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+								}
+
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
 									gameView.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
@@ -161,6 +178,11 @@ public class LocalPlayerController
 							}
 							if (CardBackView.isCardDrawnFromDeck == true)
 							{
+								if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
+								{
+									model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+								}
+
 								model.getCurrentPlayer().addCard(model.getCardFromDeck());
 								model.nextTurn();
 							}
@@ -191,6 +213,17 @@ public class LocalPlayerController
 		}).start();
 	}
 
+	/**
+	 * 
+	 */
+	public void getYourShitTogether()
+	{
+
+	}
+
+	/**
+	 * 
+	 */
 	public void checkPlayerSaidUno()
 	{
 		if (model.hasPlayerOneCard(model.getCurrentPlayer()))
@@ -199,7 +232,7 @@ public class LocalPlayerController
 		}
 		else if (model.hasPlayerOneCard(model.getPreviousPlayer()))
 		{
-			gameView.setSayUnoButtonVisibile(false, model.getPreviousPlayerIndex());
+			gameView.setSayUnoButtonVisibile(true, model.getPreviousPlayerIndex());
 		}
 	}
 }

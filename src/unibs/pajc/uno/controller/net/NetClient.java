@@ -201,10 +201,20 @@ public class NetClient
 						e.printStackTrace();
 					}
 
-					if (!TableView.message.equals(""))
+					if (TableView.message.equals("") == false)
 					{
 						sendToServer(TableView.message);
 						TableView.message = "";
+
+						try
+						{
+							Thread.sleep(3000);
+						}
+						catch (InterruptedException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}

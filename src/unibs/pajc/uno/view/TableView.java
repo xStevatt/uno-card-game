@@ -242,6 +242,7 @@ public class TableView extends JFrame
 				if (messageInput.length() > 0)
 				{
 					addChatMessage(messageInput, "Player");
+					TableView.message = messageInput;
 				}
 			}
 		});

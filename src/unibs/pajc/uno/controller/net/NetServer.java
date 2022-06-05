@@ -70,7 +70,7 @@ public class NetServer
 		try
 		{
 			serverSocket = new ServerSocket(PORT);
-			System.out.print("[SERVER] - Trying to launch server");
+			System.out.println("[SERVER] - Trying to launch server");
 
 			serverSocket.setSoTimeout(NetUtils.DEFAULT_SERVER_TIME_OUT);
 
@@ -85,9 +85,11 @@ public class NetServer
 			{
 				try
 				{
+					// CLIENT AND SERVER SHARE NAMES
 					objOutputStream.writeObject(playerNameServer);
 					playerNameClient = (String) objInputStream.readObject();
 
+					// WAITS FOR A SECOND
 					try
 					{
 						Thread.sleep(1000);
@@ -98,9 +100,9 @@ public class NetServer
 						e.printStackTrace();
 					}
 
+					// WAITS FOR A VALID NAME
 					while (playerNameClient.equals(""))
 					{
-						System.out.print("HERE ->>> ");
 						playerNameClient = (String) objInputStream.readObject();
 					}
 				}
@@ -191,11 +193,19 @@ public class NetServer
 					{
 						// TODO Auto-generated catch block
 					}
-					if (!TableView.message.equals(""))
+					if (TableView.message.equals("") == false)
 					{
-						System.out.println("Sending new message");
 						sendToClient(TableView.message);
 						TableView.message = "";
+						try
+						{
+							Thread.sleep(3000);
+						}
+						catch (InterruptedException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 				}
 			}
