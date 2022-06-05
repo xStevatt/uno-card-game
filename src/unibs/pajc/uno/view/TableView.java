@@ -195,20 +195,27 @@ public class TableView extends JFrame
 		sayUnoButtonPlayerTwo.setBounds(6, 6, 135, 39);
 		midTable.add(sayUnoButtonPlayerTwo);
 
+		JPanel panelPlacedCardsColor = new JPanel();
+		panelPlacedCardsColor.setBounds(274, 6, 288, 212);
+		midTable.add(panelPlacedCardsColor);
+		panelPlacedCardsColor.setLayout(null);
+
+		panelPlaced = new JPanel();
+		panelPlaced.setBounds(177, 33, 105, 155);
+		panelPlacedCardsColor.add(panelPlaced);
+		panelPlaced.setOpaque(false);
+		panelPlaced.setEnabled(false);
+
 		panelDeck = new JPanel();
-		// +5 is due to card's border
-		panelDeck.setBounds(304, 30, 100 + 5, 150 + 5);
-		midTable.add(panelDeck);
+		panelDeck.setBounds(6, 33, 105, 155);
+		panelPlacedCardsColor.add(panelDeck);
 		panelDeck.setOpaque(false);
 
 		panelDeck.add(new CardBackView());
 
-		panelPlaced = new JPanel();
-		// +5 is due to card's border
-		panelPlaced.setBounds(455, 30, 100 + 5, 150 + 5);
-		panelPlaced.setOpaque(false);
-		panelPlaced.setEnabled(false);
-		midTable.add(panelPlaced);
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(144, 33, 0, 155);
+		panelPlacedCardsColor.add(separator_1);
 
 		panelChat = new JPanel();
 		panelChat.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Chat",
@@ -233,12 +240,7 @@ public class TableView extends JFrame
 
 				if (messageInput.length() > 0)
 				{
-					TableView.message = messageInput;
-					LocalDateTime time = LocalDateTime.now();
-					DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm");
-					String formattedDate = time.format(myFormatObj);
-
-					textAreaChat.append("\n" + formattedDate + " " + "name" + ": " + message);
+					addChatMessage(messageInput, "Player");
 				}
 			}
 		});
@@ -382,11 +384,17 @@ public class TableView extends JFrame
 		timer.start();
 	}
 
-	public void setLastUsedCard(Card cardUsed)
+	/**
+	 * Replaces the cards dropped on the table
+	 * 
+	 * @param card
+	 */
+	public void changeDroppedCardView(Card card)
 	{
 		panelPlaced.removeAll();
-		panelPlaced.add(new CardView(cardUsed));
-		panelPlaced.repaint();
+		UsedCardView cardToAdd = new UsedCardView(card);
+
+		panelPlaced.add(cardToAdd);
 	}
 
 	/**
@@ -432,19 +440,6 @@ public class TableView extends JFrame
 			sayUnoButtonPlayerOne.setVisible(visibility);
 		if (indexPlayer == 1)
 			sayUnoButtonPlayerTwo.setVisible(visibility);
-	}
-
-	/**
-	 * Replaces the cards dropped on the table
-	 * 
-	 * @param card
-	 */
-	public void changeDroppedCardView(Card card)
-	{
-		panelPlaced.removeAll();
-		UsedCardView cardToAdd = new UsedCardView(card);
-
-		panelPlaced.add(cardToAdd);
 	}
 
 	/**
@@ -553,7 +548,12 @@ public class TableView extends JFrame
 	 */
 	public void addChatMessage(String message, String playerName)
 	{
+		TableView.message = message;
+		LocalDateTime time = LocalDateTime.now();
+		DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm");
+		String formattedDate = time.format(myFormatObj);
 
+		textAreaChat.append("\n" + formattedDate + " " + playerName + ": " + message);
 	}
 
 	// GETTERS AND SETTERS

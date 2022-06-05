@@ -142,6 +142,8 @@ public class NetServer
 						if (objReceived instanceof String && ((String) objReceived).length() > 0)
 						{
 							System.out.println("Message received from client: " + ((String) objReceived));
+
+							view.addChatMessage((String) objReceived, playerNameClient);
 						}
 					}
 					catch (EOFException e)
@@ -165,7 +167,7 @@ public class NetServer
 	}
 
 	/**
-	 * 
+	 * Listens for possible new messages to send
 	 */
 	public void listenForNewMessagesToSend()
 	{

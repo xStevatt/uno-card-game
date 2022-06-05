@@ -118,7 +118,7 @@ public class LocalPlayerController
 										model.playerDidNotSayUno(model.getCurrentPlayerIndex());
 									}
 
-									gameView.setLastUsedCard(CardView.cardSelected);
+									gameView.changeDroppedCardView(CardView.cardSelected);
 									boolean newColorSelection = model.evalMossa(CardView.cardSelected);
 
 									if (newColorSelection)
@@ -171,7 +171,7 @@ public class LocalPlayerController
 							{
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
-									gameView.setLastUsedCard(CardView.cardSelected);
+									gameView.changeDroppedCardView(CardView.cardSelected);
 									boolean newColorSelection = model.evalMossa(CardView.cardSelected);
 
 									if (model.hasPlayerOneCard(model.getPlayers().get(model.getCurrentPlayerIndex()))
