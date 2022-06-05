@@ -49,7 +49,7 @@ public class LocalPlayerController
 		gameView.loadCards(model.getPlayers().get(1).getHandCards(), 1);
 
 		// LOADS LAST CARD DROPPED
-		gameView.changeDroppedCardView(model.getLastCardUsed());
+		gameView.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
 
 		gameView.setLocationRelativeTo(null);
 	}
@@ -59,7 +59,7 @@ public class LocalPlayerController
 		gameView.loadCards(playerOne.getHandCards(), 0);
 		gameView.loadCards(playerTwo.getHandCards(), 1);
 
-		gameView.changeDroppedCardView(model.getLastCardUsed());
+		gameView.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
 	}
 
 	public void runGame()
@@ -118,7 +118,7 @@ public class LocalPlayerController
 										model.playerDidNotSayUno(model.getCurrentPlayerIndex());
 									}
 
-									gameView.changeDroppedCardView(CardView.cardSelected);
+									gameView.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
 									boolean newColorSelection = model.evalMossa(CardView.cardSelected);
 
 									if (newColorSelection)
@@ -171,7 +171,7 @@ public class LocalPlayerController
 							{
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
-									gameView.changeDroppedCardView(CardView.cardSelected);
+									gameView.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
 									boolean newColorSelection = model.evalMossa(CardView.cardSelected);
 
 									if (model.hasPlayerOneCard(model.getPlayers().get(model.getCurrentPlayerIndex()))

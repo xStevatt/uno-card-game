@@ -36,8 +36,8 @@ import javax.swing.border.TitledBorder;
 
 import unibs.pajc.uno.model.GameRules;
 import unibs.pajc.uno.model.card.Card;
+import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.player.HandCards;
-import unibs.pajc.uno.model.player.Player;
 
 public class TableView extends JFrame
 {
@@ -337,20 +337,6 @@ public class TableView extends JFrame
 	 * @param lastCardUsed
 	 * @param currentPlayer
 	 */
-	public void updateView(Player playerOne, Player playerTwo, Card lastCardUsed, int currentPlayer)
-	{
-		if (currentPlayer == 0)
-		{
-			loadCards(playerOne.getHandCards(), currentPlayer);
-		}
-		if (currentPlayer == 1)
-		{
-			loadCards(playerTwo.getHandCards(), currentPlayer);
-		}
-
-		panelPlaced.removeAll();
-		changeDroppedCardView(lastCardUsed);
-	}
 
 	/**
 	 * Inits game timer. Timer starts at 00:00:00 and stops when game is over.
@@ -390,7 +376,7 @@ public class TableView extends JFrame
 	 * 
 	 * @param card
 	 */
-	public void changeDroppedCardView(Card card)
+	public void changeDroppedCardView(Card card, CardColor currentColor)
 	{
 		panelPlaced.removeAll();
 
@@ -403,8 +389,17 @@ public class TableView extends JFrame
 
 		Color color = Util.convertCardColor(card.getCardColor());
 
-		panelPlacedCardsColor.setBorder(new LineBorder(color, 6));
-		panelPlacedCardsColor.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
+		if (color.getRed() == 0 && color.getGreen() == 0 && color.getBlue() == 0)
+		{
+			panelPlacedCardsColor.setBorder(new LineBorder(Util.convertCardColor(currentColor), 6));
+			panelPlacedCardsColor.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
+		}
+		else
+		{
+			panelPlacedCardsColor.setBorder(new LineBorder(color, 6));
+			panelPlacedCardsColor.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
+		}
+
 		panelPlacedCardsColor.repaint();
 
 		panelPlaced.add(cardToAdd);
@@ -688,4 +683,4 @@ public class TableView extends JFrame
 	{
 		this.sayUnoButtonPlayerOne = sayUnoButtonPlayerOne;
 	}
-};
+}
