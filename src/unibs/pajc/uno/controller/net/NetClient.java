@@ -30,7 +30,7 @@ public class NetClient
 
 	private Thread clientThread;
 
-	private int indexCurrentPlayer;
+	private int indexCurrentPlayer = 1;
 
 	public NetClient(String IP_ADDRESS, int port, String playerName)
 	{
@@ -49,14 +49,10 @@ public class NetClient
 			e.printStackTrace();
 		}
 
-		ExecutorService executor = Executors.newFixedThreadPool(2);
+		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-		executor.execute(() -> {
-			listenForNewMessagesToSend();
-		});
-		executor.execute(() -> {
-			listenToServer();
-		});
+		executor.execute(this::listenForNewMessagesToSend);
+		executor.execute(this::listenToServer);
 	}
 
 	public void startView()
@@ -146,17 +142,23 @@ public class NetClient
 			@Override
 			public void run()
 			{
+				Object objReceived;
+
 				while (true)
 				{
+					objReceived = null;
+
 					try
 					{
-						Object objReceived = objInputStream.readObject();
+						objReceived = objInputStream.readObject();
 
 						if (objReceived != null && objReceived instanceof String && ((String) objReceived).length() > 0)
 						{
 							System.out.println("[CLIENT] - Message received from server: " + ((String) objReceived));
 
 							view.addChatMessage((String) objReceived, playerNameServer);
+
+							Thread.sleep(1000);
 						}
 					}
 					catch (EOFException e)
@@ -174,6 +176,11 @@ public class NetClient
 						System.out.print("Class not found");
 						System.exit(0);
 					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}).start();
@@ -184,41 +191,34 @@ public class NetClient
 	 */
 	public void listenForNewMessagesToSend()
 	{
-		new Thread(new Runnable()
+		while (true)
 		{
-			@Override
-			public void run()
+			try
 			{
-				while (true)
-				{
-					try
-					{
-						Thread.sleep(100);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					if (TableView.message.equals("") == false)
-					{
-						sendToServer(TableView.message);
-						TableView.message = "";
-
-						try
-						{
-							Thread.sleep(3000);
-						}
-						catch (InterruptedException e)
-						{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
+				Thread.sleep(1000);
 			}
-		}).start();
+			catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			if (TableView.message.equals("") == false)
+			{
+				sendToServer(TableView.message);
+
+				try
+				{
+					Thread.sleep(3000);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				TableView.message = "";
+			}
+		}
 	}
 
 	/**

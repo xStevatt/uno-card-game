@@ -565,7 +565,6 @@ public class TableView extends JFrame
 	 */
 	public void addChatMessage(String message, String playerName)
 	{
-		TableView.message = message;
 		LocalDateTime time = LocalDateTime.now();
 		DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm");
 		String formattedDate = time.format(myFormatObj);

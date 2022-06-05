@@ -23,6 +23,7 @@ public class NetServer
 
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
+	private Object objReceivedChat;
 
 	private TableView view;
 	private GameModel model;
@@ -30,7 +31,7 @@ public class NetServer
 	private String playerNameServer;
 	private String playerNameClient;
 
-	private int indexCurrentPlayer;
+	private int indexCurrentPlayer = 0;
 
 	public NetServer(String IP_ADDRESS, int PORT, String playerNameServer)
 	{
@@ -42,24 +43,27 @@ public class NetServer
 
 		startServer();
 
-		ExecutorService executor = Executors.newFixedThreadPool(2);
+		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-		executor.execute(() -> {
-			listenForNewMessagesToSend();
-		});
+		executor.execute(this::listenForNewMessagesToSend);
+		executor.execute(this::listenToClient);
+		executor.execute(this::runGame);
 
-		executor.execute(() -> {
-			listenToClient();
-		});
+		view = new TableView(playerNameServer, playerNameClient, false);
+		view.setVisible(true);
 	}
 
 	/**
 	 * 
 	 */
-	public void startView()
+	public void runGame()
 	{
-		view = new TableView(playerNameServer, playerNameClient, false);
-		view.setVisible(true);
+		model = new GameModel();
+
+		while (!model.isGameOver())
+		{
+
+		}
 	}
 
 	/**
@@ -89,17 +93,6 @@ public class NetServer
 					objOutputStream.writeObject(playerNameServer);
 					playerNameClient = (String) objInputStream.readObject();
 
-					// WAITS FOR A SECOND
-					try
-					{
-						Thread.sleep(1000);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
 					// WAITS FOR A VALID NAME
 					while (playerNameClient.equals(""))
 					{
@@ -126,8 +119,6 @@ public class NetServer
 			System.err.println("Some communication error happened: " + e);
 			System.exit(0);
 		}
-
-		startView();
 	}
 
 	/**
@@ -135,42 +126,45 @@ public class NetServer
 	 */
 	public void listenToClient()
 	{
-		new Thread(new Runnable()
+		while (true)
 		{
-			@Override
-			public void run()
+			objReceivedChat = null;
+
+			try
 			{
-				while (true)
+				objReceivedChat = objInputStream.readObject();
+
+				if (objReceivedChat != null & objReceivedChat instanceof String
+						&& ((String) objReceivedChat).length() > 0)
 				{
-					try
-					{
-						Object objReceived = objInputStream.readObject();
+					System.out.println("[SERVER] - Message received from client: " + ((String) objReceivedChat));
 
-						if (objReceived != null & objReceived instanceof String && ((String) objReceived).length() > 0)
-						{
-							System.out.println("[SERVER] - Message received from client: " + ((String) objReceived));
+					view.addChatMessage((String) objReceivedChat, playerNameClient);
 
-							view.addChatMessage((String) objReceived, playerNameClient);
-						}
-					}
-					catch (EOFException e)
-					{
-
-					}
-					catch (IOException e)
-					{
-						System.out.println("Errors in listening to the client");
-						System.exit(0);
-
-					}
-					catch (ClassNotFoundException e)
-					{
-						System.out.print("Class not found");
-						System.exit(0);
-					}
+					Thread.sleep(1000);
 				}
 			}
-		}).start();
+			catch (EOFException e)
+			{
+
+			}
+			catch (IOException e)
+			{
+				System.out.println("Errors in listening to the client");
+				System.exit(0);
+
+			}
+			catch (ClassNotFoundException e)
+			{
+				System.out.print("Class not found");
+				System.exit(0);
+			}
+			catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
@@ -178,38 +172,32 @@ public class NetServer
 	 */
 	public void listenForNewMessagesToSend()
 	{
-		new Thread(new Runnable()
+		while (true)
 		{
-			@Override
-			public void run()
+			try
 			{
-				while (true)
-				{
-					try
-					{
-						Thread.sleep(100);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-					}
-					if (TableView.message.equals("") == false)
-					{
-						sendToClient(TableView.message);
-						TableView.message = "";
-						try
-						{
-							Thread.sleep(3000);
-						}
-						catch (InterruptedException e)
-						{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
+				Thread.sleep(100);
 			}
-		}).start();
+			catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+			}
+			if (TableView.message.equals("") == false)
+			{
+				sendToClient(TableView.message);
+
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				TableView.message = "";
+			}
+		}
 	}
 
 	/**
