@@ -7,10 +7,13 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import unibs.pajc.uno.model.GameModel;
+import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.view.TableView;
 
 public class NetServer
@@ -23,7 +26,7 @@ public class NetServer
 
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
-	private Object objReceivedChat;
+	private Object objReceivedGame;
 
 	private TableView view;
 	private GameModel model;
@@ -60,9 +63,14 @@ public class NetServer
 	{
 		model = new GameModel();
 
+		Player server = new Player(playerNameServer, model.generateStartingCards(), 0);
+		Player client = new Player(playerNameClient, model.generateStartingCards(), 1);
+
+		model.initPlayers(new ArrayList<Player>(Arrays.asList(new Player[] { server, client })));
+
 		while (!model.isGameOver())
 		{
-
+			view.setTurn(model.getCurrentPlayer().getNamePlayer());
 		}
 	}
 
@@ -128,25 +136,29 @@ public class NetServer
 	{
 		while (true)
 		{
-			objReceivedChat = null;
+			Object objReceived = null;
 
 			try
 			{
-				objReceivedChat = objInputStream.readObject();
+				objReceived = objInputStream.readObject();
 
-				if (objReceivedChat != null & objReceivedChat instanceof String
-						&& ((String) objReceivedChat).length() > 0)
+				if (objReceived != null && objReceived instanceof String && ((String) objReceived).length() > 0)
 				{
-					System.out.println("[SERVER] - Message received from client: " + ((String) objReceivedChat));
+					System.out.println("[SERVER] - Message received from client: " + ((String) objReceived));
 
-					view.addChatMessage((String) objReceivedChat, playerNameClient);
+					view.addChatMessage((String) objReceived, playerNameClient);
 
 					Thread.sleep(1000);
+				}
+				if (objReceived != null && objReceived instanceof GameModel)
+				{
+					objReceivedGame = objReceived;
+					System.out.println("[SERVER] - Game model received");
 				}
 			}
 			catch (EOFException e)
 			{
-
+				System.out.println("Error while connected!");
 			}
 			catch (IOException e)
 			{

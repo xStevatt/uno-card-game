@@ -21,6 +21,7 @@ public class NetClient
 
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
+	private Object objReceivedGame = null;
 
 	private final String playerNameClient;
 	private String playerNameServer;

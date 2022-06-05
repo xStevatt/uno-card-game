@@ -96,7 +96,7 @@ public class GameModel
 	 * 
 	 * @param player
 	 */
-	public void initPlayer(ArrayList<Player> playersToAdd)
+	public void initPlayers(ArrayList<Player> playersToAdd)
 	{
 		players.addAll(playersToAdd);
 		numberOfPlayers += playersToAdd.size();

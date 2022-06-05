@@ -22,7 +22,7 @@ public class GameModelTest
 		Player player1 = new Player("Player 1", gameModel.generateStartingCards(), 0);
 		Player player2 = new Player("Player 2", gameModel.generateStartingCards(), 1);
 		ArrayList<Player> playerList = new ArrayList<Player>(Arrays.asList(new Player[] { player1, player2 }));
-		gameModel.initPlayer(playerList);
+		gameModel.initPlayers(playerList);
 
 		Card cardUsed = new NumberCard(CardColor.RED, 9);
 		Card cardSelected = new NumberCard(CardColor.BLUE, 9);
@@ -37,7 +37,7 @@ public class GameModelTest
 		Player player1 = new Player("Player 1", gameModel.generateStartingCards(), 0);
 		Player player2 = new Player("Player 2", gameModel.generateStartingCards(), 1);
 		ArrayList<Player> playerList = new ArrayList<Player>(Arrays.asList(new Player[] { player1, player2 }));
-		gameModel.initPlayer(playerList);
+		gameModel.initPlayers(playerList);
 
 		Card cardUsed = new NumberCard(CardColor.RED, 9);
 		Card cardSelected = new NumberCard(CardColor.RED, 8);
@@ -52,7 +52,7 @@ public class GameModelTest
 		Player player1 = new Player("Player 1", gameModel.generateStartingCards(), 0);
 		Player player2 = new Player("Player 2", gameModel.generateStartingCards(), 1);
 		ArrayList<Player> playerList = new ArrayList<Player>(Arrays.asList(new Player[] { player1, player2 }));
-		gameModel.initPlayer(playerList);
+		gameModel.initPlayers(playerList);
 
 		Card cardUsed = new NumberCard(CardColor.RED, 9);
 		Card cardSelected = new NumberCard(CardColor.RED, 9);
@@ -67,7 +67,7 @@ public class GameModelTest
 		Player player1 = new Player("Player 1", gameModel.generateStartingCards(), 0);
 		Player player2 = new Player("Player 2", gameModel.generateStartingCards(), 1);
 		ArrayList<Player> playerList = new ArrayList<Player>(Arrays.asList(new Player[] { player1, player2 }));
-		gameModel.initPlayer(playerList);
+		gameModel.initPlayers(playerList);
 
 		Card cardUsed = new NumberCard(CardColor.RED, 9);
 		Card cardSelected = new NumberCard(CardColor.BLUE, 8);
@@ -82,7 +82,7 @@ public class GameModelTest
 		Player player1 = new Player("Player 1", gameModel.generateStartingCards(), 0);
 		Player player2 = new Player("Player 2", gameModel.generateStartingCards(), 1);
 		ArrayList<Player> playerList = new ArrayList<Player>(Arrays.asList(new Player[] { player1, player2 }));
-		gameModel.initPlayer(playerList);
+		gameModel.initPlayers(playerList);
 
 		assertEquals(gameModel.isGameOver(), false);
 	}
@@ -94,7 +94,7 @@ public class GameModelTest
 		Player player1 = new Player("Player 1", gameModel.generateStartingCards(), 0);
 		Player player2 = new Player("Player 2", gameModel.generateStartingCards(), 1);
 		ArrayList<Player> playerList = new ArrayList<Player>(Arrays.asList(new Player[] { player1, player2 }));
-		gameModel.initPlayer(playerList);
+		gameModel.initPlayers(playerList);
 
 		player1.getHandCards().removeAllCards();
 		assertEquals(player1.getHandCards().getNumberOfCards(), 0);
@@ -107,7 +107,7 @@ public class GameModelTest
 		Player player1 = new Player("Player 1", gameModel.generateStartingCards(), 0);
 		Player player2 = new Player("Player 2", gameModel.generateStartingCards(), 1);
 		ArrayList<Player> playerList = new ArrayList<Player>(Arrays.asList(new Player[] { player1, player2 }));
-		gameModel.initPlayer(playerList);
+		gameModel.initPlayers(playerList);
 
 		player1.getHandCards().removeAllCards();
 		assertEquals(gameModel.isGameOver(), true);

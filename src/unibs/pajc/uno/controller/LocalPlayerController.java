@@ -97,6 +97,8 @@ public class LocalPlayerController
 							{
 								if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
 								{
+									JOptionPane.showMessageDialog(gameView,
+											"You didn't say UNO! Two more cards for you.");
 									model.playerDidNotSayUno(model.getCurrentPlayerIndex());
 								}
 
@@ -123,6 +125,8 @@ public class LocalPlayerController
 							{
 								if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
 								{
+									JOptionPane.showMessageDialog(gameView,
+											"You didn't say UNO! Two more cards for you.");
 									model.playerDidNotSayUno(model.getCurrentPlayerIndex());
 								}
 
