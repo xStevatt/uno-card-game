@@ -53,6 +53,7 @@ public class TableView extends JFrame
 	private JPanel panelActualPlayer;
 	private JPanel panelAdversaryPlayer;
 	private JPanel centerPanel;
+	private JPanel panelPlacedCardsColor;
 
 	private JPanel midTable;
 	private JPanel panelChat;
@@ -195,19 +196,19 @@ public class TableView extends JFrame
 		sayUnoButtonPlayerTwo.setBounds(6, 6, 135, 39);
 		midTable.add(sayUnoButtonPlayerTwo);
 
-		JPanel panelPlacedCardsColor = new JPanel();
+		panelPlacedCardsColor = new JPanel();
 		panelPlacedCardsColor.setBounds(274, 6, 288, 212);
 		midTable.add(panelPlacedCardsColor);
 		panelPlacedCardsColor.setLayout(null);
 
 		panelPlaced = new JPanel();
-		panelPlaced.setBounds(177, 33, 105, 155);
+		panelPlaced.setBounds(157, 22, 105, 155);
 		panelPlacedCardsColor.add(panelPlaced);
 		panelPlaced.setOpaque(false);
 		panelPlaced.setEnabled(false);
 
 		panelDeck = new JPanel();
-		panelDeck.setBounds(6, 33, 105, 155);
+		panelDeck.setBounds(27, 22, 105, 155);
 		panelPlacedCardsColor.add(panelDeck);
 		panelDeck.setOpaque(false);
 
@@ -303,7 +304,7 @@ public class TableView extends JFrame
 
 		turnFinalLabel = new JLabel("Turn:");
 		turnFinalLabel.setFont(new Font("Lucida Grande", Font.BOLD, 15));
-		turnFinalLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		turnFinalLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		turnFinalLabel.setBounds(6, 150, 88, 27);
 		panelInfo.add(turnFinalLabel);
 
@@ -393,6 +394,12 @@ public class TableView extends JFrame
 	{
 		panelPlaced.removeAll();
 		UsedCardView cardToAdd = new UsedCardView(card);
+
+		Color color = Util.convertCardColor(card.getCardColor());
+
+		panelPlacedCardsColor.setBorder(new LineBorder(color));
+		panelPlacedCardsColor.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 90));
+		panelPlacedCardsColor.repaint();
 
 		panelPlaced.add(cardToAdd);
 	}
