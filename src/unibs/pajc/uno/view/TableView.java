@@ -393,12 +393,18 @@ public class TableView extends JFrame
 	public void changeDroppedCardView(Card card)
 	{
 		panelPlaced.removeAll();
+
+		panelPlacedCardsColor.setOpaque(false);
+		panelPlacedCardsColor.setBackground(null);
+		panelPlacedCardsColor.setBorder(null);
+		panelPlacedCardsColor.repaint();
+
 		UsedCardView cardToAdd = new UsedCardView(card);
 
 		Color color = Util.convertCardColor(card.getCardColor());
 
-		panelPlacedCardsColor.setBorder(new LineBorder(color));
-		panelPlacedCardsColor.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 90));
+		panelPlacedCardsColor.setBorder(new LineBorder(color, 6));
+		panelPlacedCardsColor.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
 		panelPlacedCardsColor.repaint();
 
 		panelPlaced.add(cardToAdd);
