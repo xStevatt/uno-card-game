@@ -6,6 +6,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.view.TableView;
@@ -47,8 +49,20 @@ public class NetClient
 			e.printStackTrace();
 		}
 
-		listenToServer();
-		listenForNewMessagesToSend();
+		ExecutorService executor = Executors.newFixedThreadPool(2);
+
+		executor.execute(() -> {
+			listenForNewMessagesToSend();
+		});
+		executor.execute(() -> {
+			listenToServer();
+		});
+	}
+
+	public void startView()
+	{
+		view = new TableView(playerNameClient, playerNameServer, false);
+		view.setVisible(true);
 	}
 
 	/**
@@ -108,6 +122,7 @@ public class NetClient
 		});
 
 		clientThread.start();
+		startView();
 
 		/*
 		 * try { new Thread(new Runnable() {

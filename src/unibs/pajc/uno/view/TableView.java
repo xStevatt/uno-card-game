@@ -239,8 +239,6 @@ public class TableView extends JFrame
 					String formattedDate = time.format(myFormatObj);
 
 					textAreaChat.append("\n" + formattedDate + " " + "name" + ": " + message);
-
-					message = "";
 				}
 			}
 		});

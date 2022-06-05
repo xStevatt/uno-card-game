@@ -10,6 +10,7 @@ import java.net.SocketTimeoutException;
 
 import javax.swing.JTextArea;
 
+import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.view.TableView;
 
 public class NetServer
@@ -22,6 +23,9 @@ public class NetServer
 
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
+
+	private TableView view;
+	private GameModel model;
 
 	private String playerNameServer;
 	private String playerNameClient;
@@ -40,6 +44,15 @@ public class NetServer
 
 		startServer();
 		listenToClient();
+	}
+
+	/**
+	 * 
+	 */
+	public void startView()
+	{
+		view = new TableView(playerNameServer, playerNameClient, false);
+		view.setVisible(true);
 	}
 
 	/**
@@ -104,6 +117,8 @@ public class NetServer
 			System.err.println("Some communication error happened: " + e);
 			System.exit(0);
 		}
+
+		startView();
 	}
 
 	/**
