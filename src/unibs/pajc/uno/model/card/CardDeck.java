@@ -29,6 +29,9 @@ public class CardDeck
 		initWildCards();
 	}
 
+	/**
+	 * Inits number cards in deck
+	 */
 	public void initNumberCards()
 	{
 		for (CardColor color : CardColor.values())
@@ -40,6 +43,9 @@ public class CardDeck
 		}
 	}
 
+	/**
+	 * Inits action cards in deck
+	 */
 	public void initActionCards()
 	{
 		for (CardColor color : CardColor.values())
@@ -53,6 +59,9 @@ public class CardDeck
 		}
 	}
 
+	/**
+	 * Inits wild cards in deck
+	 */
 	public void initWildCards()
 	{
 		for (int i = 0; i < GameRules.NUMBER_OF_WILD_CARDS; i++)
@@ -62,19 +71,54 @@ public class CardDeck
 		}
 	}
 
+	/**
+	 * Retuns a random card from the deck. If the deck doesn't have any more cards,
+	 * the deck is resetted
+	 * 
+	 * @return a random card from the deck
+	 */
 	public Card getRandomCard()
 	{
-		int randomIndex = new Random().nextInt(cardDeck.size());
+		Card cardSelected = null;
 
-		Card card = cardDeck.get(new Random().nextInt(cardDeck.size()));
+		if (cardDeck.size() > 0)
+		{
+			int randomIndex = new Random().nextInt(cardDeck.size());
 
-		cardDeck.remove(randomIndex);
+			cardSelected = cardDeck.get(new Random().nextInt(cardDeck.size()));
 
-		return card;
+			cardDeck.remove(randomIndex);
+		}
+		else
+		{
+			initCardDeck();
+			shuffleCards();
+
+			int randomIndex = new Random().nextInt(cardDeck.size());
+
+			cardSelected = cardDeck.get(new Random().nextInt(cardDeck.size()));
+
+			cardDeck.remove(randomIndex);
+		}
+
+		return cardSelected;
 	}
 
+	/**
+	 * Shuffle cards in the deck
+	 */
 	public void shuffleCards()
 	{
 		Collections.shuffle(cardDeck);
+	}
+
+	/**
+	 * Returns the number of cards in the deck
+	 * 
+	 * @return the number of cards in the deck
+	 */
+	public int numberOfCards()
+	{
+		return cardDeck.size();
 	}
 }

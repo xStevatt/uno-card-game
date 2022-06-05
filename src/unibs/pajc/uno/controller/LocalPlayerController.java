@@ -158,19 +158,44 @@ public class LocalPlayerController
 							{
 								if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
 								{
+									JOptionPane.showMessageDialog(gameView,
+											"You didn't say UNO! Two more cards for you.");
+
 									model.playerDidNotSayUno(model.getCurrentPlayerIndex());
 								}
 
 								if (model.isPlacedCardValid(CardView.cardSelected))
 								{
-									gameView.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
-									boolean newColorSelection = model.evalMossa(CardView.cardSelected);
-
-									if (newColorSelection)
+									if (model.hasPlayerOneCard() && gameView.isUnoButtonPressed())
 									{
-										DialogSelectNewColor dialogColor = new DialogSelectNewColor();
-										CardColor cardColor = dialogColor.show();
-										model.setCurrentCardColor(cardColor);
+										gameView.changeDroppedCardView(CardView.cardSelected,
+												model.getCurrentCardColor());
+
+										boolean newColorSelection = model.evalMossa(CardView.cardSelected);
+
+										if (newColorSelection)
+										{
+											DialogSelectNewColor dialogColor = new DialogSelectNewColor();
+											CardColor cardColor = dialogColor.show();
+											model.setCurrentCardColor(cardColor);
+										}
+
+										gameView.setUnoButtonPressed(false);
+									}
+									else if (!model.hasPlayerOneCard())
+									{
+										gameView.changeDroppedCardView(CardView.cardSelected,
+												model.getCurrentCardColor());
+
+										boolean newColorSelection = model.evalMossa(CardView.cardSelected);
+
+										if (newColorSelection)
+										{
+											DialogSelectNewColor dialogColor = new DialogSelectNewColor();
+											CardColor cardColor = dialogColor.show();
+											model.setCurrentCardColor(cardColor);
+										}
+										gameView.setUnoButtonPressed(false);
 									}
 								}
 								else
@@ -184,11 +209,19 @@ public class LocalPlayerController
 							{
 								if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
 								{
+									JOptionPane.showMessageDialog(gameView,
+											"You didn't say UNO! Two more cards for you.");
 									model.playerDidNotSayUno(model.getCurrentPlayerIndex());
 								}
-
+								if (model.hasPlayerOneCard() && gameView.isUnoButtonPressed())
+								{
+									model.getCurrentPlayer().addCard(model.getCardFromDeck());
+									model.nextTurn();
+									gameView.setUnoButtonPressed(false);
+								}
 								model.getCurrentPlayer().addCard(model.getCardFromDeck());
 								model.nextTurn();
+								gameView.setUnoButtonPressed(false);
 							}
 						}
 					}
@@ -220,23 +253,11 @@ public class LocalPlayerController
 	/**
 	 * 
 	 */
-	public void getYourShitTogether()
-	{
-
-	}
-
-	/**
-	 * 
-	 */
 	public void checkPlayerSaidUno()
 	{
 		if (model.hasPlayerOneCard(model.getCurrentPlayer()))
 		{
 			gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
-		}
-		else if (model.hasPlayerOneCard(model.getPreviousPlayer()))
-		{
-			gameView.setSayUnoButtonVisibile(true, model.getPreviousPlayerIndex());
 		}
 	}
 }
