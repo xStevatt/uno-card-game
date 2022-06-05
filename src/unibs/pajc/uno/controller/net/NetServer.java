@@ -7,6 +7,8 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.view.TableView;
@@ -39,7 +41,16 @@ public class NetServer
 		System.out.println(playerNameServer);
 
 		startServer();
-		listenToClient();
+
+		ExecutorService executor = Executors.newFixedThreadPool(2);
+
+		executor.execute(() -> {
+			listenForNewMessagesToSend();
+		});
+
+		executor.execute(() -> {
+			listenToClient();
+		});
 	}
 
 	/**
@@ -133,11 +144,9 @@ public class NetServer
 					{
 						Object objReceived = objInputStream.readObject();
 
-						System.out.println(objReceived);
-
-						if (objReceived instanceof String && ((String) objReceived).length() > 0)
+						if (objReceived != null & objReceived instanceof String && ((String) objReceived).length() > 0)
 						{
-							System.out.println("Message received from client: " + ((String) objReceived));
+							System.out.println("[SERVER] - Message received from client: " + ((String) objReceived));
 
 							view.addChatMessage((String) objReceived, playerNameClient);
 						}
@@ -180,13 +189,12 @@ public class NetServer
 					}
 					catch (InterruptedException e)
 					{
-						e.printStackTrace();
+						// TODO Auto-generated catch block
 					}
 					if (!TableView.message.equals(""))
 					{
+						System.out.println("Sending new message");
 						sendToClient(TableView.message);
-						System.out.println("Will it work...");
-						TableView.textAreaChat.setText("culo");
 						TableView.message = "";
 					}
 				}
@@ -203,8 +211,12 @@ public class NetServer
 	{
 		try
 		{
-			System.out.println(TableView.message);
 			objOutputStream.writeObject(objToSend);
+
+			if (objToSend instanceof String)
+			{
+				System.out.println("Message sent: " + (String) objToSend);
+			}
 		}
 		catch (IOException e)
 		{

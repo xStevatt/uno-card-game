@@ -25,8 +25,6 @@ public class NetClient
 	private final String playerNameClient;
 	private String playerNameServer;
 
-	private Object objReceived = null;
-
 	private TableView view;
 	private GameModel model;
 
@@ -143,73 +141,42 @@ public class NetClient
 	 */
 	private void listenToServer()
 	{
-		Thread listeningThread = new Thread(new Runnable()
+		new Thread(new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				while (isConnected)
+				while (true)
 				{
 					try
 					{
-						Thread.sleep(1000);
+						Object objReceived = objInputStream.readObject();
 
-						objReceived = objInputStream.readObject();
-
-						System.out.println("-> here");
 						if (objReceived != null && objReceived instanceof String && ((String) objReceived).length() > 0)
 						{
 							System.out.println("[CLIENT] - Message received from server: " + ((String) objReceived));
+
+							view.addChatMessage((String) objReceived, playerNameServer);
 						}
 					}
 					catch (EOFException e)
 					{
-						System.out.println("HERE");
-					}
-					catch (ClassNotFoundException e)
-					{
-						System.out.println("HERE");
+
 					}
 					catch (IOException e)
 					{
-						System.out.println("Ciao 3");
+						System.out.println("Errors in listening to the client");
+						System.exit(0);
+
 					}
-					catch (InterruptedException e)
+					catch (ClassNotFoundException e)
 					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					String message = view.getMessage();
-
-					if (view.getMessage().length() > 0)
-					{
-						try
-						{
-							// SLEEPS FOR 1000ms
-							Thread.sleep(1000);
-						}
-						catch (InterruptedException e1)
-						{
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-
-						try
-						{
-							objOutputStream.writeObject(message);
-							view.addChatMessage(message, playerNameClient);
-						}
-						catch (IOException e)
-						{
-							e.printStackTrace();
-						}
+						System.out.print("Class not found");
+						System.exit(0);
 					}
 				}
 			}
-		});
-
-		listeningThread.start();
+		}).start();
 	}
 
 	/**
@@ -262,6 +229,7 @@ public class NetClient
 		}
 		catch (IOException e)
 		{
+			System.out.println("Error while sending - Couldn't send object to client");
 			e.printStackTrace();
 		}
 	}
