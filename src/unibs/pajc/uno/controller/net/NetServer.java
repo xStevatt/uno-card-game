@@ -8,8 +8,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-import javax.swing.JTextArea;
-
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.view.TableView;
 
@@ -30,7 +28,7 @@ public class NetServer
 	private String playerNameServer;
 	private String playerNameClient;
 
-	private JTextArea areaText;
+	private int indexCurrentPlayer;
 
 	public NetServer(String IP_ADDRESS, int PORT, String playerNameServer)
 	{
@@ -39,8 +37,6 @@ public class NetServer
 
 		this.playerNameServer = playerNameServer;
 		System.out.println(playerNameServer);
-
-		areaText = TableView.textAreaChat;
 
 		startServer();
 		listenToClient();

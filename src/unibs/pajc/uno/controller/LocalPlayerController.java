@@ -193,28 +193,13 @@ public class LocalPlayerController
 
 	public void checkPlayerSaidUno()
 	{
-		if (model.hasPlayerOneCard(model.getPlayers().get(model.getPreviousPlayerIndex())))
-		{
-			gameView.setSayUnoButtonVisibile(true, model.getPreviousPlayerIndex());
-		}
-		else
-		{
-			gameView.setSayUnoButtonVisibile(true, model.getPreviousPlayerIndex());
-		}
-		if (model.hasPlayerOneCard(model.getPlayers().get(model.getCurrentPlayerIndex())))
+		if (model.hasPlayerOneCard(model.getCurrentPlayer()))
 		{
 			gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
 		}
-		else
+		else if (model.hasPlayerOneCard(model.getPreviousPlayer()))
 		{
-			gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
-		}
-		if (model.hasPlayerOneCard(model.getPlayers().get(model.getPreviousPlayerIndex()))
-				&& gameView.isUnoButtonPressed() == false)
-		{
-			model.playerDidNotSayUno(model.getPreviousPlayerIndex());
-			System.out.print("Uno button not pressed - Two more cards!");
-			gameView.setUnoButtonPressed(false);
+			gameView.setSayUnoButtonVisibile(false, model.getPreviousPlayerIndex());
 		}
 	}
 }

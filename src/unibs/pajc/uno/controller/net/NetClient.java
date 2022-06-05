@@ -32,6 +32,8 @@ public class NetClient
 
 	private Thread clientThread;
 
+	private int indexCurrentPlayer;
+
 	public NetClient(String IP_ADDRESS, int port, String playerName)
 	{
 		this.IP_ADDRESS = IP_ADDRESS;

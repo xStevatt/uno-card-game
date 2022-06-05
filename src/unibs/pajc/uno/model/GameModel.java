@@ -107,6 +107,11 @@ public class GameModel
 		return turnIterator.getCurrentPlayer();
 	}
 
+	public Player getPreviousPlayer()
+	{
+		return players.get(turnIterator.getPreviousPlayerIndex());
+	}
+
 	public int getPreviousPlayerIndex()
 	{
 		return turnIterator.getPreviousPlayerIndex();
