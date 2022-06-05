@@ -266,12 +266,12 @@ public class GameModel
 	{
 		boolean isCardValid = false;
 
-		if (cardUsed.isCardSpecialWild() && turnIterator.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
+		if (cardSelected.isCardSpecialWild() && turnIterator.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
 		{
 			return false;
 		}
 
-		if (cardUsed.getCardType() == CardType.SKIP
+		if (cardSelected.getCardType() == CardType.SKIP
 				&& turnIterator.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
 		{
 			return false;

@@ -391,13 +391,22 @@ public class TableView extends JFrame
 
 		if (color.getRed() == 0 && color.getGreen() == 0 && color.getBlue() == 0)
 		{
-			panelPlacedCardsColor.setBorder(new LineBorder(Util.convertCardColor(currentColor), 6));
-			panelPlacedCardsColor.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
+			midTable.setBorder(new LineBorder(Util.convertCardColor(currentColor), 6));
+			midTable.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
+
+			// panelPlacedCardsColor.setBorder(new
+			// LineBorder(Util.convertCardColor(currentColor), 6));
+			// panelPlacedCardsColor.setBackground(new Color(color.getRed(),
+			// color.getGreen(), color.getBlue(), 80));
 		}
 		else
 		{
-			panelPlacedCardsColor.setBorder(new LineBorder(color, 6));
-			panelPlacedCardsColor.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
+			midTable.setBorder(new LineBorder(color, 6));
+			midTable.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
+
+			// panelPlacedCardsColor.setBorder(new LineBorder(color, 6));
+			// panelPlacedCardsColor.setBackground(new Color(color.getRed(),
+			// color.getGreen(), color.getBlue(), 80));
 		}
 
 		panelPlacedCardsColor.repaint();
@@ -543,7 +552,6 @@ public class TableView extends JFrame
 		}
 		else
 		{
-			System.out.println((width - 100) / (totalCards - 1));
 			return (width - 100) / (totalCards - 1);
 		}
 
