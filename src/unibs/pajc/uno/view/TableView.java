@@ -88,10 +88,13 @@ public class TableView extends JFrame
 
 	private JSeparator separatorInfo1;
 	private JSeparator separatorInfo2;
+	private JScrollBar scrollBar;
 
 	private JPanel panelInfo;
 	private JSeparator separator;
 	private JScrollPane scroll;
+
+	private volatile int status = 1;
 
 	/**
 	 * Constructor to create the form.
@@ -205,7 +208,7 @@ public class TableView extends JFrame
 		midTable.add(panelDeck);
 		panelDeck.setOpaque(false);
 
-		panelDeck.add(new CardBackView());
+		panelDeck.add(new CardBackView(true));
 
 		panelChat = new JPanel();
 		panelChat.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Chat",
@@ -252,7 +255,7 @@ public class TableView extends JFrame
 		separator.setBounds(17, 377, 216, 12);
 		panelChat.add(separator);
 
-		JScrollBar scrollBar = new JScrollBar();
+		scrollBar = new JScrollBar();
 		scrollBar.setBounds(218, 24, 15, 341);
 		panelChat.add(scrollBar);
 
@@ -414,21 +417,30 @@ public class TableView extends JFrame
 	 */
 	public void enableViewPlayer(int index, boolean enabled)
 	{
-		if (index == 0)
+		if (isGameLocal == true)
 		{
-			for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
+			if (index == 0)
 			{
-				((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(enabled);
+				for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
+				{
+					((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(enabled);
+				}
 			}
+
+			if (index == 1)
+			{
+				for (int i = 0; i < handCardsViewAdversary.getComponentCount(); i++)
+				{
+					((CardView) handCardsViewAdversary.getComponent(i)).setShouldAnimationsMove(enabled);
+				}
+			}
+		}
+		else
+		{
+
 		}
 
-		if (index == 1)
-		{
-			for (int i = 0; i < handCardsViewAdversary.getComponentCount(); i++)
-			{
-				((CardView) handCardsViewAdversary.getComponent(i)).setShouldAnimationsMove(enabled);
-			}
-		}
+		repaint();
 	}
 
 	/**
@@ -458,17 +470,28 @@ public class TableView extends JFrame
 	 */
 	public void loadCards(HandCards cards, int playingPlayer)
 	{
-		if (playingPlayer == 0)
+		if (isGameLocal == true)
+		{
+			if (playingPlayer == 0)
+			{
+				handCardsViewActual.removeAll();
+				panelActualPlayer.removeAll();
+				addCardsToView(cards, panelActualPlayer, handCardsViewActual);
+			}
+			if (playingPlayer == 1)
+			{
+				handCardsViewAdversary.removeAll();
+				panelAdversaryPlayer.removeAll();
+				addCardsToView(cards, panelAdversaryPlayer, handCardsViewAdversary);
+			}
+		}
+		else if (isGameLocal == false)
 		{
 			handCardsViewActual.removeAll();
 			panelActualPlayer.removeAll();
+
 			addCardsToView(cards, panelActualPlayer, handCardsViewActual);
-		}
-		if (playingPlayer == 1)
-		{
-			handCardsViewAdversary.removeAll();
-			panelAdversaryPlayer.removeAll();
-			addCardsToView(cards, panelAdversaryPlayer, handCardsViewAdversary);
+			addCardsToViewBack(cards, panelAdversaryPlayer, handCardsViewAdversary);
 		}
 
 		// REPAINTS ALL COMPONENTS
@@ -479,7 +502,7 @@ public class TableView extends JFrame
 	}
 
 	/**
-	 * Method to add cards of the players
+	 * Adds cards of the players
 	 * 
 	 * @param handCards
 	 * @param panelToAddCards
@@ -494,6 +517,38 @@ public class TableView extends JFrame
 		for (Card card : handCards.getCardList())
 		{
 			CardView cardView = new CardView(card);
+
+			cardView.setBounds(originPoint.x, originPoint.y, cardView.getDimension().width,
+					cardView.getDimension().height);
+			cardsView.add(cardView, i++);
+
+			cardsView.moveToFront(cardView);
+
+			originPoint.x += offset;
+		}
+
+		cardsView.revalidate();
+		// ADDS CARDS PANEL TO OUTSIDE COMPONENT
+		panelToAddCards.add(cardsView);
+	}
+
+	/**
+	 * Adds cards of the adversary player (reversed cards)
+	 * 
+	 * @param handCards
+	 * @param panelToAddCards
+	 * @param cardsView
+	 */
+	public void addCardsToViewBack(HandCards handCards, JPanel panelToAddCards, JLayeredPane cardsView)
+	{
+		Point originPoint = getFirstCardPoint(handCards.getNumberOfCards(), cardsView);
+		int offset = calculateOffset(cardsView.getWidth(), handCards.getNumberOfCards());
+
+		int i = 0;
+
+		for (int j = 0; j < handCards.getNumberOfCards(); j++)
+		{
+			CardBackView cardView = new CardBackView(false);
 
 			cardView.setBounds(originPoint.x, originPoint.y, cardView.getDimension().width,
 					cardView.getDimension().height);

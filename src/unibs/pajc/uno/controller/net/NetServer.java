@@ -45,6 +45,8 @@ public class NetServer
 		System.out.println(playerNameServer);
 
 		startServer();
+		view = new TableView(playerNameServer, playerNameClient, false);
+		view.setVisible(true);
 
 		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
@@ -58,9 +60,6 @@ public class NetServer
 	 */
 	public void runGameLogic()
 	{
-		view = new TableView(playerNameServer, playerNameClient, false);
-		view.setVisible(true);
-
 		model = new GameModel();
 
 		Player server = new Player(playerNameServer, model.generateStartingCards(), 0);
@@ -74,7 +73,7 @@ public class NetServer
 
 			try
 			{
-				Thread.sleep(10000);
+				Thread.sleep(5000);
 			}
 			catch (InterruptedException e)
 			{
@@ -89,8 +88,6 @@ public class NetServer
 	public void updateView(Player server, Player client)
 	{
 		view.setTurn(model.getCurrentPlayer().getNamePlayer());
-
-		System.out.println(model.getCurrentPlayerIndex() + " POI -> " + model.getNextPlayerIndex());
 
 		view.enableViewPlayer(model.getCurrentPlayerIndex(), true);
 		view.enableViewPlayer(model.getNextPlayerIndex(), false);

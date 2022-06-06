@@ -20,6 +20,8 @@ public class CardBackView extends JPanel
 	private final int cardHeight = 150;
 	private static final int margin = 5;
 
+	private boolean shouldCardMove = false;
+
 	public static boolean isCardDrawnFromDeck;
 
 	private final Dimension dimension = new Dimension(cardWidth, cardHeight);
@@ -29,8 +31,10 @@ public class CardBackView extends JPanel
 	private final Border focusedBorder = BorderFactory.createEtchedBorder(JComponent.WHEN_FOCUSED, Color.black,
 			Color.gray);
 
-	public CardBackView()
+	public CardBackView(boolean shouldCardMove)
 	{
+		this.shouldCardMove = shouldCardMove;
+
 		initView();
 	}
 
@@ -52,23 +56,32 @@ public class CardBackView extends JPanel
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				CardBackView.isCardDrawnFromDeck = true;
-				System.out.println("Card drawn");
-				repaint();
+				if (shouldCardMove)
+				{
+					CardBackView.isCardDrawnFromDeck = true;
+					System.out.println("Card drawn");
+					repaint();
+				}
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
-				setBorder(focusedBorder);
-				setToolTipText("Draw a card!");
+				if (shouldCardMove)
+				{
+					setBorder(focusedBorder);
+					setToolTipText("Draw a card!");
+				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				setBorder(defaultBorder);
-				setToolTipText(null);
+				if (shouldCardMove)
+				{
+					setBorder(defaultBorder);
+					setToolTipText(null);
+				}
 			}
 		});
 	}

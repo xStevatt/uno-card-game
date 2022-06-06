@@ -40,13 +40,12 @@ public class NetClient
 		this.playerNameClient = playerName;
 
 		startClient();
+		startView();
 
 		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 		executor.execute(this::listenForNewMessagesToSend);
 		executor.execute(this::listenToServer);
-
-		startView();
 	}
 
 	public void startView()

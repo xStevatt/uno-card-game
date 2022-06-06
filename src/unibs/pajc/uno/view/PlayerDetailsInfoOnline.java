@@ -161,6 +161,7 @@ public class PlayerDetailsInfoOnline extends JFrame
 		contentPane.add(lblNewLabel_1);
 
 		txtName = new JTextField();
+		txtName.setText("Player");
 		txtName.setHorizontalAlignment(SwingConstants.CENTER);
 		txtName.setBounds(220, 214, 208, 42);
 		contentPane.add(txtName);
