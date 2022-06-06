@@ -27,6 +27,8 @@ public class CardDeck
 		initActionCards();
 		initNumberCards();
 		initWildCards();
+
+		shuffleCards();
 	}
 
 	/**

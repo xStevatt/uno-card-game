@@ -223,7 +223,6 @@ public class GameModel
 		{
 			if (turnIterator.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
 			{
-				System.out.println("Player has just one card");
 				hasPlayerOneCard = true;
 			}
 		}
@@ -242,7 +241,6 @@ public class GameModel
 
 		if (player.getHandCards().getNumberOfCards() == 1)
 		{
-			System.out.println("Player has just one card");
 			hasPlayerOneCard = true;
 		}
 
