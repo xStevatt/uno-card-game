@@ -31,8 +31,8 @@ public class NetServer
 	private TableView view;
 	private GameModel model;
 
-	private String playerNameServer;
-	private String playerNameClient;
+	private String playerNameServer = null;
+	private String playerNameClient = null;
 
 	private int indexCurrentPlayer = 0;
 
@@ -48,18 +48,19 @@ public class NetServer
 
 		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-		executor.execute(this::listenForNewMessagesToSend);
-		executor.execute(this::listenToClient);
-		executor.execute(this::runGame);
-
 		view = new TableView(playerNameServer, playerNameClient, false);
 		view.setVisible(true);
+
+		executor.execute(this::listenForNewMessagesToSend);
+		executor.execute(this::listenToClient);
+
+		executor.execute(this::runGameLogic);
 	}
 
 	/**
 	 * 
 	 */
-	public void runGame()
+	public void runGameLogic()
 	{
 		model = new GameModel();
 

@@ -18,7 +18,6 @@ import unibs.pajc.uno.controller.LocalPlayerController;
 
 public class PlayerDetailsInfoOffline extends JFrame
 {
-
 	private JPanel contentPane;
 	private JTextField txtPlayerOne;
 	private JTextField txtPlayerTwo;

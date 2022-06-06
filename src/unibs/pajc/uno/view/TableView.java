@@ -53,7 +53,6 @@ public class TableView extends JFrame
 	private JPanel panelActualPlayer;
 	private JPanel panelAdversaryPlayer;
 	private JPanel centerPanel;
-	private JPanel panelPlacedCardsColor;
 
 	private JPanel midTable;
 	private JPanel panelChat;
@@ -196,27 +195,18 @@ public class TableView extends JFrame
 		sayUnoButtonPlayerTwo.setBounds(6, 6, 135, 39);
 		midTable.add(sayUnoButtonPlayerTwo);
 
-		panelPlacedCardsColor = new JPanel();
-		panelPlacedCardsColor.setBounds(274, 6, 288, 212);
-		midTable.add(panelPlacedCardsColor);
-		panelPlacedCardsColor.setLayout(null);
-
 		panelPlaced = new JPanel();
-		panelPlaced.setBounds(157, 22, 105, 155);
-		panelPlacedCardsColor.add(panelPlaced);
+		panelPlaced.setBounds(469, 28, 105, 155);
+		midTable.add(panelPlaced);
 		panelPlaced.setOpaque(false);
 		panelPlaced.setEnabled(false);
 
 		panelDeck = new JPanel();
-		panelDeck.setBounds(27, 22, 105, 155);
-		panelPlacedCardsColor.add(panelDeck);
+		panelDeck.setBounds(319, 28, 105, 155);
+		midTable.add(panelDeck);
 		panelDeck.setOpaque(false);
 
 		panelDeck.add(new CardBackView());
-
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(144, 33, 0, 155);
-		panelPlacedCardsColor.add(separator_1);
 
 		panelChat = new JPanel();
 		panelChat.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Chat",
@@ -381,36 +371,32 @@ public class TableView extends JFrame
 	{
 		panelPlaced.removeAll();
 
-		panelPlacedCardsColor.setOpaque(false);
-		panelPlacedCardsColor.setBackground(null);
-		panelPlacedCardsColor.setBorder(null);
-		panelPlacedCardsColor.repaint();
-
 		UsedCardView cardToAdd = new UsedCardView(card);
 
 		Color color = Util.convertCardColor(card.getCardColor());
+
+		midTable.setOpaque(true);
 
 		if (color.getRed() == 0 && color.getGreen() == 0 && color.getBlue() == 0)
 		{
 			midTable.setBorder(new LineBorder(Util.convertCardColor(currentColor), 6));
 			midTable.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
 
-			// panelPlacedCardsColor.setBorder(new
-			// LineBorder(Util.convertCardColor(currentColor), 6));
-			// panelPlacedCardsColor.setBackground(new Color(color.getRed(),
-			// color.getGreen(), color.getBlue(), 80));
+			midTable.setBorder(new LineBorder(Util.convertCardColor(currentColor), 6));
+			midTable.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
 		}
 		else
 		{
 			midTable.setBorder(new LineBorder(color, 6));
 			midTable.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
 
-			// panelPlacedCardsColor.setBorder(new LineBorder(color, 6));
-			// panelPlacedCardsColor.setBackground(new Color(color.getRed(),
-			// color.getGreen(), color.getBlue(), 80));
+			midTable.setBorder(new LineBorder(color, 6));
+			midTable.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
 		}
 
-		panelPlacedCardsColor.repaint();
+		this.repaint();
+		midTable.repaint();
+		panelPlaced.repaint();
 
 		panelPlaced.add(cardToAdd);
 	}

@@ -41,19 +41,12 @@ public class NetClient
 
 		connectToServer();
 
-		try
-		{
-			Thread.sleep(NetUtils.DEFAULT_SERVER_TIME_OUT);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
-
 		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 		executor.execute(this::listenForNewMessagesToSend);
 		executor.execute(this::listenToServer);
+
+		startView();
 	}
 
 	public void startView()
@@ -119,18 +112,6 @@ public class NetClient
 		});
 
 		clientThread.start();
-		startView();
-
-		/*
-		 * try { new Thread(new Runnable() {
-		 * 
-		 * @Override public void run() {
-		 * 
-		 * sendToServer("Ciao dal client");
-		 * 
-		 * } }).join(); } catch (InterruptedException e) { // TODO Auto-generated catch
-		 * block e.printStackTrace(); }
-		 */
 	}
 
 	/**
