@@ -121,7 +121,8 @@ public class LocalPlayerController
 									CardView.isCardSelected = false;
 								}
 							}
-							if (CardBackView.isCardDrawnFromDeck == true)
+							if (CardBackView.isCardDrawnFromDeck == true
+									&& model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
 							{
 								if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
 								{
@@ -132,6 +133,11 @@ public class LocalPlayerController
 
 								model.getCurrentPlayer().addCard(model.getCardFromDeck());
 								model.nextTurn();
+							}
+							else if (CardBackView.isCardDrawnFromDeck == true
+									&& model.getCurrentPlayer().getHandCards().getNumberOfCards() == 30)
+							{
+								JOptionPane.showMessageDialog(gameView, "Hai già troppe carte!");
 							}
 						}
 					}
@@ -205,7 +211,8 @@ public class LocalPlayerController
 									CardView.isCardSelected = false;
 								}
 							}
-							if (CardBackView.isCardDrawnFromDeck == true)
+							if (CardBackView.isCardDrawnFromDeck == true
+									&& model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
 							{
 								if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
 								{
@@ -222,6 +229,11 @@ public class LocalPlayerController
 								model.getCurrentPlayer().addCard(model.getCardFromDeck());
 								model.nextTurn();
 								gameView.setUnoButtonPressed(false);
+							}
+							else if (CardBackView.isCardDrawnFromDeck == true
+									&& model.getCurrentPlayer().getHandCards().getNumberOfCards() == 30)
+							{
+								JOptionPane.showMessageDialog(gameView, "Hai già troppe carte!");
 							}
 						}
 					}

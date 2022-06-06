@@ -48,12 +48,8 @@ public class NetServer
 
 		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-		view = new TableView(playerNameServer, playerNameClient, false);
-		view.setVisible(true);
-
 		executor.execute(this::listenForNewMessagesToSend);
 		executor.execute(this::listenToClient);
-
 		executor.execute(this::runGameLogic);
 	}
 
@@ -62,6 +58,9 @@ public class NetServer
 	 */
 	public void runGameLogic()
 	{
+		view = new TableView(playerNameServer, playerNameClient, false);
+		view.setVisible(true);
+
 		model = new GameModel();
 
 		Player server = new Player(playerNameServer, model.generateStartingCards(), 0);

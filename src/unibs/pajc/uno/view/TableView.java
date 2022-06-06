@@ -199,7 +199,6 @@ public class TableView extends JFrame
 		panelPlaced.setBounds(469, 28, 105, 155);
 		midTable.add(panelPlaced);
 		panelPlaced.setOpaque(false);
-		panelPlaced.setEnabled(false);
 
 		panelDeck = new JPanel();
 		panelDeck.setBounds(319, 28, 105, 155);
@@ -381,17 +380,13 @@ public class TableView extends JFrame
 		{
 			midTable.setBorder(new LineBorder(Util.convertCardColor(currentColor), 6));
 			midTable.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
-
-			midTable.setBorder(new LineBorder(Util.convertCardColor(currentColor), 6));
-			midTable.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
+			panelPlaced.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
 		}
 		else
 		{
 			midTable.setBorder(new LineBorder(color, 6));
 			midTable.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
-
-			midTable.setBorder(new LineBorder(color, 6));
-			midTable.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
+			panelPlaced.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
 		}
 
 		this.repaint();

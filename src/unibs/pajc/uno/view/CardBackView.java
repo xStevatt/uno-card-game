@@ -54,6 +54,7 @@ public class CardBackView extends JPanel
 			{
 				CardBackView.isCardDrawnFromDeck = true;
 				System.out.println("Card drawn");
+				repaint();
 			}
 
 			@Override
