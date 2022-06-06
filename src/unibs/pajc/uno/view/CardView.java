@@ -20,9 +20,6 @@ import unibs.pajc.uno.model.card.NumberCard;
 
 public class CardView extends JPanel
 {
-	public static Card cardSelected = new NumberCard(CardColor.RED, 1);
-	public static boolean isCardSelected = false;
-
 	protected final Card card;
 	protected final String value;
 
@@ -38,6 +35,9 @@ public class CardView extends JPanel
 			Color.gray);
 	protected final Border focusedBorder = BorderFactory.createEtchedBorder(JComponent.WHEN_FOCUSED, Color.black,
 			Color.gray);
+
+	public static Card cardSelected = new NumberCard(CardColor.RED, 1);
+	public static boolean isCardSelected = false;
 
 	public CardView(Card card)
 	{
@@ -81,7 +81,6 @@ public class CardView extends JPanel
 			{
 				if (shouldAnimationsMove)
 				{
-					System.out.println("asdasd");
 					CardView.cardSelected = card;
 					isCardSelected = true;
 				}

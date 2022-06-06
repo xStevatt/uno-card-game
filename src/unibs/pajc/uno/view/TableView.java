@@ -195,10 +195,10 @@ public class TableView extends JFrame
 		sayUnoButtonPlayerTwo.setBounds(6, 6, 135, 39);
 		midTable.add(sayUnoButtonPlayerTwo);
 
-		panelPlaced = new JPanel();
+		panelPlaced = new JPanel(new GridBagLayout());
 		panelPlaced.setBounds(469, 28, 105, 155);
-		midTable.add(panelPlaced);
 		panelPlaced.setOpaque(false);
+		midTable.add(panelPlaced);
 
 		panelDeck = new JPanel();
 		panelDeck.setBounds(319, 28, 105, 155);
@@ -378,7 +378,8 @@ public class TableView extends JFrame
 
 		if (color.getRed() == 0 && color.getGreen() == 0 && color.getBlue() == 0)
 		{
-			midTable.setBorder(new LineBorder(Util.convertCardColor(currentColor), 6));
+			color = Util.convertCardColor(currentColor);
+			midTable.setBorder(new LineBorder(color, 6));
 			midTable.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
 			panelPlaced.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
 		}
@@ -439,6 +440,11 @@ public class TableView extends JFrame
 			sayUnoButtonPlayerOne.setVisible(visibility);
 		if (indexPlayer == 1)
 			sayUnoButtonPlayerTwo.setVisible(visibility);
+
+		panelAdversaryPlayer.repaint();
+		panelAdversaryPlayer.repaint();
+		handCardsViewActual.repaint();
+		panelActualPlayer.repaint();
 	}
 
 	/**
@@ -536,7 +542,6 @@ public class TableView extends JFrame
 		{
 			return (width - 100) / (totalCards - 1);
 		}
-
 	}
 
 	/**
