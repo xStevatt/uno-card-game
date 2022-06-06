@@ -428,6 +428,11 @@ public class GameModel
 		return turnIterator.getIndexCurrentPlayer();
 	}
 
+	public int getNextPlayerIndex()
+	{
+		return turnIterator.getIndexNextPlayer();
+	}
+
 	// GETTERS AND SETTERS
 
 	public Card getLastCardUsed()

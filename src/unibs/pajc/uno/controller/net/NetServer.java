@@ -67,17 +67,34 @@ public class NetServer
 		Player client = new Player(playerNameClient, model.generateStartingCards(), 1);
 
 		model.initPlayers(new ArrayList<Player>(Arrays.asList(new Player[] { server, client })));
-		initView(server, client);
 
 		while (!model.isGameOver())
 		{
+			updateView(server, client);
 
+			try
+			{
+				Thread.sleep(10000);
+			}
+			catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			model.nextTurn();
 		}
 	}
 
-	public void initView(Player server, Player client)
+	public void updateView(Player server, Player client)
 	{
 		view.setTurn(model.getCurrentPlayer().getNamePlayer());
+
+		System.out.println(model.getCurrentPlayerIndex() + " POI -> " + model.getNextPlayerIndex());
+
+		view.enableViewPlayer(model.getCurrentPlayerIndex(), true);
+		view.enableViewPlayer(model.getNextPlayerIndex(), false);
+
 		view.loadCards(server.getHandCards(), 0);
 		view.loadCards(client.getHandCards(), 1);
 		view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
