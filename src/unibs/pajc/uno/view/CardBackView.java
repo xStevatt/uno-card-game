@@ -22,7 +22,7 @@ public class CardBackView extends JPanel
 
 	private boolean shouldCardMove = false;
 
-	public static boolean isCardDrawnFromDeck;
+	public static volatile boolean isCardDrawnFromDeck;
 
 	private final Dimension dimension = new Dimension(cardWidth, cardHeight);
 

@@ -142,6 +142,9 @@ public class GameModel
 		turnIterator.getCurrentPlayer().removeCard(card);
 		usedCards.addCard(card);
 
+		System.out.println("Current player has "
+				+ getPlayers().get(turnIterator.getIndexCurrentPlayer()).getHandCards().getNumberOfCards());
+
 		boolean newColorNeedsSelection = false;
 
 		switch (card.getCardType())
