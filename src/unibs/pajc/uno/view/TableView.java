@@ -369,8 +369,12 @@ public class TableView extends JFrame
 	public void changeDroppedCardView(Card card, CardColor currentColor)
 	{
 		panelPlaced.removeAll();
+		panelPlaced.repaint();
 
 		UsedCardView cardToAdd = new UsedCardView(card);
+
+		panelPlaced.add(cardToAdd);
+		panelPlaced.repaint();
 
 		Color color = Util.convertCardColor(card.getCardColor());
 
@@ -390,11 +394,9 @@ public class TableView extends JFrame
 			panelPlaced.setBackground(new Color(color.getRed(), color.getGreen(), color.getBlue(), 80));
 		}
 
-		this.repaint();
 		midTable.repaint();
 		panelPlaced.repaint();
-
-		panelPlaced.add(cardToAdd);
+		this.repaint();
 	}
 
 	/**

@@ -39,7 +39,7 @@ public class NetClient
 		this.port = port;
 		this.playerNameClient = playerName;
 
-		connectToServer();
+		startClient();
 
 		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
@@ -59,7 +59,7 @@ public class NetClient
 	 * 
 	 * @return true if client is successfully connected to the server
 	 */
-	private void connectToServer()
+	private void startClient()
 	{
 		clientThread = new Thread(new Runnable()
 		{
@@ -82,15 +82,10 @@ public class NetClient
 					{
 						try
 						{
+							// SENDS CLIENT NAME TO SERVER
 							objOutputStream.writeObject(playerNameClient);
-							playerNameServer = (String) objInputStream.readObject();
-
-							while (playerNameServer.equals(""))
-							{
-								playerNameServer = (String) objInputStream.readObject();
-							}
 						}
-						catch (Exception e)
+						catch (IOException e)
 						{
 							System.out.println("Error while getting init details");
 							e.printStackTrace();
@@ -177,7 +172,7 @@ public class NetClient
 		{
 			try
 			{
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			}
 			catch (InterruptedException e)
 			{
@@ -189,15 +184,17 @@ public class NetClient
 			{
 				sendToServer(TableView.message);
 
+				// COOLDOWN - DEFAULT 700ms
 				try
 				{
-					Thread.sleep(3000);
+					Thread.sleep(700);
 				}
 				catch (InterruptedException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
+				// RESETS LAST MESSAGE SENT
 				TableView.message = "";
 			}
 		}
@@ -216,7 +213,7 @@ public class NetClient
 
 			if (objToSend instanceof String)
 			{
-				System.out.println("Message sent: " + (String) objToSend);
+				System.out.println("[CLIENT] - Message sent: " + (String) objToSend);
 			}
 		}
 		catch (IOException e)

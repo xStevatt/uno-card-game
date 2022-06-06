@@ -67,11 +67,20 @@ public class NetServer
 		Player client = new Player(playerNameClient, model.generateStartingCards(), 1);
 
 		model.initPlayers(new ArrayList<Player>(Arrays.asList(new Player[] { server, client })));
+		initView(server, client);
 
 		while (!model.isGameOver())
 		{
-			view.setTurn(model.getCurrentPlayer().getNamePlayer());
+
 		}
+	}
+
+	public void initView(Player server, Player client)
+	{
+		view.setTurn(model.getCurrentPlayer().getNamePlayer());
+		view.loadCards(server.getHandCards(), 0);
+		view.loadCards(client.getHandCards(), 1);
+		view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
 	}
 
 	/**
@@ -97,11 +106,13 @@ public class NetServer
 			{
 				try
 				{
-					// CLIENT AND SERVER SHARE NAMES
+					// SENDS SERVER NAME TO CLIENT
 					objOutputStream.writeObject(playerNameServer);
+
+					// TRIES TO READ CLIENT NAME
 					playerNameClient = (String) objInputStream.readObject();
 
-					// WAITS FOR A VALID NAME
+					// WAITS FOR A VALID CLIENT NAME
 					while (playerNameClient.equals(""))
 					{
 						playerNameClient = (String) objInputStream.readObject();
