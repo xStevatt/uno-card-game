@@ -72,6 +72,33 @@ public class NetServer
 
 	/**
 	 * 
+	 * @param server
+	 * @param client
+	 */
+	public void updateView(Player server, Player client, int playingPlayer)
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				logCurrentCards(server, client);
+
+				view.setTurn(model.getCurrentPlayer().getNamePlayer());
+
+				view.loadCards(server.getHandCards(), 0);
+				view.addCardsToViewBack(client.getHandCards().getNumberOfCards());
+
+				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
+
+				changeTurnView(playingPlayer);
+				view.repaint();
+			}
+		});
+	}
+
+	/**
+	 * 
 	 * @param playingPlayer
 	 */
 	public void changeTurnView(int playingPlayer)
@@ -110,7 +137,7 @@ public class NetServer
 
 		while (!model.isGameOver())
 		{
-			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+			updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
 
 			if (model.getCurrentPlayerIndex() == 0)
 			{
@@ -165,13 +192,24 @@ public class NetServer
 					}
 				}
 
+				try
+				{
+					Thread.sleep(500);
+				}
+				catch (InterruptedException e1)
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
 				// --------- SENDS MATCH MODEL TO SERVER ----------
 				System.out.println("[SERVER] - Sending model to client");
 				sendToClient(model);
 
 				try
 				{
-					Thread.sleep(1000);
+					Thread.sleep(500);
 				}
 				catch (InterruptedException e)
 				{
@@ -182,6 +220,7 @@ public class NetServer
 			if (model.getCurrentPlayerIndex() == 1)
 			{
 				changeTurnView(model.getCurrentPlayerIndex());
+
 				try
 				{
 					Thread.sleep(1000);
@@ -194,6 +233,8 @@ public class NetServer
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
 				this.model = waitForClient();
+
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
 			}
 
 			model.nextTurn();
@@ -266,7 +307,7 @@ public class NetServer
 		}
 
 		model.getCurrentPlayer().addCard(model.getCardFromDeck());
-		updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+		updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
 		model.nextTurn();
 	}
 
@@ -287,7 +328,7 @@ public class NetServer
 		{
 			view.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
 			boolean newColorSelection = model.evalMossa(CardView.cardSelected);
-			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+			updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
 
 			if (newColorSelection)
 			{
@@ -296,7 +337,7 @@ public class NetServer
 				model.setCurrentCardColor(cardColor);
 			}
 
-			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+			updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
 		}
 		else
 		{
@@ -318,49 +359,6 @@ public class NetServer
 		}
 
 		return null;
-	}
-
-	/**
-	 * 
-	 * @param server
-	 * @param client
-	 */
-	public void updateView(Player server, Player client)
-	{
-		try
-		{
-			Thread.sleep(100);
-		}
-		catch (InterruptedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				view.setTurn(model.getCurrentPlayer().getNamePlayer());
-
-				view.loadCards(server.getHandCards(), 0);
-				view.loadCards(client.getHandCards(), 1);
-
-				try
-				{
-					Thread.sleep(1000);
-				}
-				catch (InterruptedException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
-				view.repaint();
-			}
-		});
 	}
 
 	public void checkPlayerSaidUno()

@@ -510,21 +510,10 @@ public class TableView extends JFrame
 		}
 		else if (isGameLocal == false)
 		{
-			if (playingPlayer == 0)
-			{
-				handCardsViewActual.removeAll();
-				panelActualPlayer.removeAll();
+			handCardsViewActual.removeAll();
+			panelActualPlayer.removeAll();
 
-				addCardsToView(cards, panelActualPlayer, handCardsViewActual);
-
-			}
-			if (playingPlayer == 1)
-			{
-				handCardsViewAdversary.removeAll();
-				panelAdversaryPlayer.removeAll();
-
-				addCardsToViewBack(cards, panelAdversaryPlayer, handCardsViewAdversary);
-			}
+			addCardsToView(cards, panelActualPlayer, handCardsViewActual);
 		}
 
 		// REPAINTS ALL COMPONENTS
@@ -572,29 +561,35 @@ public class TableView extends JFrame
 	 * @param panelToAddCards
 	 * @param cardsView
 	 */
-	public synchronized void addCardsToViewBack(HandCards handCards, JPanel panelToAddCards, JLayeredPane cardsView)
+	public synchronized void addCardsToViewBack(int numberOfCards)
 	{
-		Point originPoint = getFirstCardPoint(handCards.getNumberOfCards(), cardsView);
-		int offset = calculateOffset(cardsView.getWidth(), handCards.getNumberOfCards());
+		Point originPoint = getFirstCardPoint(numberOfCards, handCardsViewAdversary);
+		int offset = calculateOffset(handCardsViewAdversary.getWidth(), numberOfCards);
 
 		int i = 0;
 
-		for (int j = 0; j < handCards.getNumberOfCards(); j++)
+		for (int j = 0; j < numberOfCards; j++)
 		{
 			CardBackView cardView = new CardBackView(false);
 
 			cardView.setBounds(originPoint.x, originPoint.y, cardView.getDimension().width,
 					cardView.getDimension().height);
-			cardsView.add(cardView, i++);
+			handCardsViewAdversary.add(cardView, i++);
 
-			cardsView.moveToFront(cardView);
+			handCardsViewAdversary.moveToFront(cardView);
 
 			originPoint.x += offset;
 		}
 
-		cardsView.revalidate();
+		handCardsViewAdversary.revalidate();
 		// ADDS CARDS PANEL TO OUTSIDE COMPONENT
-		panelToAddCards.add(cardsView);
+		panelAdversaryPlayer.add(handCardsViewAdversary);
+
+		// UPDATING
+		panelAdversaryPlayer.repaint();
+		panelAdversaryPlayer.repaint();
+		handCardsViewActual.repaint();
+		panelActualPlayer.repaint();
 	}
 
 	/**

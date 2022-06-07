@@ -74,6 +74,32 @@ public class NetClient
 		});
 	}
 
+	/**
+	 * 
+	 * @param server
+	 * @param client
+	 */
+	public void updateView(Player server, Player client, int playingPlayer)
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				// SETS LABEL WITH TURN
+				view.setTurn(model.getCurrentPlayer().getNamePlayer());
+
+				view.loadCards(client.getHandCards(), 0);
+				view.addCardsToViewBack(server.getHandCards().getNumberOfCards());
+
+				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
+
+				changeTurnView(playingPlayer);
+				view.repaint();
+			}
+		});
+	}
+
 	public void changeTurnView(int playingPlayer)
 	{
 		SwingUtilities.invokeLater(new Runnable()
@@ -118,8 +144,8 @@ public class NetClient
 
 		initView();
 
-		this.playerNameClient = model.getPlayers().get(1).getNamePlayer();
 		this.playerNameServer = model.getPlayers().get(0).getNamePlayer();
+		this.playerNameClient = model.getPlayers().get(1).getNamePlayer();
 		System.out.println("Server name in running: " + model.getPlayers().get(0).getNamePlayer());
 
 		try
@@ -133,8 +159,7 @@ public class NetClient
 
 		while (!model.isGameOver())
 		{
-			updateView(model.getPlayers().get(1), model.getPlayers().get(0), model.getCurrentPlayerIndex());
-			changeTurnView(model.getCurrentPlayerIndex());
+			updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
 
 			if (model.getCurrentPlayerIndex() == 0)
 			{
@@ -158,18 +183,27 @@ public class NetClient
 
 				objReceivedGame = null;
 
-				updateView(model.getPlayers().get(1), model.getPlayers().get(0), model.getCurrentPlayerIndex());
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
 			}
 			if (model.getCurrentPlayerIndex() == 1)
 			{
 				checkPlayerSaidUno();
-				view.setTurn(model.getCurrentPlayer().getNamePlayer());
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
 
 				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false
 						&& model.getCurrentPlayerIndex() == 1)
 				{
 					turnGame();
-					updateView(model.getPlayers().get(1), model.getPlayers().get(0), model.getCurrentPlayerIndex());
 
 					try
 					{
@@ -179,6 +213,7 @@ public class NetClient
 					{
 						e.printStackTrace();
 					}
+					updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
 				}
 
 			}
@@ -285,32 +320,6 @@ public class NetClient
 		}
 
 		return null;
-	}
-
-	/**
-	 * 
-	 * @param server
-	 * @param client
-	 */
-	public void updateView(Player server, Player client, int playingPlayer)
-	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				view.setTurn(model.getCurrentPlayer().getNamePlayer());
-
-				// view.enableViewPlayer(model.getCurrentPlayerIndex(), true);
-				// view.enableViewPlayer(model.getNextPlayerIndex(), false);
-
-				view.loadCards(server.getHandCards(), 0);
-				view.loadCards(client.getHandCards(), 1);
-				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
-
-				changeTurnView(playingPlayer);
-			}
-		});
 	}
 
 	/**
