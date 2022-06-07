@@ -235,7 +235,7 @@ public class TableView extends JFrame
 				if (messageInput.length() > 0)
 				{
 					txtSendMessageField.setText("");
-					addChatMessage(messageInput, "Player");
+					addChatMessage(messageInput, "You");
 					TableView.message = messageInput;
 				}
 			}
@@ -464,9 +464,15 @@ public class TableView extends JFrame
 	public synchronized void setSayUnoButtonVisibile(boolean visibility, int indexPlayer)
 	{
 		if (indexPlayer == 0)
+		{
 			sayUnoButtonPlayerOne.setVisible(visibility);
+
+		}
 		if (indexPlayer == 1)
+		{
 			sayUnoButtonPlayerTwo.setVisible(visibility);
+
+		}
 
 		panelAdversaryPlayer.repaint();
 		panelAdversaryPlayer.repaint();

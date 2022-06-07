@@ -83,7 +83,8 @@ public class PlayerDetailsInfoOnline extends JFrame
 				{
 					if (portNumber != 0 || txtIPAddress.getText().length() == 0 || txtName.getText().length() > 0)
 					{
-						NetClient client = new NetClient(txtIPAddress.getText(), portNumber, txtName.getText());
+						new NetClient(txtIPAddress.getText(), portNumber, txtName.getText());
+						setVisible(false);
 					}
 					else
 					{
@@ -95,7 +96,8 @@ public class PlayerDetailsInfoOnline extends JFrame
 				{
 					if (portNumber != 0 || txtIPAddress.getText().length() == 0 || txtName.getText().length() > 0)
 					{
-						NetServer server = new NetServer(txtIPAddress.getText(), portNumber, txtName.getText());
+						new NetServer(txtIPAddress.getText(), portNumber, txtName.getText());
+						setVisible(false);
 					}
 					else
 					{
@@ -176,6 +178,7 @@ public class PlayerDetailsInfoOnline extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				txtName.setText("Client");
 				panelSettingsClient.setBorder(new TitledBorder(null, "Edit client details", TitledBorder.LEADING,
 						TitledBorder.TOP, null, null));
 			}
@@ -186,6 +189,7 @@ public class PlayerDetailsInfoOnline extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				txtName.setText("Server");
 				panelSettingsClient.setBorder(new TitledBorder(null, "Edit server details", TitledBorder.LEADING,
 						TitledBorder.TOP, null, null));
 			}

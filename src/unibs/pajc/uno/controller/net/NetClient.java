@@ -31,8 +31,8 @@ public class NetClient
 	private ObjectOutputStream objOutputStream;
 	private volatile Object objReceivedGame = null;
 
-	private String playerNameClient;
-	private String playerNameServer;
+	private volatile String playerNameClient;
+	private volatile String playerNameServer;
 
 	private TableView view;
 	private GameModel model;
@@ -99,6 +99,10 @@ public class NetClient
 
 		initView();
 
+		this.playerNameClient = model.getPlayers().get(1).getNamePlayer();
+		this.playerNameServer = model.getPlayers().get(0).getNamePlayer();
+		System.out.println("Server name in running: " + model.getPlayers().get(0).getNamePlayer());
+
 		try
 		{
 			Thread.sleep(100);
@@ -116,9 +120,6 @@ public class NetClient
 			{
 				model = waitForServer();
 				objReceivedGame = null;
-
-				this.playerNameClient = model.getPlayers().get(1).getNamePlayer();
-				this.playerNameServer = model.getPlayers().get(0).getNamePlayer();
 
 				updateView(model.getPlayers().get(1), model.getPlayers().get(0));
 			}
@@ -342,6 +343,7 @@ public class NetClient
 				{
 					System.out.println("[CLIENT] - Message received from server: " + ((String) objReceived));
 
+					System.out.println("Server name: " + playerNameServer);
 					view.addChatMessage((String) objReceived, playerNameServer);
 
 					Thread.sleep(1000);
