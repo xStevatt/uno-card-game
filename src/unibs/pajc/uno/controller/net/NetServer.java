@@ -84,9 +84,17 @@ public class NetServer
 			if (model.getCurrentPlayerIndex() == 0)
 			{
 				checkPlayerSaidUno();
-				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
-				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				changeTurnView(model.getCurrentPlayerIndex());
 
 				try
 				{
@@ -118,6 +126,17 @@ public class NetServer
 			}
 			if (model.getCurrentPlayerIndex() == 1)
 			{
+				changeTurnView(model.getCurrentPlayerIndex());
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
 				this.model = waitForClient();
@@ -141,6 +160,16 @@ public class NetServer
 
 	public void turnGame()
 	{
+		try
+		{
+			Thread.sleep(100);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		if (CardView.isCardSelected == true)
 		{
 			System.out.println("[SERVER] - card selected");
@@ -155,6 +184,7 @@ public class NetServer
 			{
 				view.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
 				boolean newColorSelection = model.evalMossa(CardView.cardSelected);
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 				if (newColorSelection)
 				{
@@ -162,6 +192,8 @@ public class NetServer
 					CardColor cardColor = dialogColor.show();
 					model.setCurrentCardColor(cardColor);
 				}
+
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 			}
 			else
 			{
@@ -192,6 +224,7 @@ public class NetServer
 			}
 
 			model.getCurrentPlayer().addCard(model.getCardFromDeck());
+			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 			model.nextTurn();
 		}
 		else if (CardBackView.isCardDrawnFromDeck == true
@@ -218,6 +251,26 @@ public class NetServer
 		return null;
 	}
 
+	public void changeTurnView(int playingPlayer)
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (playingPlayer == 0)
+				{
+					view.enableViewPlayer(0, true);
+					view.enableViewPlayer(1, false);
+				}
+				if (playingPlayer == 1)
+				{
+					view.enableViewPlayer(0, false);
+				}
+			}
+		});
+	}
+
 	/**
 	 * 
 	 * @param server
@@ -225,6 +278,15 @@ public class NetServer
 	 */
 	public void updateView(Player server, Player client)
 	{
+		try
+		{
+			Thread.sleep(100);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		SwingUtilities.invokeLater(new Runnable()
 		{
@@ -233,13 +295,21 @@ public class NetServer
 			{
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
-				view.enableViewPlayer(model.getCurrentPlayerIndex(), true);
-				view.enableViewPlayer(model.getNextPlayerIndex(), false);
-
 				view.loadCards(server.getHandCards(), 0);
-
 				view.loadCards(client.getHandCards(), 1);
+
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
+				view.repaint();
 			}
 		});
 	}

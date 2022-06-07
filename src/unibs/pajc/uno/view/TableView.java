@@ -435,9 +435,15 @@ public class TableView extends JFrame
 				}
 			}
 		}
-		else
+		else if (isGameLocal == false)
 		{
-
+			if (index == 0)
+			{
+				for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
+				{
+					((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(enabled);
+				}
+			}
 		}
 
 		repaint();
