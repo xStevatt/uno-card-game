@@ -165,7 +165,8 @@ public class NetClient
 				checkPlayerSaidUno();
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
-				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
+				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false
+						&& model.getCurrentPlayerIndex() == 1)
 				{
 					turnGame();
 					updateView(model.getPlayers().get(1), model.getPlayers().get(0), model.getCurrentPlayerIndex());

@@ -67,6 +67,7 @@ public class NetServer
 	{
 		view.setVisible(true);
 		view.setResizable(false);
+		view.setTitle(playerNameServer);
 	}
 
 	/**
@@ -137,7 +138,8 @@ public class NetServer
 					e.printStackTrace();
 				}
 
-				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
+				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false
+						&& model.getCurrentPlayerIndex() == 0)
 				{
 					// System.out.println("Working");
 					try
@@ -149,11 +151,33 @@ public class NetServer
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+
 					turnGame();
+
+					try
+					{
+						Thread.sleep(100);
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 
-				// SENDS MATCH MODEL TO SERVER
-				// sendToClient(model);
+				// --------- SENDS MATCH MODEL TO SERVER ----------
+				System.out.println("[SERVER] - Sending model to client");
+				sendToClient(model);
+
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			if (model.getCurrentPlayerIndex() == 1)
 			{
