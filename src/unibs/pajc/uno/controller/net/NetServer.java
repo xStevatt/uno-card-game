@@ -87,6 +87,15 @@ public class NetServer
 				{
 					turnGame();
 					updateView(server, client);
+					try
+					{
+						Thread.sleep(1000);
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 
 				// SENDS MATCH MODEL TO SERVER
@@ -221,7 +230,6 @@ public class NetServer
 					+ client.getHandCards().getCard(i).getCardColor());
 		}
 
-		System.out.println("HERE");
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			@Override
@@ -233,6 +241,7 @@ public class NetServer
 				view.enableViewPlayer(model.getNextPlayerIndex(), false);
 
 				view.loadCards(server.getHandCards(), 0);
+
 				view.loadCards(client.getHandCards(), 1);
 				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
 			}

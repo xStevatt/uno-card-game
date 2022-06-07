@@ -487,11 +487,21 @@ public class TableView extends JFrame
 		}
 		else if (isGameLocal == false)
 		{
-			handCardsViewActual.removeAll();
-			panelActualPlayer.removeAll();
+			if (playingPlayer == 0)
+			{
+				handCardsViewActual.removeAll();
+				panelActualPlayer.removeAll();
 
-			addCardsToView(cards, panelActualPlayer, handCardsViewActual);
-			addCardsToViewBack(cards, panelAdversaryPlayer, handCardsViewAdversary);
+				addCardsToView(cards, panelActualPlayer, handCardsViewActual);
+
+			}
+			if (playingPlayer == 1)
+			{
+				handCardsViewAdversary.removeAll();
+				panelAdversaryPlayer.removeAll();
+
+				addCardsToViewBack(cards, panelAdversaryPlayer, handCardsViewAdversary);
+			}
 		}
 
 		// REPAINTS ALL COMPONENTS
