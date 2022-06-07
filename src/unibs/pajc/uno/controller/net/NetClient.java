@@ -9,7 +9,15 @@ import java.net.UnknownHostException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
 import unibs.pajc.uno.model.GameModel;
+import unibs.pajc.uno.model.card.CardColor;
+import unibs.pajc.uno.model.player.Player;
+import unibs.pajc.uno.view.CardBackView;
+import unibs.pajc.uno.view.CardView;
+import unibs.pajc.uno.view.DialogSelectNewColor;
 import unibs.pajc.uno.view.TableView;
 
 public class NetClient
@@ -40,18 +48,14 @@ public class NetClient
 		this.playerNameClient = playerName;
 
 		startClient();
-		startView();
+		System.out.println("[CLIENT] - starting");
+		view = new TableView(null, null, false);
+		view.setVisible(true);
 
 		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 		executor.execute(this::listenForNewMessagesToSend);
 		executor.execute(this::listenToServer);
-	}
-
-	public void startView()
-	{
-		view = new TableView(playerNameClient, playerNameServer, false);
-		view.setVisible(true);
 	}
 
 	public void runGameLogic()
@@ -71,6 +75,175 @@ public class NetClient
 
 			System.out.println("[CLIENT] - waiting for server");
 		}
+
+		model = ((GameModel) objReceivedGame);
+		objReceivedGame = null;
+
+		view.setVisible(true);
+
+		while (!model.isGameOver())
+		{
+			updateView(model.getPlayers().get(1), model.getPlayers().get(0));
+
+			if (model.getCurrentPlayerIndex() == 0)
+			{
+				model = waitForServer();
+				objReceivedGame = null;
+
+				updateView(model.getPlayers().get(1), model.getPlayers().get(0));
+			}
+			if (model.getCurrentPlayerIndex() == 1)
+			{
+				checkPlayerSaidUno();
+				view.setTurn(model.getCurrentPlayer().getNamePlayer());
+
+				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
+				{
+					turnGame();
+					updateView(model.getPlayers().get(1), model.getPlayers().get(0));
+
+					try
+					{
+						Thread.sleep(1000);
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+			}
+		}
+	}
+
+	public void turnGame()
+	{
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (CardView.isCardSelected == true)
+		{
+			System.out.println("[CLIENT] - card selected");
+
+			if (model.hasPlayerOneCard() && !view.isUnoButtonPressed())
+			{
+				JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
+				model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+			}
+
+			if (model.isPlacedCardValid(CardView.cardSelected))
+			{
+				view.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
+				boolean newColorSelection = model.evalMossa(CardView.cardSelected);
+
+				if (newColorSelection)
+				{
+					DialogSelectNewColor dialogColor = new DialogSelectNewColor();
+					CardColor cardColor = dialogColor.show();
+					model.setCurrentCardColor(cardColor);
+				}
+
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(null, "Please select a valid card!", "Error", JOptionPane.ERROR_MESSAGE);
+				CardView.isCardSelected = false;
+			}
+
+			CardView.isCardSelected = false;
+		}
+		if (CardBackView.isCardDrawnFromDeck == true && model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
+		{
+			System.out.println("[CLIENT] - Card drawn");
+
+			if (model.hasPlayerOneCard() && view.isUnoButtonPressed())
+			{
+				JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
+				model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+			}
+
+			model.getCurrentPlayer().addCard(model.getCardFromDeck());
+			model.nextTurn();
+		}
+		else if (CardBackView.isCardDrawnFromDeck == true
+				&& model.getCurrentPlayer().getHandCards().getNumberOfCards() == 30)
+		{
+			JOptionPane.showMessageDialog(view, "Hai già troppe carte!");
+		}
+
+		// RESETTING FLAGS
+		CardView.isCardSelected = false;
+		CardBackView.isCardDrawnFromDeck = false;
+	}
+
+	public GameModel waitForServer()
+	{
+		while (objReceivedGame == null)
+		{
+			if (objReceivedGame != null && objReceivedGame instanceof GameModel)
+			{
+				return ((GameModel) objReceivedGame);
+			}
+		}
+
+		return null;
+	}
+
+	public void updateView(Player server, Player client)
+	{
+		for (int i = 0; i < server.getHandCards().getNumberOfCards(); i++)
+		{
+			System.out.println(server.getHandCards().getCard(i).getCardType() + " - "
+					+ server.getHandCards().getCard(i).getCardColor());
+		}
+		System.out.println("---");
+		for (int i = 0; i < client.getHandCards().getNumberOfCards(); i++)
+		{
+			System.out.println(client.getHandCards().getCard(i).getCardType() + " - "
+					+ client.getHandCards().getCard(i).getCardColor());
+		}
+
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				view.setTurn(model.getCurrentPlayer().getNamePlayer());
+
+				view.enableViewPlayer(model.getCurrentPlayerIndex(), true);
+				view.enableViewPlayer(model.getNextPlayerIndex(), false);
+
+				view.loadCards(server.getHandCards(), 0);
+
+				view.loadCards(client.getHandCards(), 1);
+				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
+			}
+		});
+	}
+
+	public void checkPlayerSaidUno()
+	{
+		if (model.hasPlayerOneCard(model.getCurrentPlayer()))
+		{
+			view.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
+		}
 	}
 
 	/**
@@ -79,52 +252,43 @@ public class NetClient
 	 */
 	private void startClient()
 	{
-		clientThread = new Thread(new Runnable()
+		try
 		{
-			@Override
-			public void run()
+			clientSocket = new Socket(IP_ADDRESS, port);
+
+			System.out.println("[CLIENT] - Trying to connect to server");
+
+			objInputStream = new ObjectInputStream(clientSocket.getInputStream());
+			objOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+
+			isConnected = true;
+			System.out.println("[CLIENT] - CONNECTED TO SERVER: " + isConnected);
+
+			if (isConnected)
 			{
 				try
 				{
-					clientSocket = new Socket(IP_ADDRESS, port);
-
-					System.out.println("[CLIENT] - Trying to connect to server");
-
-					objInputStream = new ObjectInputStream(clientSocket.getInputStream());
-					objOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-
-					isConnected = true;
-					System.out.println("[CLIENT] - CONNECTED TO SERVER: " + isConnected);
-
-					if (isConnected)
-					{
-						try
-						{
-							// SENDS CLIENT NAME TO SERVER
-							objOutputStream.writeObject(playerNameClient);
-						}
-						catch (IOException e)
-						{
-							System.out.println("Error while getting init details");
-							e.printStackTrace();
-						}
-					}
-					// initializeGame();
-				}
-				catch (UnknownHostException e)
-				{
-					System.err.println("IP address of the host could not be determined : " + e.toString());
-					System.exit(0);
+					// SENDS CLIENT NAME TO SERVER
+					objOutputStream.writeObject(playerNameClient);
 				}
 				catch (IOException e)
 				{
-					System.err.println("Error in creating socket: " + e.toString());
-					System.exit(0);
+					System.out.println("Error while getting init details");
+					e.printStackTrace();
 				}
 			}
-		});
-
-		clientThread.start();
+			// initializeGame();
+		}
+		catch (UnknownHostException e)
+		{
+			System.err.println("IP address of the host could not be determined : " + e.toString());
+			System.exit(0);
+		}
+		catch (IOException e)
+		{
+			System.err.println("Error in creating socket: " + e.toString());
+			System.exit(0);
+		}
 	}
 
 	/**
@@ -132,59 +296,50 @@ public class NetClient
 	 */
 	private void listenToServer()
 	{
-		new Thread(new Runnable()
+		while (true)
 		{
-			@Override
-			public void run()
+			Object objReceived = null;
+
+			try
 			{
-				Object objReceived;
+				objReceived = objInputStream.readObject();
 
-				while (true)
+				if (objReceived != null && objReceived instanceof String && ((String) objReceived).length() > 0)
 				{
-					objReceived = null;
+					System.out.println("[CLIENT] - Message received from server: " + ((String) objReceived));
 
-					try
-					{
-						objReceived = objInputStream.readObject();
+					view.addChatMessage((String) objReceived, playerNameServer);
 
-						if (objReceived != null && objReceived instanceof String && ((String) objReceived).length() > 0)
-						{
-							System.out.println("[CLIENT] - Message received from server: " + ((String) objReceived));
+					Thread.sleep(1000);
+				}
+				if (objReceived != null & objReceived instanceof GameModel)
+				{
+					System.out.println("[CLIENT] - New game model received from server: ");
 
-							view.addChatMessage((String) objReceived, playerNameServer);
-
-							Thread.sleep(1000);
-						}
-						if (objReceived != null & objReceived instanceof GameModel)
-						{
-							System.out.println("[CLIENT] - New game model received from server: ");
-
-							objReceivedGame = objReceived;
-						}
-					}
-					catch (EOFException e)
-					{
-
-					}
-					catch (IOException e)
-					{
-						System.out.println("Errors in listening to the server");
-						System.exit(0);
-
-					}
-					catch (ClassNotFoundException e)
-					{
-						System.out.print("Class not found");
-						System.exit(0);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					objReceivedGame = objReceived;
 				}
 			}
-		}).start();
+			catch (EOFException e)
+			{
+
+			}
+			catch (IOException e)
+			{
+				System.out.println("Errors in listening to the server");
+				System.exit(0);
+
+			}
+			catch (ClassNotFoundException e)
+			{
+				System.out.print("Class not found");
+				System.exit(0);
+			}
+			catch (InterruptedException e)
+			{
+				System.out.println("Interrupted execution");
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**

@@ -79,7 +79,7 @@ public class NetServer
 
 		while (!model.isGameOver())
 		{
-			updateView(server, client);
+			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 			if (model.getCurrentPlayerIndex() == 0)
 			{
@@ -89,7 +89,8 @@ public class NetServer
 				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 				{
 					turnGame();
-					updateView(server, client);
+					updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+
 					try
 					{
 						Thread.sleep(1000);
@@ -109,7 +110,7 @@ public class NetServer
 				System.out.println("HERE");
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
-				this.model = waitForUser();
+				this.model = waitForClient();
 			}
 
 			model.nextTurn();
@@ -202,7 +203,7 @@ public class NetServer
 		CardBackView.isCardDrawnFromDeck = false;
 	}
 
-	public GameModel waitForUser()
+	public GameModel waitForClient()
 	{
 		while (objReceivedGame == null)
 		{
