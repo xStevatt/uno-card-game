@@ -369,7 +369,7 @@ public class TableView extends JFrame
 	 * 
 	 * @param card
 	 */
-	public void changeDroppedCardView(Card card, CardColor currentColor)
+	public synchronized void changeDroppedCardView(Card card, CardColor currentColor)
 	{
 		panelPlaced.removeAll();
 		panelPlaced.repaint();
@@ -415,7 +415,7 @@ public class TableView extends JFrame
 	 * 
 	 * @param index
 	 */
-	public void enableViewPlayer(int index, boolean enabled)
+	public synchronized void enableViewPlayer(int index, boolean enabled)
 	{
 		if (isGameLocal == true)
 		{
@@ -448,7 +448,7 @@ public class TableView extends JFrame
 	 * player only has one card left. If the user doesn't say "uno" (doesn't press
 	 * the button), two cards are added to his hand.
 	 */
-	public void setSayUnoButtonVisibile(boolean visibility, int indexPlayer)
+	public synchronized void setSayUnoButtonVisibile(boolean visibility, int indexPlayer)
 	{
 		if (indexPlayer == 0)
 			sayUnoButtonPlayerOne.setVisible(visibility);
@@ -468,7 +468,7 @@ public class TableView extends JFrame
 	 * @param handCards
 	 * @param players
 	 */
-	public void loadCards(HandCards cards, int playingPlayer)
+	public synchronized void loadCards(HandCards cards, int playingPlayer)
 	{
 		if (isGameLocal == true)
 		{
@@ -507,7 +507,7 @@ public class TableView extends JFrame
 	 * @param handCards
 	 * @param panelToAddCards
 	 */
-	public void addCardsToView(HandCards handCards, JPanel panelToAddCards, JLayeredPane cardsView)
+	public synchronized void addCardsToView(HandCards handCards, JPanel panelToAddCards, JLayeredPane cardsView)
 	{
 		Point originPoint = getFirstCardPoint(handCards.getNumberOfCards(), cardsView);
 		int offset = calculateOffset(cardsView.getWidth(), handCards.getNumberOfCards());
@@ -539,7 +539,7 @@ public class TableView extends JFrame
 	 * @param panelToAddCards
 	 * @param cardsView
 	 */
-	public void addCardsToViewBack(HandCards handCards, JPanel panelToAddCards, JLayeredPane cardsView)
+	public synchronized void addCardsToViewBack(HandCards handCards, JPanel panelToAddCards, JLayeredPane cardsView)
 	{
 		Point originPoint = getFirstCardPoint(handCards.getNumberOfCards(), cardsView);
 		int offset = calculateOffset(cardsView.getWidth(), handCards.getNumberOfCards());
@@ -569,7 +569,7 @@ public class TableView extends JFrame
 	 * @param totalCards
 	 * @return
 	 */
-	private Point getFirstCardPoint(int totalCards, JLayeredPane handCardsView)
+	private synchronized Point getFirstCardPoint(int totalCards, JLayeredPane handCardsView)
 	{
 		Point p = new Point(0, 20);
 
@@ -589,7 +589,7 @@ public class TableView extends JFrame
 	 * @param totalCards
 	 * @return
 	 */
-	private int calculateOffset(int width, int totalCards)
+	private synchronized int calculateOffset(int width, int totalCards)
 	{
 		if (totalCards <= GameRules.DEFAULT_NUMBER_OF_CARDS)
 		{
@@ -606,7 +606,7 @@ public class TableView extends JFrame
 	 * @param message
 	 * @param playerName
 	 */
-	public void addChatMessage(String message, String playerName)
+	public synchronized void addChatMessage(String message, String playerName)
 	{
 		LocalDateTime time = LocalDateTime.now();
 		DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm");

@@ -137,7 +137,7 @@ public class GameModel
 	 * @param card
 	 * @param index - if index is 1, then a new color must be chosen
 	 */
-	public boolean evalMossa(Card card)
+	public synchronized boolean evalMossa(Card card)
 	{
 		turnIterator.getCurrentPlayer().removeCard(card);
 		usedCards.addCard(card);
@@ -396,7 +396,7 @@ public class GameModel
 	 * 
 	 * @param player is the identifier of the player
 	 */
-	public Card[] generateStartingCards()
+	public synchronized Card[] generateStartingCards()
 	{
 		Card[] card = new Card[GameRules.DEFAULT_NUMBER_OF_CARDS];
 
@@ -416,7 +416,7 @@ public class GameModel
 	 * @param player        is the index of the player the new set of cards is set
 	 *                      for
 	 */
-	public void generateStartingCards(int startingCards)
+	public synchronized void generateStartingCards(int startingCards)
 	{
 		Card[] card = new Card[startingCards];
 
@@ -426,19 +426,19 @@ public class GameModel
 		}
 	}
 
-	public int getCurrentPlayerIndex()
+	public synchronized int getCurrentPlayerIndex()
 	{
 		return turnIterator.getIndexCurrentPlayer();
 	}
 
-	public int getNextPlayerIndex()
+	public synchronized int getNextPlayerIndex()
 	{
 		return turnIterator.getIndexNextPlayer();
 	}
 
 	// GETTERS AND SETTERS
 
-	public Card getLastCardUsed()
+	public synchronized Card getLastCardUsed()
 	{
 		return usedCards.getLastCardUsed();
 	}

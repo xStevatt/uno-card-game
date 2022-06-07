@@ -83,30 +83,10 @@ public class NetServer
 				checkPlayerSaidUno();
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
-				try
-				{
-					Thread.sleep(1000);
-				}
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-
-				System.out.println("HERE");
-
 				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 				{
-					try
-					{
-						Thread.sleep(100);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 					turnGame();
-					view.repaint();
+					updateView(server, client);
 				}
 
 				// SENDS MATCH MODEL TO SERVER
@@ -119,24 +99,36 @@ public class NetServer
 				this.model = waitForUser();
 			}
 
-			try
-			{
-				Thread.sleep(5000);
-			}
-			catch (InterruptedException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
 			model.nextTurn();
+		}
+
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
 	public void turnGame()
 	{
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		if (CardView.isCardSelected == true)
 		{
+			System.out.println("[SERVER] - card selected");
+
 			if (model.hasPlayerOneCard() && !view.isUnoButtonPressed())
 			{
 				JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
@@ -154,6 +146,16 @@ public class NetServer
 					CardColor cardColor = dialogColor.show();
 					model.setCurrentCardColor(cardColor);
 				}
+
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			else
 			{
@@ -165,6 +167,8 @@ public class NetServer
 		}
 		if (CardBackView.isCardDrawnFromDeck == true && model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
 		{
+			System.out.println("[SERVER] - Card drawn");
+
 			if (model.hasPlayerOneCard() && view.isUnoButtonPressed())
 			{
 				JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
@@ -179,6 +183,10 @@ public class NetServer
 		{
 			JOptionPane.showMessageDialog(view, "Hai già troppe carte!");
 		}
+
+		// RESETTING FLAGS
+		CardView.isCardSelected = false;
+		CardBackView.isCardDrawnFromDeck = false;
 	}
 
 	public GameModel waitForUser()
@@ -201,6 +209,19 @@ public class NetServer
 	 */
 	public void updateView(Player server, Player client)
 	{
+		for (int i = 0; i < server.getHandCards().getNumberOfCards(); i++)
+		{
+			System.out.println(server.getHandCards().getCard(i).getCardType() + " - "
+					+ server.getHandCards().getCard(i).getCardColor());
+		}
+		System.out.println("---");
+		for (int i = 0; i < client.getHandCards().getNumberOfCards(); i++)
+		{
+			System.out.println(client.getHandCards().getCard(i).getCardType() + " - "
+					+ client.getHandCards().getCard(i).getCardColor());
+		}
+
+		System.out.println("HERE");
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			@Override
