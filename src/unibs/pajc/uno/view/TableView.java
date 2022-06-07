@@ -323,6 +323,11 @@ public class TableView extends JFrame
 		initTimer();
 	}
 
+	public void setMatchLabel(String playerCurrent, String playerAdversary)
+	{
+		lblMatchDescriptor.setText(playerCurrent + " vs " + playerAdversary);
+	}
+
 	/**
 	 * 
 	 * @param playerOne

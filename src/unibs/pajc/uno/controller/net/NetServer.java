@@ -54,6 +54,7 @@ public class NetServer
 		startServer();
 		view = new TableView(playerNameServer, playerNameClient, false);
 		view.setVisible(true);
+		view.setResizable(false);
 
 		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 

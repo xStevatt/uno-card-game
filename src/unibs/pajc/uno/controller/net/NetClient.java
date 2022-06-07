@@ -37,10 +37,6 @@ public class NetClient
 	private TableView view;
 	private GameModel model;
 
-	private Thread clientThread;
-
-	private int indexCurrentPlayer = 1;
-
 	public NetClient(String IP_ADDRESS, int port, String playerName)
 	{
 		this.IP_ADDRESS = IP_ADDRESS;
@@ -67,10 +63,10 @@ public class NetClient
 			public void run()
 			{
 				view.setVisible(true);
+				view.setResizable(false);
 
-				System.out.println("HERE 2");
-
-				System.out.println(model.getPlayers().get(0));
+				view.setMatchLabel(model.getPlayers().get(1).getNamePlayer(),
+						model.getPlayers().get(0).getNamePlayer());
 
 				view.setTitle(model.getPlayers().get(0).getNamePlayer());
 			}
