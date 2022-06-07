@@ -31,7 +31,7 @@ public class NetClient
 	private ObjectOutputStream objOutputStream;
 	private volatile Object objReceivedGame = null;
 
-	private final String playerNameClient;
+	private String playerNameClient;
 	private String playerNameServer;
 
 	private TableView view;
@@ -116,6 +116,9 @@ public class NetClient
 			{
 				model = waitForServer();
 				objReceivedGame = null;
+
+				this.playerNameClient = model.getPlayers().get(1).getNamePlayer();
+				this.playerNameServer = model.getPlayers().get(0).getNamePlayer();
 
 				updateView(model.getPlayers().get(1), model.getPlayers().get(0));
 			}
