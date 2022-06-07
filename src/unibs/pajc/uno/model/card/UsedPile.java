@@ -1,9 +1,14 @@
 package unibs.pajc.uno.model.card;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class UsedPile
+public class UsedPile implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Card> usedCards;
 
 	public UsedPile(Card startingCard)

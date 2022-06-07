@@ -54,6 +54,25 @@ public class NetClient
 		view.setVisible(true);
 	}
 
+	public void runGameLogic()
+	{
+		// WAITS FOR SERVER TO SEND MODEL
+		while (objReceivedGame == null)
+		{
+			try
+			{
+				Thread.sleep(1000);
+			}
+			catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			System.out.println("[CLIENT] - waiting for server");
+		}
+	}
+
 	/**
 	 * 
 	 * @return true if client is successfully connected to the server
@@ -136,6 +155,12 @@ public class NetClient
 
 							Thread.sleep(1000);
 						}
+						if (objReceived != null & objReceived instanceof GameModel)
+						{
+							System.out.println("[CLIENT] - New game model received from server: ");
+
+							objReceivedGame = objReceived;
+						}
 					}
 					catch (EOFException e)
 					{
@@ -143,7 +168,7 @@ public class NetClient
 					}
 					catch (IOException e)
 					{
-						System.out.println("Errors in listening to the client");
+						System.out.println("Errors in listening to the server");
 						System.exit(0);
 
 					}

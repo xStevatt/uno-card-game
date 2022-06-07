@@ -1,11 +1,12 @@
 package unibs.pajc.uno.model.player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import unibs.pajc.uno.model.card.Card;
 
-public class HandCards
+public class HandCards implements Serializable
 {
 	private ArrayList<Card> cardList;
 

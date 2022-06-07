@@ -74,6 +74,9 @@ public class NetServer
 
 		model.initPlayers(new ArrayList<Player>(Arrays.asList(new Player[] { server, client })));
 
+		// SENDING MODEL TO CLIENT
+		sendToClient(model);
+
 		while (!model.isGameOver())
 		{
 			updateView(server, client);
@@ -103,6 +106,7 @@ public class NetServer
 			}
 			if (model.getCurrentPlayerIndex() == 1)
 			{
+				System.out.println("HERE");
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
 				this.model = waitForUser();
@@ -357,7 +361,6 @@ public class NetServer
 			}
 			catch (InterruptedException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

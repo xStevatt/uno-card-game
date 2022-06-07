@@ -1,5 +1,6 @@
 package unibs.pajc.uno.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import unibs.pajc.uno.model.card.Card;
@@ -11,8 +12,12 @@ import unibs.pajc.uno.model.card.UsedPile;
 import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.model.player.PlayerRoundIterator;
 
-public class GameModel
+public class GameModel implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private CardDeck cardsDeck;
 	private UsedPile usedCards;
 

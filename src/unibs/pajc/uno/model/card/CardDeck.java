@@ -1,5 +1,6 @@
 package unibs.pajc.uno.model.card;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -12,8 +13,12 @@ import unibs.pajc.uno.model.GameRules;
  * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
  *
  */
-public class CardDeck
+public class CardDeck implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ArrayList<Card> cardDeck;
 
 	public CardDeck()

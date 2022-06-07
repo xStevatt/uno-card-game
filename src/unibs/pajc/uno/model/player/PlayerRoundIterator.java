@@ -1,9 +1,14 @@
 package unibs.pajc.uno.model.player;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PlayerRoundIterator
+public class PlayerRoundIterator implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final ArrayList<Player> players;
 	private int current = 0;
 	private int previous = 0;
