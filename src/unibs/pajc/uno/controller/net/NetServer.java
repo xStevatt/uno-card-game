@@ -88,19 +88,29 @@ public class NetServer
 
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
+				try
+				{
+					Thread.sleep(100);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 				{
-					turnGame();
-
+					// System.out.println("Working");
 					try
 					{
-						Thread.sleep(1000);
+						Thread.sleep(100);
 					}
 					catch (InterruptedException e)
 					{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					turnGame();
 				}
 
 				// SENDS MATCH MODEL TO SERVER
@@ -108,7 +118,6 @@ public class NetServer
 			}
 			if (model.getCurrentPlayerIndex() == 1)
 			{
-				System.out.println("HERE");
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
 				this.model = waitForClient();
@@ -119,14 +128,13 @@ public class NetServer
 
 		try
 		{
-			Thread.sleep(1000);
+			Thread.sleep(100);
 		}
 		catch (InterruptedException e)
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		CardView.isCardSelected = false;
 		CardBackView.isCardDrawnFromDeck = false;
 	}
@@ -135,16 +143,6 @@ public class NetServer
 	{
 		if (CardView.isCardSelected == true)
 		{
-			try
-			{
-				Thread.sleep(1000);
-			}
-			catch (InterruptedException e1)
-			{
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
 			System.out.println("[SERVER] - card selected");
 
 			if (model.hasPlayerOneCard() && !view.isUnoButtonPressed())
@@ -163,16 +161,6 @@ public class NetServer
 					DialogSelectNewColor dialogColor = new DialogSelectNewColor();
 					CardColor cardColor = dialogColor.show();
 					model.setCurrentCardColor(cardColor);
-				}
-
-				try
-				{
-					Thread.sleep(1000);
-				}
-				catch (InterruptedException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 			}
 			else
@@ -237,17 +225,6 @@ public class NetServer
 	 */
 	public void updateView(Player server, Player client)
 	{
-		for (int i = 0; i < server.getHandCards().getNumberOfCards(); i++)
-		{
-			System.out.println(server.getHandCards().getCard(i).getCardType() + " - "
-					+ server.getHandCards().getCard(i).getCardColor());
-		}
-		System.out.println("---");
-		for (int i = 0; i < client.getHandCards().getNumberOfCards(); i++)
-		{
-			System.out.println(client.getHandCards().getCard(i).getCardType() + " - "
-					+ client.getHandCards().getCard(i).getCardColor());
-		}
 
 		SwingUtilities.invokeLater(new Runnable()
 		{
@@ -272,6 +249,21 @@ public class NetServer
 		if (model.hasPlayerOneCard(model.getCurrentPlayer()))
 		{
 			view.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
+		}
+	}
+
+	public void logCurrentCards(Player server, Player client)
+	{
+		for (int i = 0; i < server.getHandCards().getNumberOfCards(); i++)
+		{
+			System.out.println(server.getHandCards().getCard(i).getCardType() + " - "
+					+ server.getHandCards().getCard(i).getCardColor());
+		}
+		System.out.println("---");
+		for (int i = 0; i < client.getHandCards().getNumberOfCards(); i++)
+		{
+			System.out.println(client.getHandCards().getCard(i).getCardType() + " - "
+					+ client.getHandCards().getCard(i).getCardColor());
 		}
 	}
 

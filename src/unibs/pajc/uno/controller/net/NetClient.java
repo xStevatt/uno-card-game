@@ -72,7 +72,6 @@ public class NetClient
 			}
 			catch (InterruptedException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
@@ -83,6 +82,7 @@ public class NetClient
 		objReceivedGame = null;
 
 		view.setVisible(true);
+		view.setTitle(model.getPlayers().get(1).getNamePlayer());
 
 		while (!model.isGameOver())
 		{
@@ -155,16 +155,6 @@ public class NetClient
 					DialogSelectNewColor dialogColor = new DialogSelectNewColor();
 					CardColor cardColor = dialogColor.show();
 					model.setCurrentCardColor(cardColor);
-				}
-
-				try
-				{
-					Thread.sleep(1000);
-				}
-				catch (InterruptedException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 			}
 			else

@@ -37,6 +37,7 @@ public class CardView extends JPanel
 			Color.gray);
 
 	public static Card cardSelected = new NumberCard(CardColor.RED, 1);
+
 	public static volatile boolean isCardSelected = false;
 
 	public CardView(Card card)
@@ -83,7 +84,6 @@ public class CardView extends JPanel
 				{
 					CardView.cardSelected = card;
 					isCardSelected = true;
-					System.out.println("CARD SELECTED");
 				}
 			}
 		});
