@@ -94,6 +94,7 @@ public class NetServer
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
 				changeTurnView(model.getCurrentPlayerIndex());
 
 				try
@@ -228,7 +229,7 @@ public class NetServer
 			model.nextTurn();
 		}
 		else if (CardBackView.isCardDrawnFromDeck == true
-				&& model.getCurrentPlayer().getHandCards().getNumberOfCards() == 30)
+				&& model.getCurrentPlayer().getHandCards().getNumberOfCards() >= 30)
 		{
 			JOptionPane.showMessageDialog(view, "Hai già troppe carte!");
 		}

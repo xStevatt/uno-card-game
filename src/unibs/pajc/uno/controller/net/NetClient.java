@@ -29,7 +29,7 @@ public class NetClient
 
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
-	private Object objReceivedGame = null;
+	private volatile Object objReceivedGame = null;
 
 	private final String playerNameClient;
 	private String playerNameServer;
@@ -50,12 +50,31 @@ public class NetClient
 		startClient();
 		System.out.println("[CLIENT] - starting");
 		view = new TableView(null, null, false);
-		view.setVisible(true);
+		// view.setVisible(true);
 
 		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 		executor.execute(this::listenForNewMessagesToSend);
 		executor.execute(this::listenToServer);
+		executor.execute(this::runGameLogic);
+	}
+
+	public void initView()
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				view.setVisible(true);
+
+				System.out.println("HERE 2");
+
+				System.out.println(model.getPlayers().get(0));
+
+				view.setTitle(model.getPlayers().get(0).getNamePlayer());
+			}
+		});
 	}
 
 	/**
@@ -66,23 +85,33 @@ public class NetClient
 		// WAITS FOR SERVER TO SEND MODEL
 		while (objReceivedGame == null)
 		{
+			System.out.println("[CLIENT] - waiting for server");
 			try
 			{
-				Thread.sleep(1000);
+				Thread.sleep(10);
 			}
 			catch (InterruptedException e)
 			{
 				e.printStackTrace();
 			}
 
-			System.out.println("[CLIENT] - waiting for server");
+			System.out.println(" 1[CLIENT] - waiting for server");
 		}
 
-		model = ((GameModel) objReceivedGame);
+		System.out.println("HERE 1");
+		this.model = ((GameModel) objReceivedGame);
 		objReceivedGame = null;
 
-		view.setVisible(true);
-		view.setTitle(model.getPlayers().get(1).getNamePlayer());
+		initView();
+
+		try
+		{
+			Thread.sleep(100);
+		}
+		catch (InterruptedException e1)
+		{
+			e1.printStackTrace();
+		}
 
 		while (!model.isGameOver())
 		{
@@ -302,7 +331,7 @@ public class NetClient
 	/**
 	 * Makes the server listen to the client
 	 */
-	private void listenToServer()
+	private synchronized void listenToServer()
 	{
 		while (true)
 		{
@@ -320,16 +349,17 @@ public class NetClient
 
 					Thread.sleep(1000);
 				}
-				if (objReceived != null & objReceived instanceof GameModel)
+				if (objReceived != null && objReceived instanceof GameModel)
 				{
-					System.out.println("[CLIENT] - New game model received from server: ");
+					System.out.println("[CLIENT] - New game model received from server. Adversary: "
+							+ ((GameModel) objReceived).getPlayers().get(0).getNamePlayer());
 
 					objReceivedGame = objReceived;
 				}
 			}
 			catch (EOFException e)
 			{
-
+				System.out.println("EOFException");
 			}
 			catch (IOException e)
 			{
