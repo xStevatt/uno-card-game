@@ -451,6 +451,10 @@ public class TableView extends JFrame
 					((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(enabled);
 				}
 			}
+			if (index == 1)
+			{
+
+			}
 		}
 
 		repaint();

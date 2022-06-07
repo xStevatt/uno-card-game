@@ -41,8 +41,6 @@ public class NetServer
 	private String playerNameServer = null;
 	private String playerNameClient = null;
 
-	private int indexCurrentPlayer = 0;
-
 	public NetServer(String IP_ADDRESS, int PORT, String playerNameServer)
 	{
 		this.IP_ADDRESS = IP_ADDRESS;
@@ -135,7 +133,6 @@ public class NetServer
 				}
 				catch (InterruptedException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
@@ -153,7 +150,6 @@ public class NetServer
 		}
 		catch (InterruptedException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		CardView.isCardSelected = false;
@@ -168,7 +164,7 @@ public class NetServer
 		}
 		catch (InterruptedException e)
 		{
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 
@@ -263,7 +259,6 @@ public class NetServer
 				if (playingPlayer == 0)
 				{
 					view.enableViewPlayer(0, true);
-					view.enableViewPlayer(1, false);
 				}
 				if (playingPlayer == 1)
 				{

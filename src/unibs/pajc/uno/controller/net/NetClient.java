@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -73,6 +74,25 @@ public class NetClient
 		});
 	}
 
+	public void changeTurnView(int playingPlayer)
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				if (playingPlayer == 0)
+				{
+					view.enableViewPlayer(0, false);
+				}
+				if (playingPlayer == 1)
+				{
+					view.enableViewPlayer(0, true);
+				}
+			}
+		});
+	}
+
 	/**
 	 * 
 	 */
@@ -81,17 +101,16 @@ public class NetClient
 		// WAITS FOR SERVER TO SEND MODEL
 		while (objReceivedGame == null)
 		{
-			System.out.println("[CLIENT] - waiting for server");
 			try
 			{
-				Thread.sleep(10);
+				Thread.sleep(100);
 			}
 			catch (InterruptedException e)
 			{
 				e.printStackTrace();
 			}
 
-			System.out.println(" 1[CLIENT] - waiting for server");
+			System.out.println("[CLIENT] - waiting for server");
 		}
 
 		this.model = ((GameModel) objReceivedGame);
@@ -114,14 +133,32 @@ public class NetClient
 
 		while (!model.isGameOver())
 		{
-			updateView(model.getPlayers().get(1), model.getPlayers().get(0));
+			updateView(model.getPlayers().get(1), model.getPlayers().get(0), model.getCurrentPlayerIndex());
+			changeTurnView(model.getCurrentPlayerIndex());
 
 			if (model.getCurrentPlayerIndex() == 0)
 			{
-				model = waitForServer();
+				this.model = waitForServer();
+
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				System.out.println("HERE");
+				if (Objects.isNull(model))
+				{
+					System.out.println("here");
+				}
+
 				objReceivedGame = null;
 
-				updateView(model.getPlayers().get(1), model.getPlayers().get(0));
+				updateView(model.getPlayers().get(1), model.getPlayers().get(0), model.getCurrentPlayerIndex());
 			}
 			if (model.getCurrentPlayerIndex() == 1)
 			{
@@ -131,7 +168,7 @@ public class NetClient
 				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 				{
 					turnGame();
-					updateView(model.getPlayers().get(1), model.getPlayers().get(0));
+					updateView(model.getPlayers().get(1), model.getPlayers().get(0), model.getCurrentPlayerIndex());
 
 					try
 					{
@@ -164,46 +201,11 @@ public class NetClient
 
 		if (CardView.isCardSelected == true)
 		{
-			System.out.println("[CLIENT] - card selected");
-
-			if (model.hasPlayerOneCard() && !view.isUnoButtonPressed())
-			{
-				JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
-				model.playerDidNotSayUno(model.getCurrentPlayerIndex());
-			}
-
-			if (model.isPlacedCardValid(CardView.cardSelected))
-			{
-				view.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
-				boolean newColorSelection = model.evalMossa(CardView.cardSelected);
-
-				if (newColorSelection)
-				{
-					DialogSelectNewColor dialogColor = new DialogSelectNewColor();
-					CardColor cardColor = dialogColor.show();
-					model.setCurrentCardColor(cardColor);
-				}
-			}
-			else
-			{
-				JOptionPane.showMessageDialog(null, "Please select a valid card!", "Error", JOptionPane.ERROR_MESSAGE);
-				CardView.isCardSelected = false;
-			}
-
-			CardView.isCardSelected = false;
+			manageCardSelected();
 		}
 		if (CardBackView.isCardDrawnFromDeck == true && model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
 		{
-			System.out.println("[CLIENT] - Card drawn");
-
-			if (model.hasPlayerOneCard() && view.isUnoButtonPressed())
-			{
-				JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
-				model.playerDidNotSayUno(model.getCurrentPlayerIndex());
-			}
-
-			model.getCurrentPlayer().addCard(model.getCardFromDeck());
-			model.nextTurn();
+			manageCardDrawn();
 		}
 		else if (CardBackView.isCardDrawnFromDeck == true
 				&& model.getCurrentPlayer().getHandCards().getNumberOfCards() == 30)
@@ -214,6 +216,57 @@ public class NetClient
 		// RESETTING FLAGS
 		CardView.isCardSelected = false;
 		CardBackView.isCardDrawnFromDeck = false;
+	}
+
+	/**
+	 * 
+	 */
+	private void manageCardDrawn()
+	{
+		System.out.println("[CLIENT] - Card drawn");
+
+		if (model.hasPlayerOneCard() && view.isUnoButtonPressed())
+		{
+			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
+			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+		}
+
+		model.getCurrentPlayer().addCard(model.getCardFromDeck());
+		model.nextTurn();
+	}
+
+	/**
+	 * 
+	 */
+	private void manageCardSelected()
+	{
+		System.out.println("[CLIENT] - card selected");
+
+		if (model.hasPlayerOneCard() && !view.isUnoButtonPressed())
+		{
+			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
+			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+		}
+
+		if (model.isPlacedCardValid(CardView.cardSelected))
+		{
+			view.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
+			boolean newColorSelection = model.evalMossa(CardView.cardSelected);
+
+			if (newColorSelection)
+			{
+				DialogSelectNewColor dialogColor = new DialogSelectNewColor();
+				CardColor cardColor = dialogColor.show();
+				model.setCurrentCardColor(cardColor);
+			}
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(null, "Please select a valid card!", "Error", JOptionPane.ERROR_MESSAGE);
+			CardView.isCardSelected = false;
+		}
+
+		CardView.isCardSelected = false;
 	}
 
 	/**
@@ -238,7 +291,33 @@ public class NetClient
 	 * @param server
 	 * @param client
 	 */
-	public void updateView(Player server, Player client)
+	public void updateView(Player server, Player client, int playingPlayer)
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				view.setTurn(model.getCurrentPlayer().getNamePlayer());
+
+				// view.enableViewPlayer(model.getCurrentPlayerIndex(), true);
+				// view.enableViewPlayer(model.getNextPlayerIndex(), false);
+
+				view.loadCards(server.getHandCards(), 0);
+				view.loadCards(client.getHandCards(), 1);
+				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
+
+				changeTurnView(playingPlayer);
+			}
+		});
+	}
+
+	/**
+	 * 
+	 * @param server
+	 * @param client
+	 */
+	public void logPlayerCards(Player server, Player client)
 	{
 		for (int i = 0; i < server.getHandCards().getNumberOfCards(); i++)
 		{
@@ -251,23 +330,6 @@ public class NetClient
 			System.out.println(client.getHandCards().getCard(i).getCardType() + " - "
 					+ client.getHandCards().getCard(i).getCardColor());
 		}
-
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				view.setTurn(model.getCurrentPlayer().getNamePlayer());
-
-				view.enableViewPlayer(model.getCurrentPlayerIndex(), true);
-				view.enableViewPlayer(model.getNextPlayerIndex(), false);
-
-				view.loadCards(server.getHandCards(), 0);
-
-				view.loadCards(client.getHandCards(), 1);
-				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
-			}
-		});
 	}
 
 	/**
