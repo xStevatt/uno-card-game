@@ -86,10 +86,11 @@ public class NetServer
 				checkPlayerSaidUno();
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+
 				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
 				{
 					turnGame();
-					updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 					try
 					{
@@ -125,22 +126,25 @@ public class NetServer
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		CardView.isCardSelected = false;
+		CardBackView.isCardDrawnFromDeck = false;
 	}
 
 	public void turnGame()
 	{
-		try
-		{
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		if (CardView.isCardSelected == true)
 		{
+			try
+			{
+				Thread.sleep(1000);
+			}
+			catch (InterruptedException e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 			System.out.println("[SERVER] - card selected");
 
 			if (model.hasPlayerOneCard() && !view.isUnoButtonPressed())
@@ -181,6 +185,16 @@ public class NetServer
 		}
 		if (CardBackView.isCardDrawnFromDeck == true && model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
 		{
+			try
+			{
+				Thread.sleep(1000);
+			}
+			catch (InterruptedException e1)
+			{
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
 			System.out.println("[SERVER] - Card drawn");
 
 			if (model.hasPlayerOneCard() && view.isUnoButtonPressed())

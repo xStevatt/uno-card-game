@@ -58,6 +58,9 @@ public class NetClient
 		executor.execute(this::listenToServer);
 	}
 
+	/**
+	 * 
+	 */
 	public void runGameLogic()
 	{
 		// WAITS FOR SERVER TO SEND MODEL
@@ -117,6 +120,9 @@ public class NetClient
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public void turnGame()
 	{
 		try
@@ -193,6 +199,10 @@ public class NetClient
 		CardBackView.isCardDrawnFromDeck = false;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public GameModel waitForServer()
 	{
 		while (objReceivedGame == null)
@@ -206,6 +216,11 @@ public class NetClient
 		return null;
 	}
 
+	/**
+	 * 
+	 * @param server
+	 * @param client
+	 */
 	public void updateView(Player server, Player client)
 	{
 		for (int i = 0; i < server.getHandCards().getNumberOfCards(); i++)
@@ -238,6 +253,9 @@ public class NetClient
 		});
 	}
 
+	/**
+	 * 
+	 */
 	public void checkPlayerSaidUno()
 	{
 		if (model.hasPlayerOneCard(model.getCurrentPlayer()))
