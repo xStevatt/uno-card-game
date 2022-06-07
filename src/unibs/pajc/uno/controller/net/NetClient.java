@@ -94,7 +94,6 @@ public class NetClient
 			System.out.println(" 1[CLIENT] - waiting for server");
 		}
 
-		System.out.println("HERE 1");
 		this.model = ((GameModel) objReceivedGame);
 		objReceivedGame = null;
 
@@ -136,7 +135,6 @@ public class NetClient
 					}
 					catch (InterruptedException e)
 					{
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}

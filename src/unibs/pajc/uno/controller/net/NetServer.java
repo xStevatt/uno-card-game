@@ -362,8 +362,8 @@ public class NetServer
 			{
 				try
 				{
-					// SENDS SERVER NAME TO CLIENT
-					objOutputStream.writeObject(playerNameServer);
+					// SENDS SERVER NAME TO CLIENT (not necessary)
+					// objOutputStream.writeObject(playerNameServer);
 
 					// TRIES TO READ CLIENT NAME
 					playerNameClient = (String) objInputStream.readObject();

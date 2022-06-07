@@ -115,6 +115,7 @@ public class TableView extends JFrame
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		this.setLocationRelativeTo(null);
 
 		centerPanel = new JPanel()
 		{
@@ -233,6 +234,7 @@ public class TableView extends JFrame
 
 				if (messageInput.length() > 0)
 				{
+					txtSendMessageField.setText("");
 					addChatMessage(messageInput, "Player");
 					TableView.message = messageInput;
 				}
