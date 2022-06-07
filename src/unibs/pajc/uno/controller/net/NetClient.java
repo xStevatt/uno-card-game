@@ -69,7 +69,7 @@ public class NetClient
 				view.setMatchLabel(model.getPlayers().get(1).getNamePlayer(),
 						model.getPlayers().get(0).getNamePlayer());
 
-				view.setTitle(model.getPlayers().get(0).getNamePlayer());
+				view.setTitle(model.getPlayers().get(1).getNamePlayer());
 			}
 		});
 	}
