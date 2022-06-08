@@ -98,6 +98,18 @@ public class NetServer
 		});
 	}
 
+	public void repaintView()
+	{
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				view.repaint();
+			}
+		});
+	}
+
 	/**
 	 * 
 	 * @param playingPlayer
@@ -144,94 +156,32 @@ public class NetServer
 			{
 				checkPlayerSaidUno();
 
-				try
-				{
-					Thread.sleep(1000);
-				}
-				catch (InterruptedException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
 				changeTurnView(model.getCurrentPlayerIndex());
-
-				try
-				{
-					Thread.sleep(100);
-				}
-				catch (InterruptedException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 
 				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false
 						&& model.getCurrentPlayerIndex() == 0)
 				{
-					// System.out.println("Working");
-					try
-					{
-						Thread.sleep(100);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
 					turnGame();
+					repaintView();
 
 					try
 					{
-						Thread.sleep(100);
+						Thread.sleep(1000);
 					}
 					catch (InterruptedException e)
 					{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}
-
-				try
-				{
-					Thread.sleep(500);
-				}
-				catch (InterruptedException e1)
-				{
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
 				}
 
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
-				// --------- SENDS MATCH MODEL TO SERVER ----------
-				System.out.println("[SERVER] - Sending model to client. Number of cards server: "
-						+ model.getPlayers().get(0).getHandCards().getNumberOfCards());
 
 				sendToClient(model);
-
-				try
-				{
-					Thread.sleep(500);
-				}
-				catch (InterruptedException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 			}
 			if (model.getCurrentPlayerIndex() == 1)
 			{
 				changeTurnView(model.getCurrentPlayerIndex());
-
-				try
-				{
-					Thread.sleep(1000);
-				}
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
 
 				this.model = waitForClient();
 
@@ -241,32 +191,15 @@ public class NetServer
 			model.nextTurn();
 		}
 
-		try
-		{
-			Thread.sleep(100);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
 		CardView.isCardSelected = false;
 		CardBackView.isCardDrawnFromDeck = false;
 	}
 
 	public void turnGame()
 	{
-		try
-		{
-			Thread.sleep(100);
-		}
-		catch (InterruptedException e)
-		{
-
-			e.printStackTrace();
-		}
-
 		if (CardView.isCardSelected == true)
 		{
+			System.out.println("[SERVER] - Card selected");
 			manageCardSelected();
 		}
 		if (CardBackView.isCardDrawnFromDeck == true && model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
@@ -289,16 +222,6 @@ public class NetServer
 	 */
 	public void manageCardDrawn()
 	{
-		try
-		{
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e1)
-		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
 		System.out.println("[SERVER] - Card drawn");
 
 		if (model.hasPlayerOneCard() && view.isUnoButtonPressed())
@@ -309,7 +232,16 @@ public class NetServer
 
 		model.getCurrentPlayer().addCard(model.getCardFromDeck());
 		updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
-		model.nextTurn();
+
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 
 	/**
@@ -323,6 +255,16 @@ public class NetServer
 		{
 			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
 			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+		}
+
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		if (model.isPlacedCardValid(CardView.cardSelected))
@@ -372,6 +314,7 @@ public class NetServer
 
 	public void logCurrentCards(Player server, Player client)
 	{
+		System.out.println("\n");
 		for (int i = 0; i < server.getHandCards().getNumberOfCards(); i++)
 		{
 			System.out.println(server.getHandCards().getCard(i).getCardType() + " - "
@@ -500,11 +443,12 @@ public class NetServer
 		{
 			try
 			{
-				Thread.sleep(100);
+				Thread.sleep(1000);
 			}
-			catch (InterruptedException e)
+			catch (InterruptedException e1)
 			{
 				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			if (TableView.message.equals("") == false)
 			{
@@ -528,7 +472,7 @@ public class NetServer
 	 * 
 	 * @param objToSend the object to send to the client
 	 */
-	public synchronized void sendToClient(Object objToSend)
+	public void sendToClient(Object objToSend)
 	{
 		if (objToSend instanceof GameModel)
 		{

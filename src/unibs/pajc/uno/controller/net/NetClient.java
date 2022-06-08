@@ -144,16 +144,6 @@ public class NetClient
 
 		this.model = ((GameModel) objReceivedGame);
 
-		try
-		{
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e2)
-		{
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-
 		objReceivedGame = null;
 
 		// UNA VOLTA CHE RICEVE IL MODEL INIZIALIZZA LA GRAFICA
@@ -178,18 +168,17 @@ public class NetClient
 
 			if (model.getCurrentPlayerIndex() == 0)
 			{
-				this.model = waitForServer();
-
-				try
+				while (objReceivedGame == null)
 				{
-					Thread.sleep(100);
+					if (objReceivedGame != null && objReceivedGame instanceof GameModel
+							&& ((GameModel) objReceivedGame).getPlayers().get(0).getHandCards()
+									.getNumberOfCards() != model.getPlayers().get(0).getHandCards().getNumberOfCards())
+					{
+						System.out.println(
+								((GameModel) objReceivedGame).getPlayers().get(0).getHandCards().getNumberOfCards());
+						model = (GameModel) objReceivedGame;
+					}
 				}
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-
-				executor.execute(this::waitForServer);
 
 				objReceivedGame = null;
 
@@ -214,15 +203,6 @@ public class NetClient
 						&& model.getCurrentPlayerIndex() == 1)
 				{
 					turnGame();
-
-					try
-					{
-						Thread.sleep(1000);
-					}
-					catch (InterruptedException e)
-					{
-						e.printStackTrace();
-					}
 					updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
 				}
 
@@ -235,16 +215,6 @@ public class NetClient
 	 */
 	public void turnGame()
 	{
-		try
-		{
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		if (CardView.isCardSelected == true)
 		{
 			manageCardSelected();
@@ -323,7 +293,6 @@ public class NetClient
 	{
 		while (objReceivedGame == null)
 		{
-			System.out.println("HERE");
 			if (objReceivedGame != null && objReceivedGame instanceof GameModel
 					&& ((GameModel) objReceivedGame).getPlayers().get(0).getHandCards().getNumberOfCards() != model
 							.getPlayers().get(0).getHandCards().getNumberOfCards())
@@ -398,7 +367,6 @@ public class NetClient
 					e.printStackTrace();
 				}
 			}
-			// initializeGame();
 		}
 		catch (UnknownHostException e)
 		{
@@ -481,7 +449,6 @@ public class NetClient
 			}
 			catch (InterruptedException e)
 			{
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
