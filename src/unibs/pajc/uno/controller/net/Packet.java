@@ -1,5 +1,6 @@
 package unibs.pajc.uno.controller.net;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import unibs.pajc.uno.model.card.Card;
@@ -7,8 +8,12 @@ import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.card.CardDeck;
 import unibs.pajc.uno.model.player.Player;
 
-public class Packet
+public class Packet implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8639405824892164137L;
 	private ArrayList<Player> players;
 	private CardDeck deck;
 	private Card cardPlaced;

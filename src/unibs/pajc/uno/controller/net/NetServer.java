@@ -127,7 +127,9 @@ public class NetServer
 		model.initPlayers(new ArrayList<Player>(Arrays.asList(new Player[] { server, client })));
 
 		// SENDING MODEL TO CLIENT
-		sendToClient(model);
+		sendToClient(new Packet(model.getPlayers(), model.getLastCardUsed(), model.getCurrentCardColor(),
+				model.getCardsDeck(), model.getCurrentPlayerIndex()));
+
 		updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
 
 		while (!model.isGameOver())

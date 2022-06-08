@@ -143,9 +143,21 @@ public class NetClient
 			System.out.println("[CLIENT] - waiting for server");
 		}
 
-		this.model = ((GameModel) objReceivedGame);
+		this.model = new GameModel(((Packet) objReceivedGame).getPlayers(), ((Packet) objReceivedGame).getCardPlaced(),
+				((Packet) objReceivedGame).getCurrentCardColor(), ((Packet) objReceivedGame).getDeck(),
+				((Packet) objReceivedGame).getCurrentTurn());
 
 		objReceivedGame = null;
+
+		try
+		{
+			objOutputStream.flush();
+		}
+		catch (IOException e2)
+		{
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 
 		// UNA VOLTA CHE RICEVE IL MODEL INIZIALIZZA LA GRAFICA
 		initView();
@@ -442,16 +454,15 @@ public class NetClient
 
 					Thread.sleep(1000);
 				}
-				if (objReceived != null && objReceived instanceof GameModel)
+				if (objReceived != null && objReceived instanceof Packet)
 				{
 					System.out.println("[CLIENT] - New game model received from server. \n"
-							+ ((GameModel) objReceived).getPlayers().get(0).getNamePlayer() + " - number of cards: "
-							+ ((GameModel) objReceived).getPlayers().get(0).getHandCards().getNumberOfCards()
-							+ ((GameModel) objReceived).getPlayers().get(1).getNamePlayer() + " - number of cards: "
-							+ ((GameModel) objReceived).getPlayers().get(1).getHandCards().getNumberOfCards());
+							+ ((Packet) objReceived).getPlayers().get(0).getNamePlayer() + " - number of cards: "
+							+ ((Packet) objReceived).getPlayers().get(0).getHandCards().getNumberOfCards()
+							+ ((Packet) objReceived).getPlayers().get(1).getNamePlayer() + " - number of cards: "
+							+ ((Packet) objReceived).getPlayers().get(1).getHandCards().getNumberOfCards());
 
 					objReceivedGame = objReceived;
-					this.model = (GameModel) objReceived;
 				}
 			}
 			catch (EOFException e)
