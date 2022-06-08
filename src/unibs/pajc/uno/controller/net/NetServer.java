@@ -33,10 +33,10 @@ public class NetServer
 
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
-	private Object objReceivedGame = null;
+	private volatile Object objReceivedGame = null;
 
 	private TableView view;
-	private GameModel model;
+	private volatile GameModel model;
 
 	private String playerNameServer = null;
 	private String playerNameClient = null;
@@ -82,6 +82,7 @@ public class NetServer
 			@Override
 			public void run()
 			{
+				view.repaint();
 				logCurrentCards(server, client);
 
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
@@ -204,8 +205,11 @@ public class NetServer
 
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
 				// --------- SENDS MATCH MODEL TO SERVER ----------
-				System.out.println("[SERVER] - Sending model to client");
-				sendToClient(model);
+				System.out.println("[SERVER] - Sending model to client. Number of cards server: "
+						+ model.getPlayers().get(0).getHandCards().getNumberOfCards());
+
+				sendToClient(new GameModel(model.getPlayers(), model.getLastCardUsed(), model.getCardsDeck(),
+						model.getCurrentPlayerIndex()));
 
 				try
 				{
@@ -229,8 +233,6 @@ public class NetServer
 				{
 					e.printStackTrace();
 				}
-
-				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
 				this.model = waitForClient();
 
@@ -527,8 +529,11 @@ public class NetServer
 	 * 
 	 * @param objToSend the object to send to the client
 	 */
-	public void sendToClient(Object objToSend)
+	public synchronized void sendToClient(Object objToSend)
 	{
+		System.out.println(((GameModel) objToSend).getPlayers().get(0).getNamePlayer() + " . "
+				+ ((GameModel) objToSend).getPlayers().get(0).getHandCards().getNumberOfCards());
+
 		try
 		{
 			objOutputStream.writeObject(objToSend);

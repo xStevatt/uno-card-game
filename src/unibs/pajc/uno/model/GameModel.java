@@ -40,6 +40,15 @@ public class GameModel implements Serializable
 		initGameElements();
 	}
 
+	public GameModel(ArrayList<Player> players, Card cardPlaced, CardDeck deck, int turn)
+	{
+		this.players = new ArrayList<>(players);
+		this.usedCards = new UsedPile(cardPlaced);
+		this.cardsDeck = deck;
+
+		turnIterator = new PlayerRoundIterator(players, turn);
+	}
+
 	/**
 	 * Constructor that allows to set a custom number of players
 	 * 

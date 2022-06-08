@@ -36,7 +36,7 @@ public class NetClient
 	private volatile String playerNameServer;
 
 	private TableView view;
-	private GameModel model;
+	private volatile GameModel model;
 
 	public NetClient(String IP_ADDRESS, int port, String playerName)
 	{
@@ -86,15 +86,16 @@ public class NetClient
 			@Override
 			public void run()
 			{
-				// SETS LABEL WITH TURN
+				// view.removeAll();
+
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
 				view.loadCards(client.getHandCards(), 0);
 				view.addCardsToViewBack(server.getHandCards().getNumberOfCards());
-
 				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
 
 				changeTurnView(playingPlayer);
+
 				view.repaint();
 			}
 		});
@@ -167,7 +168,7 @@ public class NetClient
 
 				try
 				{
-					Thread.sleep(1000);
+					Thread.sleep(100);
 				}
 				catch (InterruptedException e)
 				{
@@ -176,16 +177,19 @@ public class NetClient
 				}
 
 				System.out.println("HERE");
+				System.out.println(
+						"Sever number of cards: " + model.getPlayers().get(0).getHandCards().getNumberOfCards());
+
 				if (Objects.isNull(model))
 				{
-					System.out.println("here");
+					System.out.println("Model is null");
 				}
 
 				objReceivedGame = null;
 
 				try
 				{
-					Thread.sleep(1000);
+					Thread.sleep(100);
 				}
 				catch (InterruptedException e)
 				{
@@ -422,8 +426,11 @@ public class NetClient
 				}
 				if (objReceived != null && objReceived instanceof GameModel)
 				{
-					System.out.println("[CLIENT] - New game model received from server. Adversary: "
-							+ ((GameModel) objReceived).getPlayers().get(0).getNamePlayer());
+					System.out.println("[CLIENT] - New game model received from server. \n"
+							+ ((GameModel) objReceived).getPlayers().get(0).getNamePlayer() + " - number of cards: "
+							+ ((GameModel) objReceived).getPlayers().get(0).getHandCards().getNumberOfCards()
+							+ ((GameModel) objReceived).getPlayers().get(1).getNamePlayer() + " - number of cards: "
+							+ ((GameModel) objReceived).getPlayers().get(1).getHandCards().getNumberOfCards());
 
 					objReceivedGame = objReceived;
 				}

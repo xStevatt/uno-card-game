@@ -19,6 +19,12 @@ public class PlayerRoundIterator implements Serializable
 		this.players = players;
 	}
 
+	public PlayerRoundIterator(ArrayList<Player> players, int current)
+	{
+		this.players = players;
+		this.current = current;
+	}
+
 	/**
 	 * 
 	 * @return
@@ -78,5 +84,13 @@ public class PlayerRoundIterator implements Serializable
 		previous = current;
 		int increment = direction == Direction.CLOCKWISE ? 1 : -1;
 		return (players.size() + current + increment) % players.size();
+	}
+
+	/**
+	 * 
+	 */
+	public void setCurrentPlayer(int turn)
+	{
+		this.current = turn;
 	}
 }
