@@ -10,10 +10,6 @@ import unibs.pajc.uno.model.player.Player;
 
 public class Packet implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8639405824892164137L;
 	private ArrayList<Player> players;
 	private CardDeck deck;
 	private Card cardPlaced;

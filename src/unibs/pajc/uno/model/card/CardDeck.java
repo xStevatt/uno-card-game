@@ -15,10 +15,6 @@ import unibs.pajc.uno.model.GameRules;
  */
 public class CardDeck implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private ArrayList<Card> cardDeck;
 
 	public CardDeck()

@@ -6,10 +6,6 @@ import unibs.pajc.uno.model.card.Card;
 
 public class Player implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private final String namePlayer;
 	private final int index;
 	private HandCards handCards;
