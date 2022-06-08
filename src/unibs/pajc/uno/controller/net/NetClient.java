@@ -125,6 +125,8 @@ public class NetClient
 	 */
 	public void runGameLogic()
 	{
+		objReceivedGame = null;
+
 		// WAITS FOR SERVER TO SEND MODEL
 		while (objReceivedGame == null)
 		{
@@ -141,6 +143,17 @@ public class NetClient
 		}
 
 		this.model = ((GameModel) objReceivedGame);
+
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e2)
+		{
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
 		objReceivedGame = null;
 
 		// UNA VOLTA CHE RICEVE IL MODEL INIZIALIZZA LA GRAFICA
@@ -176,9 +189,7 @@ public class NetClient
 					e.printStackTrace();
 				}
 
-				System.out.println("HERE");
-
-				model = waitForServer();
+				executor.execute(this::waitForServer);
 
 				objReceivedGame = null;
 
@@ -308,11 +319,14 @@ public class NetClient
 	 * 
 	 * @return
 	 */
-	public synchronized GameModel waitForServer()
+	public GameModel waitForServer()
 	{
 		while (objReceivedGame == null)
 		{
-			if (objReceivedGame != null && objReceivedGame instanceof GameModel)
+			System.out.println("HERE");
+			if (objReceivedGame != null && objReceivedGame instanceof GameModel
+					&& ((GameModel) objReceivedGame).getPlayers().get(0).getHandCards().getNumberOfCards() != model
+							.getPlayers().get(0).getHandCards().getNumberOfCards())
 			{
 				System.out.println(((GameModel) objReceivedGame).getPlayers().get(0).getHandCards().getNumberOfCards());
 				return ((GameModel) objReceivedGame);

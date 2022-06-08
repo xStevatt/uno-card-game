@@ -208,8 +208,7 @@ public class NetServer
 				System.out.println("[SERVER] - Sending model to client. Number of cards server: "
 						+ model.getPlayers().get(0).getHandCards().getNumberOfCards());
 
-				sendToClient(new GameModel(model.getPlayers(), model.getLastCardUsed(), model.getCardsDeck(),
-						model.getCurrentPlayerIndex()));
+				sendToClient(model);
 
 				try
 				{
@@ -531,8 +530,11 @@ public class NetServer
 	 */
 	public synchronized void sendToClient(Object objToSend)
 	{
-		System.out.println(((GameModel) objToSend).getPlayers().get(0).getNamePlayer() + " . "
-				+ ((GameModel) objToSend).getPlayers().get(0).getHandCards().getNumberOfCards());
+		if (objToSend instanceof GameModel)
+		{
+			System.out.println(((GameModel) objToSend).getPlayers().get(0).getNamePlayer() + " . "
+					+ ((GameModel) objToSend).getPlayers().get(0).getHandCards().getNumberOfCards());
+		}
 
 		try
 		{
