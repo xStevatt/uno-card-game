@@ -6,7 +6,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -38,6 +37,8 @@ public class NetClient
 	private TableView view;
 	private volatile GameModel model;
 
+	private ExecutorService executor;
+
 	public NetClient(String IP_ADDRESS, int port, String playerName)
 	{
 		this.IP_ADDRESS = IP_ADDRESS;
@@ -47,9 +48,8 @@ public class NetClient
 		startClient();
 		System.out.println("[CLIENT] - starting");
 		view = new TableView(null, null, false);
-		// view.setVisible(true);
 
-		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+		executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 		executor.execute(this::listenForNewMessagesToSend);
 		executor.execute(this::listenToServer);
@@ -143,6 +143,7 @@ public class NetClient
 		this.model = ((GameModel) objReceivedGame);
 		objReceivedGame = null;
 
+		// UNA VOLTA CHE RICEVE IL MODEL INIZIALIZZA LA GRAFICA
 		initView();
 
 		this.playerNameServer = model.getPlayers().get(0).getNamePlayer();
@@ -172,18 +173,12 @@ public class NetClient
 				}
 				catch (InterruptedException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 				System.out.println("HERE");
-				System.out.println(
-						"Sever number of cards: " + model.getPlayers().get(0).getHandCards().getNumberOfCards());
 
-				if (Objects.isNull(model))
-				{
-					System.out.println("Model is null");
-				}
+				model = waitForServer();
 
 				objReceivedGame = null;
 
@@ -313,12 +308,13 @@ public class NetClient
 	 * 
 	 * @return
 	 */
-	public GameModel waitForServer()
+	public synchronized GameModel waitForServer()
 	{
 		while (objReceivedGame == null)
 		{
 			if (objReceivedGame != null && objReceivedGame instanceof GameModel)
 			{
+				System.out.println(((GameModel) objReceivedGame).getPlayers().get(0).getHandCards().getNumberOfCards());
 				return ((GameModel) objReceivedGame);
 			}
 		}
@@ -405,7 +401,7 @@ public class NetClient
 	/**
 	 * Makes the server listen to the client
 	 */
-	private synchronized void listenToServer()
+	private void listenToServer()
 	{
 		while (true)
 		{
@@ -461,7 +457,7 @@ public class NetClient
 	/**
 	 * Listens for new messages to send
 	 */
-	public void listenForNewMessagesToSend()
+	public synchronized void listenForNewMessagesToSend()
 	{
 		while (true)
 		{
