@@ -40,11 +40,12 @@ public class GameModel implements Serializable
 		initGameElements();
 	}
 
-	public GameModel(ArrayList<Player> players, Card cardPlaced, CardDeck deck, int turn)
+	public GameModel(ArrayList<Player> players, Card cardPlaced, CardColor currentCardColor, CardDeck deck, int turn)
 	{
 		this.players = new ArrayList<>(players);
 		this.usedCards = new UsedPile(cardPlaced);
 		this.cardsDeck = deck;
+		this.currentCardColor = currentCardColor;
 
 		turnIterator = new PlayerRoundIterator(players, turn);
 	}
@@ -153,7 +154,7 @@ public class GameModel implements Serializable
 	 */
 	public synchronized boolean evalMossa(Card card)
 	{
-		turnIterator.getCurrentPlayer().removeCard(card);
+		players.get(turnIterator.getIndexCurrentPlayer()).removeCard(card);
 		usedCards.addCard(card);
 
 		System.out.println("Current player has "

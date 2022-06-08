@@ -48,6 +48,7 @@ public class NetClient
 		startClient();
 		System.out.println("[CLIENT] - starting");
 		view = new TableView(null, null, false);
+		view.setTitle(playerNameClient);
 
 		executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
@@ -151,7 +152,6 @@ public class NetClient
 
 		this.playerNameServer = model.getPlayers().get(0).getNamePlayer();
 		this.playerNameClient = model.getPlayers().get(1).getNamePlayer();
-		System.out.println("Server name in running: " + model.getPlayers().get(0).getNamePlayer());
 
 		try
 		{
@@ -168,17 +168,20 @@ public class NetClient
 
 			if (model.getCurrentPlayerIndex() == 0)
 			{
-				while (objReceivedGame == null)
+				try
 				{
-					if (objReceivedGame != null && objReceivedGame instanceof GameModel
-							&& ((GameModel) objReceivedGame).getPlayers().get(0).getHandCards()
-									.getNumberOfCards() != model.getPlayers().get(0).getHandCards().getNumberOfCards())
-					{
-						System.out.println(
-								((GameModel) objReceivedGame).getPlayers().get(0).getHandCards().getNumberOfCards());
-						model = (GameModel) objReceivedGame;
-					}
+					Thread.sleep(10);
 				}
+				catch (InterruptedException e1)
+				{
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				Packet packet = waitForServer();
+
+				this.model = new GameModel(packet.getPlayers(), packet.getCardPlaced(), packet.getCurrentCardColor(),
+						packet.getDeck(), packet.getCurrentTurn());
 
 				objReceivedGame = null;
 
@@ -232,6 +235,18 @@ public class NetClient
 		// RESETTING FLAGS
 		CardView.isCardSelected = false;
 		CardBackView.isCardDrawnFromDeck = false;
+
+		try
+		{
+			Thread.sleep(100);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
 	}
 
 	/**
@@ -289,16 +304,14 @@ public class NetClient
 	 * 
 	 * @return
 	 */
-	public GameModel waitForServer()
+	public Packet waitForServer()
 	{
 		while (objReceivedGame == null)
 		{
-			if (objReceivedGame != null && objReceivedGame instanceof GameModel
-					&& ((GameModel) objReceivedGame).getPlayers().get(0).getHandCards().getNumberOfCards() != model
-							.getPlayers().get(0).getHandCards().getNumberOfCards())
+			if (objReceivedGame != null && objReceivedGame instanceof Packet)
 			{
-				System.out.println(((GameModel) objReceivedGame).getPlayers().get(0).getHandCards().getNumberOfCards());
-				return ((GameModel) objReceivedGame);
+				System.out.println(((Packet) objReceivedGame).getPlayers().get(0).getHandCards().getNumberOfCards());
+				return ((Packet) objReceivedGame);
 			}
 		}
 
@@ -380,6 +393,33 @@ public class NetClient
 		}
 	}
 
+	public void listenToServerForModel()
+	{
+		while (true)
+		{
+			Object objReceivedModel = null;
+
+			try
+			{
+				objReceivedModel = objInputStream.readObject();
+
+				if (objReceivedModel != null && objReceivedModel instanceof String)
+				{
+					System.out.println("[CLIENT] - Message received from server: " + ((String) objReceivedModel));
+
+					System.out.println("Server name: " + playerNameServer);
+					view.addChatMessage((String) objReceivedModel, playerNameServer);
+
+					Thread.sleep(1000);
+				}
+			}
+			catch (Exception e)
+			{
+
+			}
+		}
+	}
+
 	/**
 	 * Makes the server listen to the client
 	 */
@@ -411,6 +451,7 @@ public class NetClient
 							+ ((GameModel) objReceived).getPlayers().get(1).getHandCards().getNumberOfCards());
 
 					objReceivedGame = objReceived;
+					this.model = (GameModel) objReceived;
 				}
 			}
 			catch (EOFException e)
@@ -487,6 +528,8 @@ public class NetClient
 			{
 				System.out.println("[CLIENT] - Message sent: " + (String) objToSend);
 			}
+
+			objOutputStream.flush();
 		}
 		catch (IOException e)
 		{
