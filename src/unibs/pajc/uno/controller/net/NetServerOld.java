@@ -129,8 +129,7 @@ public class NetServerOld
 				model.initPlayers(new ArrayList<Player>(Arrays.asList(new Player[] { server, client })));
 
 				// SENDING MODEL TO CLIENT
-				sendToClient(new Packet(model.getPlayers(), model.getLastCardUsed(), model.getCurrentCardColor(),
-						model.getCardsDeck(), model.getCurrentPlayerIndex()));
+				sendToClient(model);
 
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
 
@@ -141,8 +140,7 @@ public class NetServerOld
 						changeTurnView(0);
 						manageCurrentAction();
 
-						sendToClient(new Packet(model.getPlayers(), model.getLastCardUsed(),
-								model.getCurrentCardColor(), model.getCardsDeck(), model.getCurrentPlayerIndex()));
+						sendToClient(model);
 
 						System.out.println("Current turn: " + model.getCurrentPlayerIndex());
 						updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
@@ -154,11 +152,11 @@ public class NetServerOld
 					{
 						changeTurnView(1);
 
-						Packet packetReceived = null;
+						GameModel updatedModel = null;
 
-						while (Objects.isNull(packetReceived))
+						while (Objects.isNull(updatedModel))
 						{
-							packetReceived = waitForClient();
+							updatedModel = waitForClient();
 
 							try
 							{
@@ -170,9 +168,8 @@ public class NetServerOld
 								e.printStackTrace();
 							}
 						}
-						model = new GameModel(packetReceived.getPlayers(), packetReceived.getCardPlaced(),
-								packetReceived.getCurrentCardColor(), packetReceived.getDeck(),
-								packetReceived.getCurrentTurn());
+
+						model = updatedModel;
 					}
 				}
 
@@ -283,13 +280,13 @@ public class NetServerOld
 		CardView.isCardSelected = false;
 	}
 
-	public Packet waitForClient()
+	public GameModel waitForClient()
 	{
 		while (objReceivedGame == null)
 		{
-			if (objReceivedGame != null && objReceivedGame instanceof Packet)
+			if (objReceivedGame != null && objReceivedGame instanceof GameModel)
 			{
-				return ((Packet) objReceivedGame);
+				return ((GameModel) objReceivedGame);
 			}
 		}
 
@@ -378,7 +375,7 @@ public class NetServerOld
 
 					view.addChatMessage((String) objReceived, playerNameClient);
 				}
-				if (objReceived != null && objReceived instanceof Packet)
+				if (objReceived != null && objReceived instanceof GameModel)
 				{
 					objReceivedGame = objReceived;
 					System.out.println("[SERVER] - Game model received");
