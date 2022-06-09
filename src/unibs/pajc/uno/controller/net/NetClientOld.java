@@ -513,6 +513,7 @@ public class NetClientOld
 	{
 		try
 		{
+			objOutputStream.reset();
 			objOutputStream.writeObject(objToSend);
 
 			if (objToSend instanceof String)

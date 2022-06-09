@@ -414,15 +414,6 @@ public class NetServerOld
 	{
 		while (true)
 		{
-			try
-			{
-				Thread.sleep(1000);
-			}
-			catch (InterruptedException e1)
-			{
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
 			if (TableView.message.equals("") == false)
 			{
 				sendToClient(TableView.message);
@@ -449,11 +440,7 @@ public class NetServerOld
 	{
 		try
 		{
-			if (objToSend instanceof Packet)
-			{
-				System.out.println("[SERVER] - sending packet");
-			}
-
+			objOutputStream.reset();
 			objOutputStream.writeObject(objToSend);
 
 			if (objToSend instanceof String)
