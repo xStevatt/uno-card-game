@@ -116,7 +116,6 @@ public class MainApp extends JFrame
 		ImageIcon image = new ImageIcon(bannerImage);
 
 		bannerLabel = new JLabel(""); // Add text to main banner
-		new JLabel("A chess game in Java");
 
 		bannerLabel.setForeground(new Color(20, 20, 20));
 		bannerLabel.setIcon(image);

@@ -41,9 +41,6 @@ public class NetServerOld
 	private String playerNameServer = null;
 	private String playerNameClient = null;
 
-	private Packet packetReceived = null;
-	private int currentIteration = 0;
-
 	public NetServerOld(String IP_ADDRESS, int PORT, String playerNameServer)
 	{
 		this.IP_ADDRESS = IP_ADDRESS;
@@ -135,7 +132,7 @@ public class NetServerOld
 
 				// SENDING MODEL TO CLIENT
 				sendToClient(new Packet(model.getPlayers(), model.getLastCardUsed(), model.getCurrentCardColor(),
-						model.getCardsDeck(), model.getCurrentPlayerIndex(), 0));
+						model.getCardsDeck(), model.getCurrentPlayerIndex()));
 
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
 
@@ -145,9 +142,8 @@ public class NetServerOld
 					{
 						manageCurrentAction();
 
-						sendToClient(
-								new Packet(model.getPlayers(), model.getLastCardUsed(), model.getCurrentCardColor(),
-										model.getCardsDeck(), model.getCurrentPlayerIndex(), currentIteration++));
+						sendToClient(new Packet(model.getPlayers(), model.getLastCardUsed(),
+								model.getCurrentCardColor(), model.getCardsDeck(), model.getCurrentPlayerIndex()));
 
 						System.out.println("Current turn: " + model.getCurrentPlayerIndex());
 						updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());

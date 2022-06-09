@@ -6,6 +6,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -35,9 +36,6 @@ public class NetClientOld
 
 	private TableView view;
 	private GameModel model;
-
-	private Packet packetReceived = null;
-	private int currentIteration = 0;
 
 	public NetClientOld(String IP_ADDRESS, int port, String playerName)
 	{
@@ -71,15 +69,11 @@ public class NetClientOld
 						model.getPlayers().get(0).getNamePlayer());
 
 				view.setTitle(model.getPlayers().get(1).getNamePlayer());
+				view.repaint();
 			}
 		});
 	}
 
-	/**
-	 * 
-	 * @param server
-	 * @param client
-	 */
 	public void updateView(Player server, Player client, int playingPlayer)
 	{
 		SwingUtilities.invokeLater(new Runnable()
@@ -87,8 +81,6 @@ public class NetClientOld
 			@Override
 			public void run()
 			{
-				// view.removeAll();
-
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
 				view.loadCards(client.getHandCards(), 0);
@@ -121,19 +113,17 @@ public class NetClientOld
 		});
 	}
 
-	/**
-	 * 
-	 */
 	public void runGameLogic()
 	{
-		objReceivedGame = null;
+		Packet startingPacket = null;
 
 		// WAITS FOR SERVER TO SEND MODEL
-		while (objReceivedGame == null)
+		while (Objects.isNull(startingPacket))
 		{
 			try
 			{
-				Thread.sleep(1000);
+				startingPacket = waitForServer();
+				Thread.sleep(200);
 			}
 			catch (InterruptedException e)
 			{
@@ -143,47 +133,46 @@ public class NetClientOld
 			System.out.println("[CLIENT] - waiting for server");
 		}
 
-		this.model = new GameModel(((Packet) objReceivedGame).getPlayers(), ((Packet) objReceivedGame).getCardPlaced(),
-				((Packet) objReceivedGame).getCurrentCardColor(), ((Packet) objReceivedGame).getDeck(),
-				((Packet) objReceivedGame).getCurrentTurn());
+		this.model = new GameModel(((Packet) startingPacket).getPlayers(), ((Packet) startingPacket).getCardPlaced(),
+				((Packet) startingPacket).getCurrentCardColor(), ((Packet) startingPacket).getDeck(),
+				((Packet) startingPacket).getCurrentTurn());
 
+		startingPacket = null;
 		objReceivedGame = null;
 
 		// UNA VOLTA CHE RICEVE IL MODEL INIZIALIZZA LA GRAFICA
 		initView();
-
 		this.playerNameServer = model.getPlayers().get(0).getNamePlayer();
 		this.playerNameClient = model.getPlayers().get(1).getNamePlayer();
-
-		try
-		{
-			Thread.sleep(100);
-		}
-		catch (InterruptedException e1)
-		{
-			e1.printStackTrace();
-		}
+		updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
 
 		while (!model.isGameOver())
 		{
+			updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
+
 			if (model.getCurrentPlayerIndex() == 0)
 			{
-				Packet packet = waitForServer();
+				Packet packet = null;
+
+				while (Objects.isNull(packet))
+				{
+					packet = waitForServer();
+
+					try
+					{
+						Thread.sleep(100);
+					}
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
+				}
 
 				this.model = new GameModel(packet.getPlayers(), packet.getCardPlaced(), packet.getCurrentCardColor(),
 						packet.getDeck(), packet.getCurrentTurn());
 
+				packet = null;
 				objReceivedGame = null;
-
-				try
-				{
-					Thread.sleep(100);
-				}
-				catch (InterruptedException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
 
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
 			}
@@ -203,9 +192,6 @@ public class NetClientOld
 		}
 	}
 
-	/**
-	 * 
-	 */
 	public void turnGame()
 	{
 		if (CardView.isCardSelected == true)
@@ -239,9 +225,6 @@ public class NetClientOld
 		updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
 	}
 
-	/**
-	 * 
-	 */
 	private void manageCardDrawn()
 	{
 		System.out.println("[CLIENT] - Card drawn");
@@ -256,9 +239,6 @@ public class NetClientOld
 		model.nextTurn();
 	}
 
-	/**
-	 * 
-	 */
 	private void manageCardSelected()
 	{
 		System.out.println("[CLIENT] - card selected");
@@ -290,31 +270,19 @@ public class NetClientOld
 		CardView.isCardSelected = false;
 	}
 
-	/**
-	 * 
-	 * @return
-	 */
-	public synchronized Packet waitForServer()
+	public Packet waitForServer()
 	{
-		while (objReceivedGame == null && !(objReceivedGame instanceof Packet))
+		if (objReceivedGame != null && objReceivedGame instanceof Packet)
 		{
-			if (objReceivedGame != null && objReceivedGame instanceof Packet)
-			{
-				System.out.println("Client is here");
-				System.out.println(((Packet) objReceivedGame).getPlayers().get(0).getHandCards().getNumberOfCards());
+			System.out.println("Client is here");
+			System.out.println(((Packet) objReceivedGame).getPlayers().get(0).getHandCards().getNumberOfCards());
 
-				return ((Packet) objReceivedGame);
-			}
+			return ((Packet) objReceivedGame);
 		}
 
 		return null;
 	}
 
-	/**
-	 * 
-	 * @param server
-	 * @param client
-	 */
 	public void logPlayerCards(Player server, Player client)
 	{
 		for (int i = 0; i < server.getHandCards().getNumberOfCards(); i++)
@@ -330,9 +298,6 @@ public class NetClientOld
 		}
 	}
 
-	/**
-	 * 
-	 */
 	public void checkPlayerSaidUno()
 	{
 		if (model.hasPlayerOneCard(model.getCurrentPlayer()))
@@ -341,10 +306,6 @@ public class NetClientOld
 		}
 	}
 
-	/**
-	 * 
-	 * @return true if client is successfully connected to the server
-	 */
 	private void startClient()
 	{
 		try
@@ -407,7 +368,7 @@ public class NetClientOld
 			}
 			catch (Exception e)
 			{
-
+				e.printStackTrace();
 			}
 		}
 	}

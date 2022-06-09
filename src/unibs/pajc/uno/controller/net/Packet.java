@@ -19,14 +19,13 @@ public class Packet implements Serializable
 	private int iterationCounter = 0;
 
 	public Packet(ArrayList<Player> players, Card cardPlaced, CardColor currentCardColor, CardDeck deck,
-			int currentTurn, int iterationCounter)
+			int currentTurn)
 	{
 		this.players = players;
 		this.cardPlaced = cardPlaced;
 		this.currentCardColor = currentCardColor;
 		this.currentTurn = currentTurn;
 		this.deck = deck;
-		this.iterationCounter = 0;
 	}
 
 	public void incrementCounter()
