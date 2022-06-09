@@ -74,7 +74,7 @@ public class NetClientOld
 		});
 	}
 
-	public void updateView(Player server, Player client, int playingPlayer)
+	public void updateView(Player server, Player client)
 	{
 		SwingUtilities.invokeLater(new Runnable()
 		{
@@ -86,8 +86,6 @@ public class NetClientOld
 				view.loadCards(client.getHandCards(), 0);
 				view.addCardsToViewBack(server.getHandCards().getNumberOfCards());
 				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
-
-				changeTurnView(playingPlayer);
 
 				view.repaint();
 			}
@@ -117,7 +115,6 @@ public class NetClientOld
 	{
 		Packet startingPacket = null;
 
-		// WAITS FOR SERVER TO SEND MODEL
 		while (Objects.isNull(startingPacket))
 		{
 			try
@@ -144,11 +141,14 @@ public class NetClientOld
 		initView();
 		this.playerNameServer = model.getPlayers().get(0).getNamePlayer();
 		this.playerNameClient = model.getPlayers().get(1).getNamePlayer();
-		updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
+
+		updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+		changeTurnView(0);
 
 		while (!model.isGameOver())
 		{
-			updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
+			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+			view.repaint();
 
 			if (model.getCurrentPlayerIndex() == 0)
 			{
@@ -174,20 +174,20 @@ public class NetClientOld
 				packet = null;
 				objReceivedGame = null;
 
-				updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 			}
-			if (model.getCurrentPlayerIndex() == 1)
+			else if (model.getCurrentPlayerIndex() == 1)
 			{
+				changeTurnView(1);
 				checkPlayerSaidUno();
-				updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
 
 				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false
 						&& model.getCurrentPlayerIndex() == 1)
 				{
 					turnGame();
-					updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
 				}
 
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 			}
 		}
 	}
@@ -211,18 +211,6 @@ public class NetClientOld
 		// RESETTING FLAGS
 		CardView.isCardSelected = false;
 		CardBackView.isCardDrawnFromDeck = false;
-
-		try
-		{
-			Thread.sleep(100);
-		}
-		catch (InterruptedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
 	}
 
 	private void manageCardDrawn()

@@ -422,7 +422,7 @@ public class TableView extends JFrame
 	 * 
 	 * @param index
 	 */
-	public synchronized void enableViewPlayer(int index, boolean enabled)
+	public void enableViewPlayer(int index, boolean enabled)
 	{
 		if (isGameLocal == true)
 		{
@@ -446,14 +446,12 @@ public class TableView extends JFrame
 		{
 			if (index == 0)
 			{
+				System.out.println("HERE");
+
 				for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
 				{
 					((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(enabled);
 				}
-			}
-			if (index == 1)
-			{
-
 			}
 		}
 

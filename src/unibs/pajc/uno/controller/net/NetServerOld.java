@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -75,13 +76,11 @@ public class NetServerOld
 			public void run()
 			{
 				view.repaint();
-				logCurrentCards(server, client);
 
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
 				view.loadCards(server.getHandCards(), 0);
 				view.addCardsToViewBack(client.getHandCards().getNumberOfCards());
-
 				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
 
 				view.repaint();
@@ -119,7 +118,6 @@ public class NetServerOld
 	{
 		new Thread(new Runnable()
 		{
-
 			@Override
 			public void run()
 			{
@@ -140,6 +138,7 @@ public class NetServerOld
 				{
 					if (model.getCurrentPlayerIndex() == 0)
 					{
+						changeTurnView(0);
 						manageCurrentAction();
 
 						sendToClient(new Packet(model.getPlayers(), model.getLastCardUsed(),
@@ -153,11 +152,27 @@ public class NetServerOld
 					}
 					else if (model.getCurrentPlayerIndex() == 1)
 					{
-						// WAITS FOR NEW PACKET FROM CLIENT
-						Packet packet = waitForClient();
+						changeTurnView(1);
 
-						model = new GameModel(packet.getPlayers(), packet.getCardPlaced(), packet.getCurrentCardColor(),
-								packet.getDeck(), packet.getCurrentTurn());
+						Packet packetReceived = null;
+
+						while (Objects.isNull(packetReceived))
+						{
+							packetReceived = waitForClient();
+
+							try
+							{
+								Thread.sleep(200);
+							}
+							catch (InterruptedException e)
+							{
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						model = new GameModel(packetReceived.getPlayers(), packetReceived.getCardPlaced(),
+								packetReceived.getCurrentCardColor(), packetReceived.getDeck(),
+								packetReceived.getCurrentTurn());
 					}
 				}
 
@@ -286,22 +301,6 @@ public class NetServerOld
 		if (model.hasPlayerOneCard(model.getCurrentPlayer()))
 		{
 			view.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
-		}
-	}
-
-	public void logCurrentCards(Player server, Player client)
-	{
-		System.out.println("\n");
-		for (int i = 0; i < server.getHandCards().getNumberOfCards(); i++)
-		{
-			System.out.println(server.getHandCards().getCard(i).getCardType() + " - "
-					+ server.getHandCards().getCard(i).getCardColor());
-		}
-		System.out.println("---");
-		for (int i = 0; i < client.getHandCards().getNumberOfCards(); i++)
-		{
-			System.out.println(client.getHandCards().getCard(i).getCardType() + " - "
-					+ client.getHandCards().getCard(i).getCardColor());
 		}
 	}
 
