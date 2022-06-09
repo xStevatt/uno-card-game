@@ -257,6 +257,16 @@ public class LocalPlayerController
 				JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer()
 						+ " vincitore! Congratulazioni! Non hai vinto assolutamente nulla, se non un briciolo di misera gloria!");
 
+				int selection = JOptionPane.showOptionDialog(gameView, "Do you want to rematch?", "Select an option.",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[] { "Yes", "No" },
+						"No");
+
+				if (selection == 0)
+				{
+					new LocalPlayerController(model.getPlayers().get(0).getNamePlayer(),
+							model.getPlayers().get(1).getNamePlayer());
+				}
+
 				gameView.dispose();
 			}
 		}).start();

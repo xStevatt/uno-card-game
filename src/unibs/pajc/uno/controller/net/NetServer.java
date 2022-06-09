@@ -140,6 +140,16 @@ public class NetServer
 
 				sendToClient(new Packet(model.getPlayers(), model.getLastCardUsed(), model.getCurrentCardColor(),
 						model.getCardsDeck(), model.getCurrentPlayerIndex()));
+				try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getNextPlayerIndex());
 			}
 			if (model.getCurrentPlayerIndex() == 1)
 			{

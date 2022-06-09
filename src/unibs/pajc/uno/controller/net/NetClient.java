@@ -316,12 +316,13 @@ public class NetClient
 	 * 
 	 * @return
 	 */
-	public Packet waitForServer()
+	public synchronized Packet waitForServer()
 	{
 		while (objReceivedGame == null)
 		{
 			if (objReceivedGame != null && objReceivedGame instanceof Packet)
 			{
+				System.out.println("Client is here");
 				System.out.println(((Packet) objReceivedGame).getPlayers().get(0).getHandCards().getNumberOfCards());
 				return ((Packet) objReceivedGame);
 			}
