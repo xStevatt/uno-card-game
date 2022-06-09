@@ -104,6 +104,7 @@ public class MainApp extends JFrame
 				java.awt.Image.SCALE_SMOOTH);
 
 		this.setResizable(false);
+		this.setVisible(true);
 		this.setIconImage(bannerImage);
 		this.setLocationRelativeTo(null);
 	}

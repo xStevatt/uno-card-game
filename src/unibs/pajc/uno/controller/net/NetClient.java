@@ -27,12 +27,12 @@ public class NetClient
 	private final int port;
 	private boolean isConnected = false;
 
-	private ObjectInputStream objInputStream;
-	private ObjectOutputStream objOutputStream;
+	private volatile ObjectInputStream objInputStream;
+	private volatile ObjectOutputStream objOutputStream;
 	private volatile Object objReceivedGame = null;
 
-	private volatile String playerNameClient;
-	private volatile String playerNameServer;
+	private String playerNameClient;
+	private String playerNameServer;
 
 	private TableView view;
 	private volatile GameModel model;
@@ -133,7 +133,7 @@ public class NetClient
 		{
 			try
 			{
-				Thread.sleep(100);
+				Thread.sleep(1000);
 			}
 			catch (InterruptedException e)
 			{
@@ -148,16 +148,6 @@ public class NetClient
 				((Packet) objReceivedGame).getCurrentTurn());
 
 		objReceivedGame = null;
-
-		try
-		{
-			objOutputStream.flush();
-		}
-		catch (IOException e2)
-		{
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
 
 		// UNA VOLTA CHE RICEVE IL MODEL INIZIALIZZA LA GRAFICA
 		initView();
@@ -316,7 +306,7 @@ public class NetClient
 	 * 
 	 * @return
 	 */
-	public synchronized Packet waitForServer()
+	public Packet waitForServer()
 	{
 		while (objReceivedGame == null)
 		{
@@ -492,7 +482,7 @@ public class NetClient
 	/**
 	 * Listens for new messages to send
 	 */
-	public synchronized void listenForNewMessagesToSend()
+	public void listenForNewMessagesToSend()
 	{
 		while (true)
 		{

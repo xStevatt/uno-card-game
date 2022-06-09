@@ -152,7 +152,7 @@ public class GameModel implements Serializable
 	 * @param card
 	 * @param index - if index is 1, then a new color must be chosen
 	 */
-	public synchronized boolean evalMossa(Card card)
+	public boolean evalMossa(Card card)
 	{
 		players.get(turnIterator.getIndexCurrentPlayer()).removeCard(card);
 		usedCards.addCard(card);

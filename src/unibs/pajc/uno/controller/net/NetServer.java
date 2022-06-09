@@ -33,7 +33,7 @@ public class NetServer
 
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
-	private volatile Object objReceivedGame = null;
+	private Object objReceivedGame = null;
 
 	private TableView view;
 	private volatile GameModel model;
@@ -127,7 +127,7 @@ public class NetServer
 		model.initPlayers(new ArrayList<Player>(Arrays.asList(new Player[] { server, client })));
 
 		// SENDING MODEL TO CLIENT
-		sendToClient(new Packet(model.getPlayers(), model.getLastCardUsed(), model.getCurrentCardColor(),
+		sendModelToClient(new Packet(model.getPlayers(), model.getLastCardUsed(), model.getCurrentCardColor(),
 				model.getCardsDeck(), model.getCurrentPlayerIndex()));
 
 		updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
@@ -138,7 +138,7 @@ public class NetServer
 			{
 				manageCurrentAction();
 
-				sendToClient(new Packet(model.getPlayers(), model.getLastCardUsed(), model.getCurrentCardColor(),
+				sendModelToClient(new Packet(model.getPlayers(), model.getLastCardUsed(), model.getCurrentCardColor(),
 						model.getCardsDeck(), model.getCurrentPlayerIndex()));
 				try
 				{
@@ -439,6 +439,21 @@ public class NetServer
 				}
 				TableView.message = "";
 			}
+		}
+	}
+
+	public void sendModelToClient(Object objToSend)
+	{
+		try
+		{
+			objOutputStream.writeObject(objToSend);
+
+			objOutputStream.flush();
+		}
+		catch (IOException e)
+		{
+			System.out.println("Error while sending - Couldn't send object to client");
+			e.printStackTrace();
 		}
 	}
 

@@ -9,6 +9,7 @@ import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.view.CardBackView;
 import unibs.pajc.uno.view.CardView;
 import unibs.pajc.uno.view.DialogSelectNewColor;
+import unibs.pajc.uno.view.PlayerDetailsInfoOffline;
 import unibs.pajc.uno.view.TableView;
 
 public class LocalPlayerController
@@ -258,16 +259,26 @@ public class LocalPlayerController
 						+ " vincitore! Congratulazioni! Non hai vinto assolutamente nulla, se non un briciolo di misera gloria!");
 
 				int selection = JOptionPane.showOptionDialog(gameView, "Do you want to rematch?", "Select an option.",
-						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new String[] { "Yes", "No" },
-						"No");
+						JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
+						new String[] { "Yes", "No", "Yes, but with new players" }, "No");
 
-				if (selection == 0)
+				switch (selection)
 				{
+				case 0:
+					gameView.dispose();
+
 					new LocalPlayerController(model.getPlayers().get(0).getNamePlayer(),
 							model.getPlayers().get(1).getNamePlayer());
+					break;
+				case 1:
+					gameView.dispose();
+					System.exit(0);
+					break;
+				case 2:
+					gameView.dispose();
+					new PlayerDetailsInfoOffline().setVisible(true);
+					break;
 				}
-
-				gameView.dispose();
 			}
 		}).start();
 	}
