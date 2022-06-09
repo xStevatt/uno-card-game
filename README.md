@@ -3,7 +3,7 @@ The iconic Uno card game made in Java
 
 University project for the course "Advanced Programming in Java and C". 
  
-#🇮🇹
+🇮🇹
 
 ### Regole del gioco
 * Viene generato in modo casuale il mazzo di carte. Ciascun mazzo è costituito da: 
