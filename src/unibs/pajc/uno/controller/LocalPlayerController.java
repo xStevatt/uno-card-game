@@ -61,6 +61,7 @@ public class LocalPlayerController
 		gameView.loadCards(playerTwo.getHandCards(), 1);
 
 		gameView.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
+		gameView.repaint();
 	}
 
 	public void runGame()
