@@ -2,9 +2,9 @@ package unibs.pajc.uno.controller.net;
 
 public class NetUtils
 {
-	public static final String DEFAULT_IP_ADDRESS = "127.0.0.1";
+	// public static final String DEFAULT_IP_ADDRESS = "127.0.0.1";
 	public static final int DEFAULT_PORT = 6161;
-	public static final int DEFAULT_SERVER_TIME_OUT = 10000;
+	public static final int DEFAULT_SERVER_TIME_OUT = 100000;
 	public static final int DEFAULT_CLIENT_TIME_OUT = 1000;
 
 	public static final boolean ONLINE_GAME = false;

@@ -23,7 +23,7 @@ import unibs.pajc.uno.view.CardView;
 import unibs.pajc.uno.view.DialogSelectNewColor;
 import unibs.pajc.uno.view.TableView;
 
-public class NetServerOld
+public class NetServer
 {
 	private Socket client;
 	private ServerSocket serverSocket;
@@ -43,7 +43,7 @@ public class NetServerOld
 
 	private Object syncObjectModel = new Object();
 
-	public NetServerOld(String IP_ADDRESS, int PORT, String playerNameServer)
+	public NetServer(String IP_ADDRESS, int PORT, String playerNameServer)
 	{
 		this.IP_ADDRESS = IP_ADDRESS;
 		this.PORT = PORT;
@@ -78,6 +78,7 @@ public class NetServerOld
 			{
 				view.repaint();
 
+				view.setPanelTitles(server.getNamePlayer(), client.getNamePlayer());
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
 				view.loadCards(server.getHandCards(), 0);
@@ -103,10 +104,12 @@ public class NetServerOld
 				if (playingPlayer == 0)
 				{
 					view.enableViewPlayer(0, true);
+					view.getPanelPlaced().setEnabled(true);
 				}
 				if (playingPlayer == 1)
 				{
 					view.enableViewPlayer(0, false);
+					view.getPanelPlaced().setEnabled(false);
 				}
 			}
 		});
@@ -182,11 +185,18 @@ public class NetServerOld
 					}
 				}
 
-				if (model.getWinnerPlayer().getIndex() == 1)
+				if (model.getWinnerPlayer().getIndex() == 0)
 				{
 					JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer()
 							+ " vincitore! Congratulazioni! Non hai vinto assolutamente nulla, se non un briciolo di misera gloria!");
 				}
+				else
+				{
+					JOptionPane.showMessageDialog(null,
+							model.getWinnerPlayer().getNamePlayer() + " hai perso! L'importante è partecipare?");
+				}
+
+				System.exit(0);
 
 				CardView.isCardSelected = false;
 				CardBackView.isCardDrawnFromDeck = false;

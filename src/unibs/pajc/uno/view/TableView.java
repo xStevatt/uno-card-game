@@ -325,6 +325,14 @@ public class TableView extends JFrame
 		initTimer();
 	}
 
+	public void setPanelTitles(String actualPlyer, String adversaryPlayer)
+	{
+		panelActualPlayer
+				.setBorder(new TitledBorder(null, actualPlyer, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panelAdversaryPlayer
+				.setBorder(new TitledBorder(null, adversaryPlayer, TitledBorder.LEADING, TitledBorder.TOP, null, null));
+	}
+
 	public void setMatchLabel(String playerCurrent, String playerAdversary)
 	{
 		lblMatchDescriptor.setText(playerCurrent + " vs " + playerAdversary);
