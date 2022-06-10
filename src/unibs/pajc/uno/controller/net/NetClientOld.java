@@ -38,7 +38,6 @@ public class NetClientOld
 	private GameModel model;
 
 	private Object syncObjectModel = new Object();
-	private static Object syncObjectView = new Object();
 
 	public NetClientOld(String IP_ADDRESS, int port, String playerName)
 	{
@@ -191,9 +190,17 @@ public class NetClientOld
 					turnGame();
 				}
 
-				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+				try
+				{
+					Thread.sleep(10);
+				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
-				System.out.println("Turn: " + model.getCurrentPlayerIndex());
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 				sendToServer(model);
 			}
@@ -202,6 +209,15 @@ public class NetClientOld
 
 	public void turnGame()
 	{
+		try
+		{
+			Thread.sleep(10);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (CardView.isCardSelected == true)
 		{
 			System.out.println("[CLIENT] - Card selected");
@@ -244,7 +260,7 @@ public class NetClientOld
 
 		try
 		{
-			Thread.sleep(100);
+			Thread.sleep(10);
 		}
 		catch (InterruptedException e)
 		{
@@ -381,7 +397,7 @@ public class NetClientOld
 					System.out.println("Server name: " + playerNameServer);
 					view.addChatMessage((String) objReceived, playerNameServer);
 
-					Thread.sleep(1000);
+					Thread.sleep(100);
 				}
 				if (objReceived != null && objReceived instanceof GameModel)
 				{
@@ -395,18 +411,17 @@ public class NetClientOld
 			}
 			catch (EOFException e)
 			{
-				JOptionPane.showMessageDialog(null, "Something went wrong");
+				JOptionPane.showMessageDialog(null, "Server disconnected");
 				System.exit(0);
 			}
 			catch (IOException e)
 			{
-				System.out.println("Errors in listening to the server");
+				JOptionPane.showMessageDialog(null, "Server disconnected");
 				System.exit(0);
-
 			}
 			catch (ClassNotFoundException e)
 			{
-				System.out.print("Class not found");
+				JOptionPane.showMessageDialog(null, "Server disconnected");
 				System.exit(0);
 			}
 			catch (InterruptedException e)

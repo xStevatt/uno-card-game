@@ -15,11 +15,13 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import unibs.pajc.uno.model.card.Card;
-import unibs.pajc.uno.model.card.CardColor;
-import unibs.pajc.uno.model.card.NumberCard;
 
 public class CardView extends JPanel
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	protected final Card card;
 	protected final String value;
 
@@ -36,7 +38,7 @@ public class CardView extends JPanel
 	protected final Border focusedBorder = BorderFactory.createEtchedBorder(JComponent.WHEN_FOCUSED, Color.black,
 			Color.gray);
 
-	public static Card cardSelected = new NumberCard(CardColor.RED, 1);
+	public static Card cardSelected = null;
 
 	public static volatile boolean isCardSelected = false;
 

@@ -42,7 +42,6 @@ public class NetServerOld
 	private String playerNameClient = null;
 
 	private Object syncObjectModel = new Object();
-	public static Object syncObjectView = new Object();
 
 	public NetServerOld(String IP_ADDRESS, int PORT, String playerNameServer)
 	{
@@ -70,7 +69,7 @@ public class NetServerOld
 	 * @param server
 	 * @param client
 	 */
-	public void updateView(Player server, Player client, int playingPlayer)
+	public void updateView(Player server, Player client)
 	{
 		SwingUtilities.invokeLater(new Runnable()
 		{
@@ -133,7 +132,7 @@ public class NetServerOld
 				// SENDING MODEL TO CLIENT
 				sendToClient(model);
 
-				updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 				while (!model.isGameOver())
 				{
@@ -148,7 +147,7 @@ public class NetServerOld
 
 						System.out.println("Current turn: " + model.getCurrentPlayerIndex());
 
-						updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
+						updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 						CardView.isCardSelected = false;
 						CardBackView.isCardDrawnFromDeck = false;
@@ -179,7 +178,7 @@ public class NetServerOld
 
 						System.out.println("Current turn: " + model.getCurrentPlayerIndex());
 
-						updateView(server, client, model.getCurrentPlayerIndex());
+						updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 					}
 				}
 
@@ -207,6 +206,15 @@ public class NetServerOld
 
 	public void turnGame()
 	{
+		try
+		{
+			Thread.sleep(10);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (CardView.isCardSelected == true)
 		{
 			System.out.println("[SERVER] - Card selected");
@@ -263,7 +271,7 @@ public class NetServerOld
 		{
 			view.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
 			boolean newColorSelection = model.evalMossa(CardView.cardSelected);
-			updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
+			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 			if (newColorSelection)
 			{
@@ -272,7 +280,7 @@ public class NetServerOld
 				model.setCurrentCardColor(cardColor);
 			}
 
-			updateView(model.getPlayers().get(0), model.getPlayers().get(1), 0);
+			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 		}
 		else
 		{

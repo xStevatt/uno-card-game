@@ -527,8 +527,10 @@ public class TableView extends JFrame
 	 * @param handCards
 	 * @param panelToAddCards
 	 */
-	public synchronized void addCardsToView(HandCards handCards, JPanel panelToAddCards, JLayeredPane cardsView)
+	public void addCardsToView(HandCards handCards, JPanel panelToAddCards, JLayeredPane cardsView)
 	{
+		panelToAddCards.removeAll();
+
 		Point originPoint = getFirstCardPoint(handCards.getNumberOfCards(), cardsView);
 		int offset = calculateOffset(cardsView.getWidth(), handCards.getNumberOfCards());
 
@@ -561,6 +563,8 @@ public class TableView extends JFrame
 	 */
 	public synchronized void addCardsToViewBack(int numberOfCards)
 	{
+		handCardsViewAdversary.removeAll();
+
 		Point originPoint = getFirstCardPoint(numberOfCards, handCardsViewAdversary);
 		int offset = calculateOffset(handCardsViewAdversary.getWidth(), numberOfCards);
 
@@ -572,6 +576,7 @@ public class TableView extends JFrame
 
 			cardView.setBounds(originPoint.x, originPoint.y, cardView.getDimension().width,
 					cardView.getDimension().height);
+
 			handCardsViewAdversary.add(cardView, i++);
 
 			handCardsViewAdversary.moveToFront(cardView);
