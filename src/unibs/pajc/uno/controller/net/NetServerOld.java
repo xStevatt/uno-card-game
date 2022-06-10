@@ -41,7 +41,8 @@ public class NetServerOld
 	private String playerNameServer = null;
 	private String playerNameClient = null;
 
-	private Object syncObject = new Object();
+	private Object syncObjectModel = new Object();
+	public static Object syncObjectView = new Object();
 
 	public NetServerOld(String IP_ADDRESS, int PORT, String playerNameServer)
 	{
@@ -146,6 +147,7 @@ public class NetServerOld
 						sendToClient(model);
 
 						System.out.println("Current turn: " + model.getCurrentPlayerIndex());
+
 						updateView(model.getPlayers().get(0), model.getPlayers().get(1), model.getCurrentPlayerIndex());
 
 						CardView.isCardSelected = false;
@@ -158,11 +160,11 @@ public class NetServerOld
 
 						GameModel updatedModel = null;
 
-						synchronized (syncObject)
+						synchronized (syncObjectModel)
 						{
 							try
 							{
-								syncObject.wait();
+								syncObjectModel.wait();
 								updatedModel = (GameModel) objReceivedGame;
 							}
 							catch (InterruptedException e)
@@ -193,6 +195,8 @@ public class NetServerOld
 	public void manageCurrentAction()
 	{
 		checkPlayerSaidUno();
+
+		// ADDING SYNCHRONIZATION
 
 		while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false
 				&& model.getCurrentPlayerIndex() == 0)
@@ -376,9 +380,9 @@ public class NetServerOld
 				}
 				if (objReceived != null && objReceived instanceof GameModel)
 				{
-					synchronized (syncObject)
+					synchronized (syncObjectModel)
 					{
-						syncObject.notify();
+						syncObjectModel.notify();
 					}
 
 					objReceivedGame = objReceived;

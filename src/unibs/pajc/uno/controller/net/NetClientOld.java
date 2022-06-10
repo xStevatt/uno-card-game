@@ -37,7 +37,8 @@ public class NetClientOld
 	private TableView view;
 	private GameModel model;
 
-	private Object syncObject = new Object();
+	private Object syncObjectModel = new Object();
+	private static Object syncObjectView = new Object();
 
 	public NetClientOld(String IP_ADDRESS, int port, String playerName)
 	{
@@ -115,11 +116,11 @@ public class NetClientOld
 
 	public void runGameLogic()
 	{
-		synchronized (syncObject)
+		synchronized (syncObjectModel)
 		{
 			try
 			{
-				syncObject.wait();
+				syncObjectModel.wait();
 				System.out.println("Notified");
 			}
 			catch (Exception e)
@@ -158,11 +159,11 @@ public class NetClientOld
 				GameModel updatedModel = null;
 				changeTurnView(0);
 
-				synchronized (syncObject)
+				synchronized (syncObjectModel)
 				{
 					try
 					{
-						syncObject.wait();
+						syncObjectModel.wait();
 						updatedModel = (GameModel) objReceivedGame;
 					}
 					catch (InterruptedException e)
@@ -384,9 +385,9 @@ public class NetClientOld
 				}
 				if (objReceived != null && objReceived instanceof GameModel)
 				{
-					synchronized (syncObject)
+					synchronized (syncObjectModel)
 					{
-						syncObject.notify();
+						syncObjectModel.notify();
 					}
 
 					objReceivedGame = objReceived;
