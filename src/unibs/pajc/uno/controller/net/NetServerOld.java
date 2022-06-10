@@ -165,14 +165,15 @@ public class NetServerOld
 								syncObject.wait();
 								updatedModel = (GameModel) objReceivedGame;
 							}
-							catch (Exception e)
+							catch (InterruptedException e)
 							{
-
+								e.printStackTrace();
 							}
 						}
 
 						model = updatedModel;
 						updatedModel = null;
+						objReceivedGame = null;
 
 						System.out.println("Current turn: " + model.getCurrentPlayerIndex());
 

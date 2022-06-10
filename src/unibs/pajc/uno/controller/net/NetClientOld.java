@@ -175,6 +175,8 @@ public class NetClientOld
 				updatedModel = null;
 				objReceivedGame = null;
 
+				System.out.println("Current turn: " + model.getCurrentPlayerIndex());
+
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 			}
 			else if (model.getCurrentPlayerIndex() == 1)
