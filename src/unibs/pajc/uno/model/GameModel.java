@@ -266,6 +266,23 @@ public class GameModel implements Serializable
 	}
 
 	/**
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public boolean hasPlayerOneCard(int playerIndex)
+	{
+		boolean hasPlayerOneCard = false;
+
+		if (players.get(playerIndex).getHandCards().getNumberOfCards() == 1)
+		{
+			hasPlayerOneCard = true;
+		}
+
+		return hasPlayerOneCard;
+	}
+
+	/**
 	 * If a player didn't say "uno", then two new cards are assigned to the player.
 	 */
 	public void playerDidNotSayUno(int indexPlayer)

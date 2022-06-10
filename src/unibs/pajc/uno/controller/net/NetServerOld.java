@@ -139,6 +139,7 @@ public class NetServerOld
 					if (model.getCurrentPlayerIndex() == 0)
 					{
 						changeTurnView(0);
+
 						checkPlayerSaidUno();
 
 						manageCurrentAction();
@@ -155,7 +156,6 @@ public class NetServerOld
 					else if (model.getCurrentPlayerIndex() == 1)
 					{
 						changeTurnView(1);
-						checkPlayerSaidUno();
 
 						GameModel updatedModel = null;
 
@@ -193,10 +193,6 @@ public class NetServerOld
 	 */
 	public void manageCurrentAction()
 	{
-		checkPlayerSaidUno();
-
-		// ADDING SYNCHRONIZATION
-
 		while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false
 				&& model.getCurrentPlayerIndex() == 0)
 		{
@@ -306,9 +302,17 @@ public class NetServerOld
 
 	public void checkPlayerSaidUno()
 	{
-		if (model.hasPlayerOneCard(model.getCurrentPlayer()))
+		if (model.hasPlayerOneCard(1))
 		{
-			view.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
+			SwingUtilities.invokeLater(() -> {
+				view.setSayUnoButtonVisibile(true, 0);
+			});
+		}
+		else
+		{
+			SwingUtilities.invokeLater(() -> {
+				view.setSayUnoButtonVisibile(false, 0);
+			});
 		}
 	}
 

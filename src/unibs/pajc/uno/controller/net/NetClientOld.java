@@ -304,9 +304,17 @@ public class NetClientOld
 
 	public void checkPlayerSaidUno()
 	{
-		if (model.hasPlayerOneCard(model.getCurrentPlayer()))
+		if (model.hasPlayerOneCard(1))
 		{
-			view.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
+			SwingUtilities.invokeLater(() -> {
+				view.setSayUnoButtonVisibile(true, 0);
+			});
+		}
+		else
+		{
+			SwingUtilities.invokeLater(() -> {
+				view.setSayUnoButtonVisibile(false, 0);
+			});
 		}
 	}
 
