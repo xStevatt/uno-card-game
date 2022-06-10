@@ -37,6 +37,8 @@ public class NetClientOld
 	private TableView view;
 	private GameModel model;
 
+	private Object syncObject = new Object();
+
 	public NetClientOld(String IP_ADDRESS, int port, String playerName)
 	{
 		this.IP_ADDRESS = IP_ADDRESS;
@@ -113,6 +115,19 @@ public class NetClientOld
 
 	public void runGameLogic()
 	{
+		synchronized (syncObject)
+		{
+			try
+			{
+				syncObject.wait();
+				System.out.println("Notified");
+			}
+			catch (Exception e)
+			{
+
+			}
+		}
+
 		while (Objects.isNull(this.model))
 		{
 			try
@@ -138,20 +153,17 @@ public class NetClientOld
 
 		while (!model.isGameOver())
 		{
-			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
-			view.repaint();
-
 			if (model.getCurrentPlayerIndex() == 0)
 			{
 				GameModel updatedModel = null;
+				changeTurnView(0);
 
-				while (Objects.isNull(updatedModel))
+				synchronized (syncObject)
 				{
-					updatedModel = waitForServer();
-
 					try
 					{
-						Thread.sleep(100);
+						syncObject.wait();
+						updatedModel = (GameModel) objReceivedGame;
 					}
 					catch (InterruptedException e)
 					{
@@ -161,6 +173,7 @@ public class NetClientOld
 
 				this.model = updatedModel;
 				updatedModel = null;
+				objReceivedGame = null;
 
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 			}
@@ -176,6 +189,10 @@ public class NetClientOld
 				}
 
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+
+				System.out.println("Turn: " + model.getCurrentPlayerIndex());
+
+				sendToServer(model);
 			}
 		}
 	}
@@ -184,10 +201,12 @@ public class NetClientOld
 	{
 		if (CardView.isCardSelected == true)
 		{
+			System.out.println("[CLIENT] - Card selected");
 			manageCardSelected();
 		}
 		if (CardBackView.isCardDrawnFromDeck == true && model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
 		{
+			System.out.println("[CLIENT] - Card drawn");
 			manageCardDrawn();
 		}
 		else if (CardBackView.isCardDrawnFromDeck == true
@@ -196,15 +215,12 @@ public class NetClientOld
 			JOptionPane.showMessageDialog(view, "Hai già troppe carte!");
 		}
 
-		// RESETTING FLAGS
 		CardView.isCardSelected = false;
 		CardBackView.isCardDrawnFromDeck = false;
 	}
 
 	private void manageCardDrawn()
 	{
-		System.out.println("[CLIENT] - Card drawn");
-
 		if (model.hasPlayerOneCard() && view.isUnoButtonPressed())
 		{
 			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
@@ -217,12 +233,19 @@ public class NetClientOld
 
 	private void manageCardSelected()
 	{
-		System.out.println("[CLIENT] - card selected");
-
 		if (model.hasPlayerOneCard() && !view.isUnoButtonPressed())
 		{
 			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
 			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+		}
+
+		try
+		{
+			Thread.sleep(100);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
 		}
 
 		if (model.isPlacedCardValid(CardView.cardSelected))
@@ -236,6 +259,8 @@ public class NetClientOld
 				CardColor cardColor = dialogColor.show();
 				model.setCurrentCardColor(cardColor);
 			}
+
+			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 		}
 		else
 		{
@@ -250,28 +275,12 @@ public class NetClientOld
 	{
 		if (objReceivedGame != null && objReceivedGame instanceof GameModel)
 		{
-			System.out.println("Client is here");
 			System.out.println(((GameModel) objReceivedGame).getPlayers().get(0).getHandCards().getNumberOfCards());
 
 			return ((GameModel) objReceivedGame);
 		}
 
 		return null;
-	}
-
-	public void logPlayerCards(Player server, Player client)
-	{
-		for (int i = 0; i < server.getHandCards().getNumberOfCards(); i++)
-		{
-			System.out.println(server.getHandCards().getCard(i).getCardType() + " - "
-					+ server.getHandCards().getCard(i).getCardColor());
-		}
-		System.out.println("---");
-		for (int i = 0; i < client.getHandCards().getNumberOfCards(); i++)
-		{
-			System.out.println(client.getHandCards().getCard(i).getCardType() + " - "
-					+ client.getHandCards().getCard(i).getCardColor());
-		}
 	}
 
 	public void checkPlayerSaidUno()
@@ -373,11 +382,10 @@ public class NetClientOld
 				}
 				if (objReceived != null && objReceived instanceof GameModel)
 				{
-					System.out.println("[CLIENT] - New game model received from server. \n"
-							+ ((GameModel) objReceived).getPlayers().get(0).getNamePlayer() + " - number of cards: "
-							+ ((GameModel) objReceived).getPlayers().get(0).getHandCards().getNumberOfCards()
-							+ ((GameModel) objReceived).getPlayers().get(1).getNamePlayer() + " - number of cards: "
-							+ ((GameModel) objReceived).getPlayers().get(1).getHandCards().getNumberOfCards() + "\n");
+					synchronized (syncObject)
+					{
+						syncObject.notify();
+					}
 
 					objReceivedGame = objReceived;
 				}

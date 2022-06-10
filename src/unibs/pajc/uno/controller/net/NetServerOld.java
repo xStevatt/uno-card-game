@@ -9,7 +9,6 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -41,6 +40,8 @@ public class NetServerOld
 
 	private String playerNameServer = null;
 	private String playerNameClient = null;
+
+	private Object syncObject = new Object();
 
 	public NetServerOld(String IP_ADDRESS, int PORT, String playerNameServer)
 	{
@@ -138,6 +139,8 @@ public class NetServerOld
 					if (model.getCurrentPlayerIndex() == 0)
 					{
 						changeTurnView(0);
+						checkPlayerSaidUno();
+
 						manageCurrentAction();
 
 						sendToClient(model);
@@ -151,25 +154,29 @@ public class NetServerOld
 					else if (model.getCurrentPlayerIndex() == 1)
 					{
 						changeTurnView(1);
+						checkPlayerSaidUno();
 
 						GameModel updatedModel = null;
 
-						while (Objects.isNull(updatedModel))
+						synchronized (syncObject)
 						{
-							updatedModel = waitForClient();
-
 							try
 							{
-								Thread.sleep(200);
+								syncObject.wait();
+								updatedModel = (GameModel) objReceivedGame;
 							}
-							catch (InterruptedException e)
+							catch (Exception e)
 							{
-								// TODO Auto-generated catch block
-								e.printStackTrace();
+
 							}
 						}
 
 						model = updatedModel;
+						updatedModel = null;
+
+						System.out.println("Current turn: " + model.getCurrentPlayerIndex());
+
+						updateView(server, client, model.getCurrentPlayerIndex());
 					}
 				}
 
@@ -193,9 +200,6 @@ public class NetServerOld
 		}
 	}
 
-	/**
-	 * 
-	 */
 	public void turnGame()
 	{
 		if (CardView.isCardSelected == true)
@@ -214,14 +218,10 @@ public class NetServerOld
 			JOptionPane.showMessageDialog(view, "Hai già troppe carte!");
 		}
 
-		// RESETTING FLAGS
 		CardView.isCardSelected = false;
 		CardBackView.isCardDrawnFromDeck = false;
 	}
 
-	/**
-	 * 
-	 */
 	public void manageCardDrawn()
 	{
 		if (model.hasPlayerOneCard() && view.isUnoButtonPressed())
@@ -239,8 +239,6 @@ public class NetServerOld
 	 */
 	public void manageCardSelected()
 	{
-		System.out.println("[SERVER] - card selected");
-
 		if (model.hasPlayerOneCard() && !view.isUnoButtonPressed())
 		{
 			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
@@ -249,7 +247,7 @@ public class NetServerOld
 
 		try
 		{
-			Thread.sleep(1000);
+			Thread.sleep(100);
 		}
 		catch (InterruptedException e)
 		{
@@ -377,6 +375,11 @@ public class NetServerOld
 				}
 				if (objReceived != null && objReceived instanceof GameModel)
 				{
+					synchronized (syncObject)
+					{
+						syncObject.notify();
+					}
+
 					objReceivedGame = objReceived;
 					System.out.println("[SERVER] - Game model received");
 				}
