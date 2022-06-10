@@ -182,6 +182,12 @@ public class NetServerOld
 					}
 				}
 
+				if (model.getWinnerPlayer().getIndex() == 1)
+				{
+					JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer()
+							+ " vincitore! Congratulazioni! Non hai vinto assolutamente nulla, se non un briciolo di misera gloria!");
+				}
+
 				CardView.isCardSelected = false;
 				CardBackView.isCardDrawnFromDeck = false;
 			}
@@ -302,7 +308,7 @@ public class NetServerOld
 
 	public void checkPlayerSaidUno()
 	{
-		if (model.hasPlayerOneCard(1))
+		if (model.hasPlayerOneCard(0))
 		{
 			SwingUtilities.invokeLater(() -> {
 				view.setSayUnoButtonVisibile(true, 0);

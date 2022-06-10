@@ -205,6 +205,12 @@ public class NetClientOld
 				sendToServer(model);
 			}
 		}
+
+		if (model.getWinnerPlayer().getIndex() == 1)
+		{
+			JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer()
+					+ " vincitore! Congratulazioni! Non hai vinto assolutamente nulla, se non un briciolo di misera gloria!");
+		}
 	}
 
 	public void turnGame()
