@@ -1,7 +1,11 @@
 
 package unibs.pajc.uno.controller;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.model.card.CardColor;
@@ -16,6 +20,7 @@ public class LocalPlayerController
 {
 	private TableView gameView;
 	private GameModel model;
+	private ExecutorService executor;
 
 	public LocalPlayerController(String playerOneName, String playerTwoName)
 	{
@@ -28,7 +33,8 @@ public class LocalPlayerController
 		initView();
 
 		// START RUNNING GAME
-		runGame();
+		executor = Executors.newCachedThreadPool();
+		executor.execute(this::runGame);
 	}
 
 	public void initModel(String playerOneName, String playerTwoName)
@@ -278,7 +284,15 @@ public class LocalPlayerController
 	{
 		if (model.hasPlayerOneCard(model.getCurrentPlayer()))
 		{
-			gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
+			SwingUtilities.invokeLater(new Runnable()
+			{
+				@Override
+				public void run()
+				{
+					gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
+					gameView.repaint();
+				}
+			});
 		}
 	}
 }
