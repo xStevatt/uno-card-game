@@ -48,8 +48,10 @@ public class LocalPlayerController
 
 	public void initView()
 	{
+		// SHOWS GUI
 		gameView.setVisible(true);
 		gameView.setResizable(false);
+		gameView.setLocationRelativeTo(null);
 
 		// LOADS GAME CARDS
 		gameView.loadCards(model.getPlayers().get(0).getHandCards(), 0);
@@ -57,8 +59,6 @@ public class LocalPlayerController
 
 		// LOADS LAST CARD DROPPED
 		gameView.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
-
-		gameView.setLocationRelativeTo(null);
 	}
 
 	public void updateView(Player playerOne, Player playerTwo)
