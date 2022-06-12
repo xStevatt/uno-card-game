@@ -490,6 +490,9 @@ public class TableView extends JFrame
 		panelActualPlayer.repaint();
 	}
 
+	/**
+	 * 
+	 */
 	public void setMiddleCardClickable()
 	{
 
