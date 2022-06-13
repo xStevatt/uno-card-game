@@ -1,6 +1,9 @@
 
 package unibs.pajc.uno.controller;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -66,6 +69,52 @@ public class LocalPlayerController
 		gameView.loadCards(playerOne.getHandCards(), 0);
 		gameView.loadCards(playerTwo.getHandCards(), 1);
 
+		ArrayList<CardView> panelPlayerOne = gameView.getAllCards(0,
+				model.getPlayers().get(0).getHandCards().getNumberOfCards());
+		ArrayList<CardView> panelPlayerTwo = gameView.getAllCards(1,
+				model.getPlayers().get(1).getHandCards().getNumberOfCards());
+
+		panelPlayerOne.forEach(e -> e.addMouseListener(new MouseListener()
+		{
+
+			@Override
+			public void mouseReleased(MouseEvent e)
+			{
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e)
+			{
+				if ((CardView) e.getSource() != null)
+				{
+					System.out.println(((CardView) e.getSource()).getCard().getCardColor());
+				}
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e)
+			{
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e)
+			{
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				// TODO Auto-generated method stub
+
+			}
+		}));
+
 		gameView.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
 		gameView.repaint();
 	}
@@ -76,6 +125,7 @@ public class LocalPlayerController
 		{
 			// SETTING TURN LABEL
 			gameView.setTurn(model.getCurrentPlayer().getNamePlayer());
+			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 			if (model.getCurrentPlayer().getIndex() == 0)
 			{

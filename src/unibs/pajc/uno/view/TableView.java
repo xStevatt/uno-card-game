@@ -664,7 +664,7 @@ public class TableView extends JFrame
 
 	// GETTERS AND SETTERS
 
-	public ArrayList<CardView> getAllCards(int indexPlayer)
+	public ArrayList<CardView> getAllCards(int indexPlayer, int numberOfCards)
 	{
 		ArrayList<CardView> list = new ArrayList<CardView>();
 
@@ -680,7 +680,7 @@ public class TableView extends JFrame
 		{
 			for (int i = 0; i < handCardsViewAdversary.getComponentCount(); i++)
 			{
-				list.add((CardView) handCardsViewActual.getComponent(i));
+				list.add((CardView) handCardsViewAdversary.getComponent(i));
 			}
 		}
 

@@ -167,6 +167,11 @@ public class CardView extends JPanel
 		}
 	}
 
+	public Card getCard()
+	{
+		return card;
+	}
+
 	public Card getCardSelected()
 	{
 		return cardSelected;
