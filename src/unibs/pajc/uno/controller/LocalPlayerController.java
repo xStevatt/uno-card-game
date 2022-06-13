@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import unibs.pajc.uno.model.GameModel;
+import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.view.CardBackView;
@@ -24,6 +25,9 @@ public class LocalPlayerController
 	private TableView gameView;
 	private GameModel model;
 	private ExecutorService executor;
+
+	private Object notifyObj = new Object();
+	private Card cardSelected;
 
 	public LocalPlayerController(String playerOneName, String playerTwoName)
 	{
@@ -80,38 +84,46 @@ public class LocalPlayerController
 			@Override
 			public void mouseReleased(MouseEvent e)
 			{
-				// TODO Auto-generated method stub
-
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
+				System.out.println("Mouse pressed");
+
 				if ((CardView) e.getSource() != null)
 				{
-					System.out.println(((CardView) e.getSource()).getCard().getCardColor());
+					synchronized (notifyObj)
+					{
+						notifyObj.notify();
+					}
 				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				// TODO Auto-generated method stub
-
+				((CardView) e.getSource()).setToolTipText("");
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
-				// TODO Auto-generated method stub
-
+				((CardView) e.getSource()).setToolTipText("Place card!");
 			}
 
 			@Override
 			public void mouseClicked(MouseEvent e)
 			{
-				// TODO Auto-generated method stub
+				System.out.println("Mouse clicked");
 
+				if ((CardView) e.getSource() != null)
+				{
+					synchronized (notifyObj)
+					{
+						notifyObj.notify();
+					}
+				}
 			}
 		}));
 
@@ -132,6 +144,19 @@ public class LocalPlayerController
 				checkPlayerSaidUno();
 				gameView.enableViewPlayer(0, true);
 				gameView.enableViewPlayer(1, false);
+
+				// synchronized (notifyObj)
+				// {
+				// try
+				// {
+				// System.out.println("Card is selected, go on...");
+				// notifyObj.wait();
+				// }
+				// catch (InterruptedException e)
+				// {
+				// e.printStackTrace();
+				// }
+				// }
 
 				// LOOP WAITING FOR A CARD TO BE SELECTED
 				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
