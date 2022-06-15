@@ -29,7 +29,7 @@ public class CardView extends JPanel
 	private final int cardHeight = 150;
 	private static final int margin = 5;
 
-	protected boolean shouldAnimationsMove = true;
+	protected boolean active = false;
 
 	protected final Dimension dimension = new Dimension(cardWidth, cardHeight);
 
@@ -82,7 +82,7 @@ public class CardView extends JPanel
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				if (shouldAnimationsMove)
+				if (active)
 				{
 					CardView.cardSelected = card;
 					isCardSelected = true;
@@ -147,7 +147,7 @@ public class CardView extends JPanel
 
 	private void showHoverEffect()
 	{
-		if (shouldAnimationsMove)
+		if (active)
 		{
 			setBorder(focusedBorder);
 			Point p = getLocation();
@@ -158,7 +158,7 @@ public class CardView extends JPanel
 
 	private void removeHoverEffect()
 	{
-		if (shouldAnimationsMove)
+		if (active)
 		{
 			setBorder(defaultBorder);
 			Point p = getLocation();
@@ -177,13 +177,13 @@ public class CardView extends JPanel
 		return cardSelected;
 	}
 
-	public boolean isShouldAnimationsMove()
+	public boolean isActive()
 	{
-		return shouldAnimationsMove;
+		return active;
 	}
 
-	public void setShouldAnimationsMove(boolean shouldAnimationsMove)
+	public void setActive(boolean shouldAnimationsMove)
 	{
-		this.shouldAnimationsMove = shouldAnimationsMove;
+		this.active = shouldAnimationsMove;
 	}
 }

@@ -54,21 +54,23 @@ public class TableView extends JFrame
 	private JPanel panelAdversaryPlayer;
 	private JPanel centerPanel;
 
+	// OTHER PANELS
 	private JPanel midTable;
 	private JPanel panelChat;
 	private JPanel panelPlaced;
-	private JPanel panel;
 	private JPanel panelDeck;
-
-	private JTextArea textArea;
-	private JButton btnNewButton;
 
 	private JLayeredPane handCardsViewActual;
 	private JLayeredPane handCardsViewAdversary;
 
-	public static JTextArea textAreaChat;
+	// USED CARD VIEW
+	private UsedCardView usedCardView;
+	private CardBackView backView;
+
+	private JTextArea textArea;
+
+	private JTextArea textAreaChat;
 	private JButton btnSendMessage;
-	private JSeparator separatorChat;
 
 	private JButton sayUnoButtonPlayerTwo;
 	private JButton sayUnoButtonPlayerOne;
@@ -93,8 +95,6 @@ public class TableView extends JFrame
 	private JPanel panelInfo;
 	private JSeparator separator;
 	private JScrollPane scroll;
-
-	private volatile int status = 1;
 
 	/**
 	 * Constructor to create the form.
@@ -209,7 +209,8 @@ public class TableView extends JFrame
 		midTable.add(panelDeck);
 		panelDeck.setOpaque(false);
 
-		panelDeck.add(new CardBackView(true));
+		backView = new CardBackView(true);
+		panelDeck.add(backView);
 
 		panelChat = new JPanel();
 		panelChat.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null), "Chat",
@@ -384,14 +385,13 @@ public class TableView extends JFrame
 	 * 
 	 * @param card
 	 */
-	public synchronized void changeDroppedCardView(Card card, CardColor currentColor)
+	public void changeDroppedCardView(Card card, CardColor currentColor)
 	{
 		panelPlaced.removeAll();
-		panelPlaced.repaint();
 
-		UsedCardView cardToAdd = new UsedCardView(card);
+		usedCardView = new UsedCardView(card);
 
-		panelPlaced.add(cardToAdd);
+		panelPlaced.add(usedCardView);
 		panelPlaced.repaint();
 
 		Color color = Util.convertCardColor(card.getCardColor());
@@ -438,7 +438,7 @@ public class TableView extends JFrame
 			{
 				for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
 				{
-					((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(enabled);
+					((CardView) handCardsViewActual.getComponent(i)).setActive(enabled);
 				}
 			}
 
@@ -446,7 +446,7 @@ public class TableView extends JFrame
 			{
 				for (int i = 0; i < handCardsViewAdversary.getComponentCount(); i++)
 				{
-					((CardView) handCardsViewAdversary.getComponent(i)).setShouldAnimationsMove(enabled);
+					((CardView) handCardsViewAdversary.getComponent(i)).setActive(enabled);
 				}
 			}
 		}
@@ -454,15 +454,12 @@ public class TableView extends JFrame
 		{
 			if (index == 0)
 			{
-				System.out.println("HERE");
-
 				for (int i = 0; i < handCardsViewActual.getComponentCount(); i++)
 				{
-					((CardView) handCardsViewActual.getComponent(i)).setShouldAnimationsMove(enabled);
+					((CardView) handCardsViewActual.getComponent(i)).setActive(enabled);
 				}
 			}
 		}
-
 		repaint();
 	}
 
@@ -493,9 +490,9 @@ public class TableView extends JFrame
 	/**
 	 * 
 	 */
-	public void setMiddleCardClickable()
+	public void setMiddleCardClickable(boolean isEnabled)
 	{
-
+		backView.setEnabled(isEnabled);
 	}
 
 	/**
@@ -505,7 +502,7 @@ public class TableView extends JFrame
 	 * @param handCards
 	 * @param players
 	 */
-	public synchronized void loadCards(HandCards cards, int playingPlayer)
+	public void loadCards(HandCards cards, int playingPlayer)
 	{
 		if (isGameLocal == true)
 		{
@@ -577,7 +574,7 @@ public class TableView extends JFrame
 	 * @param panelToAddCards
 	 * @param cardsView
 	 */
-	public synchronized void addCardsToViewBack(int numberOfCards)
+	public void addCardsToViewBack(int numberOfCards)
 	{
 		handCardsViewAdversary.removeAll();
 
@@ -616,7 +613,7 @@ public class TableView extends JFrame
 	 * @param totalCards
 	 * @return
 	 */
-	private synchronized Point getFirstCardPoint(int totalCards, JLayeredPane handCardsView)
+	private Point getFirstCardPoint(int totalCards, JLayeredPane handCardsView)
 	{
 		Point p = new Point(0, 20);
 
@@ -636,7 +633,7 @@ public class TableView extends JFrame
 	 * @param totalCards
 	 * @return
 	 */
-	private synchronized int calculateOffset(int width, int totalCards)
+	private int calculateOffset(int width, int totalCards)
 	{
 		if (totalCards <= GameRules.DEFAULT_NUMBER_OF_CARDS)
 		{
@@ -653,7 +650,7 @@ public class TableView extends JFrame
 	 * @param message
 	 * @param playerName
 	 */
-	public synchronized void addChatMessage(String message, String playerName)
+	public void addChatMessage(String message, String playerName)
 	{
 		LocalDateTime time = LocalDateTime.now();
 		DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("HH:mm");
@@ -685,6 +682,21 @@ public class TableView extends JFrame
 		}
 
 		return list;
+	}
+
+	public CardBackView getCardDeckView()
+	{
+		return backView;
+	}
+
+	public UsedCardView getUsedCardView()
+	{
+		return usedCardView;
+	}
+
+	public void setUsedCardView(UsedCardView usedCardView)
+	{
+		this.usedCardView = usedCardView;
 	}
 
 	public boolean isUnoButtonPressed()

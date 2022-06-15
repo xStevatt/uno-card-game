@@ -16,12 +16,15 @@ import unibs.pajc.uno.model.card.Card;
 
 public class CardDropped extends JPanel
 {
+	private static final long serialVersionUID = 1L;
 	private final Card card;
 	private final String value;
 
 	private final int cardWidth = 100;
 	private final int cardHeight = 150;
 	private static final int margin = 5;
+
+	private boolean shouldCardHover = false;
 
 	private final Dimension dimension = new Dimension(cardWidth, cardHeight);
 

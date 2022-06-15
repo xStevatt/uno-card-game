@@ -1,8 +1,5 @@
-
 package unibs.pajc.uno.controller;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,11 +11,12 @@ import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.player.Player;
-import unibs.pajc.uno.view.CardBackView;
 import unibs.pajc.uno.view.CardView;
 import unibs.pajc.uno.view.DialogSelectNewColor;
 import unibs.pajc.uno.view.PlayerDetailsInfoOffline;
 import unibs.pajc.uno.view.TableView;
+import unibs.pajc.uno.view.events.CardDrawnEvent;
+import unibs.pajc.uno.view.events.CardSelectedEvent;
 
 public class LocalPlayerController
 {
@@ -27,7 +25,11 @@ public class LocalPlayerController
 	private ExecutorService executor;
 
 	private Object notifyObj = new Object();
-	private Card cardSelected;
+
+	private Card cardSelected = null;
+
+	private CardSelectedEvent mouseListener;
+	private CardDrawnEvent mouseListenerDrawnCard;
 
 	public LocalPlayerController(String playerOneName, String playerTwoName)
 	{
@@ -60,272 +62,185 @@ public class LocalPlayerController
 		gameView.setResizable(false);
 		gameView.setLocationRelativeTo(null);
 
-		// LOADS GAME CARDS
-		gameView.loadCards(model.getPlayers().get(0).getHandCards(), 0);
-		gameView.loadCards(model.getPlayers().get(1).getHandCards(), 1);
+		// CREATES ACTION LISTER TO DRAW A CARD
+		mouseListenerDrawnCard = new CardDrawnEvent(notifyObj);
+		gameView.getCardDeckView().addMouseListener(mouseListenerDrawnCard);
 
-		// LOADS LAST CARD DROPPED
-		gameView.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
+		updateView();
 	}
 
-	public void updateView(Player playerOne, Player playerTwo)
+	/**
+	 * Updates game view, loading all the new data available and setting up
+	 */
+	public synchronized void updateView()
 	{
-		gameView.loadCards(playerOne.getHandCards(), 0);
-		gameView.loadCards(playerTwo.getHandCards(), 1);
+		SwingUtilities.invokeLater(() -> {
 
-		ArrayList<CardView> panelPlayerOne = gameView.getAllCards(0,
-				model.getPlayers().get(0).getHandCards().getNumberOfCards());
-		ArrayList<CardView> panelPlayerTwo = gameView.getAllCards(1,
-				model.getPlayers().get(1).getHandCards().getNumberOfCards());
+			// SETS TURN AND LOADS CARDS
+			gameView.setTurn(model.getCurrentPlayer().getNamePlayer());
+			gameView.loadCards(model.getPlayers().get(0).getHandCards(), 0);
+			gameView.loadCards(model.getPlayers().get(1).getHandCards(), 1);
+			gameView.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
 
-		panelPlayerOne.forEach(e -> e.addMouseListener(new MouseListener()
-		{
+			// DISABLE BUTTONS
+			gameView.setSayUnoButtonVisibile(false, model.getPreviousPlayerIndex());
+			gameView.setSayUnoButtonVisibile(false, model.getCurrentPlayerIndex());
 
-			@Override
-			public void mouseReleased(MouseEvent e)
+			// GETS ALL CARDS VIEWS FROM GAMEVIEW
+			ArrayList<CardView> panelPlayerOneCards = gameView.getAllCards(0,
+					model.getPlayers().get(0).getHandCards().getNumberOfCards());
+			ArrayList<CardView> panelPlayerTwoCards = gameView.getAllCards(1,
+					model.getPlayers().get(1).getHandCards().getNumberOfCards());
+
+			// ADD MOUSE LISTENERS TO CARDS
+			mouseListener = new CardSelectedEvent(notifyObj);
+			panelPlayerOneCards.forEach(e -> e.addMouseListener(mouseListener));
+			panelPlayerTwoCards.forEach(e -> e.addMouseListener(mouseListener));
+
+			// CHECKS THAT PLAYER HAS SAID UNO
+			if (model.hasPlayerOneCard(model.getCurrentPlayer()))
 			{
+				gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
+				gameView.repaint();
 			}
 
-			@Override
-			public void mousePressed(MouseEvent e)
-			{
-				System.out.println("Mouse pressed");
+			// ENABLES / DISABLE VIEW FOR PLAYERS
+			gameView.enableViewPlayer(model.getCurrentPlayerIndex(), true);
+			gameView.enableViewPlayer(model.getNextPlayerIndex(), false);
 
-				if ((CardView) e.getSource() != null)
+			// CHECKS IF UNO BUTTON SHOULD BE ENABLED
+			if (model.hasPlayerOneCard(model.getCurrentPlayer()))
+			{
+				SwingUtilities.invokeLater(new Runnable()
 				{
-					synchronized (notifyObj)
+					@Override
+					public void run()
 					{
-						notifyObj.notify();
+						gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
+						gameView.repaint();
 					}
-				}
+				});
 			}
 
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				((CardView) e.getSource()).setToolTipText("");
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				((CardView) e.getSource()).setToolTipText("Place card!");
-			}
-
-			@Override
-			public void mouseClicked(MouseEvent e)
-			{
-				System.out.println("Mouse clicked");
-
-				if ((CardView) e.getSource() != null)
-				{
-					synchronized (notifyObj)
-					{
-						notifyObj.notify();
-					}
-				}
-			}
-		}));
-
-		gameView.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
-		gameView.repaint();
+			// REPAINTS VIEW
+			gameView.repaint();
+		});
 	}
 
 	public void runGame()
 	{
 		while (!model.isGameOver())
 		{
-			// SETTING TURN LABEL
-			gameView.setTurn(model.getCurrentPlayer().getNamePlayer());
-			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
-
-			if (model.getCurrentPlayer().getIndex() == 0)
+			synchronized (notifyObj)
 			{
-				checkPlayerSaidUno();
-				gameView.enableViewPlayer(0, true);
-				gameView.enableViewPlayer(1, false);
-
-				// synchronized (notifyObj)
-				// {
-				// try
-				// {
-				// System.out.println("Card is selected, go on...");
-				// notifyObj.wait();
-				// }
-				// catch (InterruptedException e)
-				// {
-				// e.printStackTrace();
-				// }
-				// }
-
-				// LOOP WAITING FOR A CARD TO BE SELECTED
-				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
+				try
 				{
-					try
-					{
-						Thread.sleep(1);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					notifyObj.wait();
 
-					if (CardView.isCardSelected == true)
-					{
-						if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
-						{
-							JOptionPane.showMessageDialog(gameView, "You didn't say UNO! Two more cards for you.");
-							model.playerDidNotSayUno(model.getCurrentPlayerIndex());
-						}
+					checkPlayerUno();
 
-						if (model.isPlacedCardValid(CardView.cardSelected))
-						{
-							gameView.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
-							boolean newColorSelection = model.evalMossa(CardView.cardSelected);
-
-							if (newColorSelection)
-							{
-								DialogSelectNewColor dialogColor = new DialogSelectNewColor();
-								CardColor cardColor = dialogColor.show();
-								model.setCurrentCardColor(cardColor);
-							}
-						}
-						else
-						{
-							JOptionPane.showMessageDialog(null, "Please select a valid card!", "Error",
-									JOptionPane.ERROR_MESSAGE);
-							CardView.isCardSelected = false;
-						}
-					}
-					if (CardBackView.isCardDrawnFromDeck == true
+					if (mouseListenerDrawnCard.isCardDrawn()
 							&& model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
 					{
-						if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
+						if (model.getCurrentPlayer().getHandCards().getNumberOfCards() <= 30)
 						{
-							JOptionPane.showMessageDialog(gameView, "You didn't say UNO! Two more cards for you.");
-							model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+							playerDrawCard();
 						}
-
-						model.getCurrentPlayer().addCard(model.getCardFromDeck());
-						model.nextTurn();
 					}
-					else if (CardBackView.isCardDrawnFromDeck == true
-							&& model.getCurrentPlayer().getHandCards().getNumberOfCards() >= 30)
+					if (mouseListener.getCardSelected() != null)
 					{
-						JOptionPane.showMessageDialog(gameView, "Hai già troppe carte!");
+						playerSelectedCard();
 					}
 				}
-			}
-			if (model.getCurrentPlayer().getIndex() == 1)
-			{
-				checkPlayerSaidUno();
-				gameView.enableViewPlayer(0, false);
-				gameView.enableViewPlayer(1, true);
-
-				while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false)
+				catch (InterruptedException e)
 				{
-					// THREAD SLEEP
-					try
-					{
-						Thread.sleep(1);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					if (CardView.isCardSelected == true)
-					{
-						if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
-						{
-							JOptionPane.showMessageDialog(gameView, "You didn't say UNO! Two more cards for you.");
-
-							model.playerDidNotSayUno(model.getCurrentPlayerIndex());
-						}
-
-						if (model.isPlacedCardValid(CardView.cardSelected))
-						{
-							if (model.hasPlayerOneCard() && gameView.isUnoButtonPressed())
-							{
-								gameView.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
-
-								boolean newColorSelection = model.evalMossa(CardView.cardSelected);
-
-								if (newColorSelection)
-								{
-									DialogSelectNewColor dialogColor = new DialogSelectNewColor();
-									CardColor cardColor = dialogColor.show();
-									model.setCurrentCardColor(cardColor);
-								}
-
-								gameView.setUnoButtonPressed(false);
-							}
-							else if (!model.hasPlayerOneCard())
-							{
-								gameView.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
-
-								boolean newColorSelection = model.evalMossa(CardView.cardSelected);
-
-								if (newColorSelection)
-								{
-									DialogSelectNewColor dialogColor = new DialogSelectNewColor();
-									CardColor cardColor = dialogColor.show();
-									model.setCurrentCardColor(cardColor);
-								}
-								gameView.setUnoButtonPressed(false);
-							}
-						}
-						else
-						{
-							JOptionPane.showMessageDialog(null, "Please select a valid card!", "Error",
-									JOptionPane.ERROR_MESSAGE);
-							CardView.isCardSelected = false;
-						}
-					}
-					if (CardBackView.isCardDrawnFromDeck == true
-							&& model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
-					{
-						if (model.hasPlayerOneCard() && !gameView.isUnoButtonPressed())
-						{
-							JOptionPane.showMessageDialog(gameView, "You didn't say UNO! Two more cards for you.");
-							model.playerDidNotSayUno(model.getCurrentPlayerIndex());
-						}
-						if (model.hasPlayerOneCard() && gameView.isUnoButtonPressed())
-						{
-							model.getCurrentPlayer().addCard(model.getCardFromDeck());
-							model.nextTurn();
-							gameView.setUnoButtonPressed(false);
-						}
-						model.getCurrentPlayer().addCard(model.getCardFromDeck());
-						model.nextTurn();
-						gameView.setUnoButtonPressed(false);
-					}
-					else if (CardBackView.isCardDrawnFromDeck == true
-							&& model.getCurrentPlayer().getHandCards().getNumberOfCards() >= 30)
-					{
-						JOptionPane.showMessageDialog(gameView, "Hai già troppe carte!");
-					}
+					e.printStackTrace();
 				}
 			}
 
-			// DISABLING BUTTONS
-			gameView.setSayUnoButtonVisibile(false, model.getPreviousPlayerIndex());
-			gameView.setSayUnoButtonVisibile(false, model.getCurrentPlayerIndex());
+			updateView();
 
-			// RESETTING FLAGS
-			CardView.isCardSelected = false;
-			CardBackView.isCardDrawnFromDeck = false;
-
-			// RESETS GAME VIEW
-			gameView.enableViewPlayer(0, false);
-			gameView.enableViewPlayer(1, false);
-
-			// UPDATES VIEW
-			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+			mouseListener.setCardSelectedNull();
+			mouseListenerDrawnCard.setCardDrawn(false);
 		}
 
+		gameOver();
+	}
+
+	public void playerDrawCard()
+	{
+		// CHECK IF PLAYER SAID UNO
+		model.getCurrentPlayer().addCard(model.getCardFromDeck());
+		model.nextTurn();
+	}
+
+	public void playerSelectedCard()
+	{
+		// CHECK IF PLAYER SAID UNO
+
+		cardSelected = mouseListener.getCardSelected();
+
+		if (model.isPlacedCardValid(cardSelected))
+		{
+			gameView.changeDroppedCardView(cardSelected, model.getCurrentCardColor());
+
+			// CHECKS IF A NEW COLOR SELECTION IS NEEDED
+			boolean newColorSelection = model.evalMossa(cardSelected);
+
+			if (newColorSelection)
+			{
+				boolean colorSelectionValid = false;
+
+				while (colorSelectionValid == false)
+				{
+					try
+					{
+						DialogSelectNewColor dialogColor = new DialogSelectNewColor();
+						CardColor cardColor = dialogColor.show();
+						model.setCurrentCardColor(cardColor);
+						colorSelectionValid = true;
+					}
+					catch (NullPointerException e)
+					{
+						colorSelectionValid = false;
+					}
+				}
+			}
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(null, "Please select a valid card!", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public void checkPlayerUno()
+	{
+		// PLAYER DID NOT SAY UNO
+		if (model.hasPlayerOneCard(model.getPreviousPlayer()) && !gameView.isUnoButtonPressed())
+		{
+			JOptionPane.showMessageDialog(gameView, "You didn't say UNO! Two more cards for you.");
+			model.playerDidNotSayUno(model.getPreviousPlayerIndex());
+		}
+		// PLAYER SAID UNO
+		if (model.hasPlayerOneCard(model.getPreviousPlayer()) && gameView.isUnoButtonPressed())
+		{
+			gameView.setUnoButtonPressed(false);
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public void checkEnableUnoButton()
+	{
+
+	}
+
+	public void gameOver()
+	{
 		JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer()
 				+ " vincitore! Congratulazioni! Non hai vinto assolutamente nulla, se non un briciolo di misera gloria!");
 
@@ -349,25 +264,6 @@ public class LocalPlayerController
 			gameView.dispose();
 			new PlayerDetailsInfoOffline().setVisible(true);
 			break;
-		}
-	}
-
-	/**
-	 * 
-	 */
-	public void checkPlayerSaidUno()
-	{
-		if (model.hasPlayerOneCard(model.getCurrentPlayer()))
-		{
-			SwingUtilities.invokeLater(new Runnable()
-			{
-				@Override
-				public void run()
-				{
-					gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
-					gameView.repaint();
-				}
-			});
 		}
 	}
 }

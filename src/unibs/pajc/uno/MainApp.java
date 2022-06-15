@@ -4,21 +4,34 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.AffineTransform;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.LineBorder;
 
+import unibs.pajc.uno.model.card.Card;
+import unibs.pajc.uno.model.card.CardColor;
+import unibs.pajc.uno.model.card.CardType;
+import unibs.pajc.uno.model.card.NumberCard;
+import unibs.pajc.uno.model.card.WildCard;
+import unibs.pajc.uno.view.CardBackView;
+import unibs.pajc.uno.view.CardView;
 import unibs.pajc.uno.view.PlayerDetailsInfoOffline;
 import unibs.pajc.uno.view.PlayerDetailsInfoOnline;
 import unibs.pajc.uno.view.events.HoverButtonEvent;
@@ -48,6 +61,10 @@ public class MainApp extends JFrame
 
 	private JPanel AIGamePanel;
 	private JButton newAIGameButton;
+
+	private JLayeredPane panelCards;
+	private Card cards[] = { new NumberCard(CardColor.RED, 6), new WildCard(CardType.SKIP, CardColor.YELLOW),
+			new NumberCard(CardColor.GREEN, 9) };
 
 	private PlayerDetailsInfoOnline playerInfoFrameOnline;
 	private PlayerDetailsInfoOffline playerInfoFrameOffline;
@@ -85,6 +102,7 @@ public class MainApp extends JFrame
 	public MainApp()
 	{
 		super("Uno");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loadInterface();
 	}
 
@@ -93,10 +111,14 @@ public class MainApp extends JFrame
 		initializeBannerPanel();
 		initializeButtonsPanel();
 
-		this.setLayout(new BorderLayout());
-		this.add(bannerPanel, BorderLayout.NORTH);
+		getContentPane().setLayout(new BorderLayout());
+		getContentPane().add(bannerPanel, BorderLayout.NORTH);
+
+		panelCards = new JLayeredPane();
+		panelCards.setBounds(100, 39, 250, 150);
+		bannerPanel.add(panelCards);
 		// this.add(buttonsPanel, BorderLayout.SOUTH);
-		this.add(mainContainer, BorderLayout.SOUTH);
+		getContentPane().add(mainContainer, BorderLayout.SOUTH);
 
 		this.pack();
 
@@ -107,22 +129,80 @@ public class MainApp extends JFrame
 		this.setVisible(true);
 		this.setIconImage(bannerImage);
 		this.setLocationRelativeTo(null);
+
+		CardBackView backView = new CardBackView(false);
+		backView.setBounds(0, 0, backView.getDimension().width, backView.getDimension().height);
+
+		// FIRST CARD
+		CardView cardone = new CardView(cards[0]);
+		cardone.setBounds(50, 0, cardone.getDimension().width, cardone.getDimension().height);
+
+		// SECOND CARD
+		CardView cardtwo = new CardView(cards[1]);
+
+		cardtwo.setBounds(100, 0, cardtwo.getDimension().width, cardtwo.getDimension().height);
+
+		// THIRD CARD
+		CardView cardThree = new CardView(cards[2]);
+
+		cardThree.setBounds(150, 0, cardThree.getDimension().width, cardThree.getDimension().height);
+
+		panelCards.add(backView);
+		panelCards.add(cardone);
+		panelCards.add(cardtwo);
+		panelCards.add(cardThree);
+
+		panelCards.moveToFront(backView);
+
+		JPanel panelLogo = new JPanel()
+		{
+			@Override
+			public void paintComponent(Graphics g)
+			{
+				Graphics2D g2 = (Graphics2D) g;
+
+				int CARD_WIDTH = (int) ((int) 100 * 1.2);
+				int CARD_HEIGHT = (int) ((int) 150 * 1.2);
+
+				// var defaultFont = new Font(Util.DEFAULT_FONT, Font.BOLD, cardWidth / 2 + 5);
+				var defaultFont = new Font("Arial", Font.PLAIN, 50);
+				var fontMetrics = this.getFontMetrics(defaultFont);
+				int stringWidth = fontMetrics.stringWidth("UNO") / 2;
+				int fontHeight = defaultFont.getSize() / 2;
+
+				g2.setColor(Color.black);
+
+				AffineTransform affineTransform = new AffineTransform();
+				// affineTransform.rotate(Math.toRadians(-8), 0, 0);
+				Font rotatedFont = defaultFont.deriveFont(affineTransform);
+
+				g2.setFont(rotatedFont);
+				g2.drawString("UNO", CARD_WIDTH / 2 - stringWidth, CARD_HEIGHT / 2 + fontHeight);
+			}
+		};
+		panelLogo.setBounds(379, 39, 215, 150);
+		panelLogo.setOpaque(false);
+		bannerPanel.add(panelLogo);
 	}
 
 	protected void initializeBannerPanel()
 	{
-		Image bannerImage = new ImageIcon("res/img/main_banner.png").getImage().getScaledInstance(350, 250,
-				java.awt.Image.SCALE_SMOOTH);
-		ImageIcon image = new ImageIcon(bannerImage);
+		// Image bannerImage = new
+		// ImageIcon("res/img/main_banner.png").getImage().getScaledInstance(350, 250,
+		// java.awt.Image.SCALE_SMOOTH);
+		// ImageIcon image = new ImageIcon(bannerImage);
 
 		bannerLabel = new JLabel(""); // Add text to main banner
+		bannerLabel.setBounds(300, 5, 0, 0);
 
 		bannerLabel.setForeground(new Color(20, 20, 20));
-		bannerLabel.setIcon(image);
+		// bannerLabel.setIcon(image);
 		bannerLabel.setIconTextGap(25);
 
 		bannerPanel = new JPanel();
+		bannerPanel.setBorder(new LineBorder(new Color(165, 42, 42), 7));
 		bannerPanel.setPreferredSize(new Dimension(600, 250));
+		bannerPanel.setLayout(null);
 		bannerPanel.add(bannerLabel);
 		// bannerPanel.add(bannerLabelSubtitle);
 		bannerPanel.setBackground(new Color(237, 28, 36));
@@ -135,14 +215,17 @@ public class MainApp extends JFrame
 		newAIGameButton = new JButton("Against AI");
 
 		newGameButtonPanel = new JPanel(new GridLayout());
+		newGameButtonPanel.setBackground(Color.LIGHT_GRAY);
 		newGameButtonPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 40, 25));
 		newGameButtonPanel.add(newOnlineGameButton);
 
 		newOnlineGamePanel = new JPanel(new GridLayout(1, 1));
+		newOnlineGamePanel.setBackground(Color.LIGHT_GRAY);
 		newOnlineGamePanel.setBorder(BorderFactory.createEmptyBorder(30, 25, 40, 25));
 		newOnlineGamePanel.add(newLocalGameButton);
 
 		AIGamePanel = new JPanel(new GridLayout());
+		AIGamePanel.setBackground(Color.LIGHT_GRAY);
 		AIGamePanel.setBorder(BorderFactory.createEmptyBorder(30, 25, 40, 40));
 		AIGamePanel.add(newAIGameButton);
 
@@ -156,8 +239,10 @@ public class MainApp extends JFrame
 		JLabel authorLabel = new JLabel(APP_SIGNATURE, SwingConstants.CENTER);
 
 		JPanel descriptorPanelNorth = new JPanel();
+		descriptorPanelNorth.setBackground(Color.LIGHT_GRAY);
 		descriptorPanelNorth.setBorder(BorderFactory.createEmptyBorder(10, 25, 1, 40));
 		JPanel descriptionPaneSouth = new JPanel();
+		descriptionPaneSouth.setBackground(Color.LIGHT_GRAY);
 		descriptionPaneSouth.setBorder(BorderFactory.createEmptyBorder(1, 25, 1, 40));
 
 		descriptorPanelNorth.add(descriptorLabel);

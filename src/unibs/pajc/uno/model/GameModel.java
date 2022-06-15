@@ -157,9 +157,6 @@ public class GameModel implements Serializable
 		players.get(turnIterator.getIndexCurrentPlayer()).removeCard(card);
 		usedCards.addCard(card);
 
-		System.out.println("Current player has "
-				+ getPlayers().get(turnIterator.getIndexCurrentPlayer()).getHandCards().getNumberOfCards());
-
 		boolean newColorNeedsSelection = false;
 
 		switch (card.getCardType())

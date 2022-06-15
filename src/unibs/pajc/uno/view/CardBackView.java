@@ -59,8 +59,6 @@ public class CardBackView extends JPanel
 				if (shouldCardMove)
 				{
 					CardBackView.isCardDrawnFromDeck = true;
-					System.out.println("Card drawn");
-					repaint();
 				}
 			}
 
