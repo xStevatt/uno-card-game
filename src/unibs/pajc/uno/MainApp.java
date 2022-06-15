@@ -165,7 +165,7 @@ public class MainApp extends JFrame
 				int CARD_HEIGHT = (int) ((int) 150 * 1.2);
 
 				// var defaultFont = new Font(Util.DEFAULT_FONT, Font.BOLD, cardWidth / 2 + 5);
-				var defaultFont = new Font("Arial", Font.PLAIN, 50);
+				var defaultFont = new Font("Arial", Font.ITALIC + Font.BOLD, 50);
 				var fontMetrics = this.getFontMetrics(defaultFont);
 				int stringWidth = fontMetrics.stringWidth("UNO") / 2;
 				int fontHeight = defaultFont.getSize() / 2;
@@ -178,6 +178,8 @@ public class MainApp extends JFrame
 
 				g2.setFont(rotatedFont);
 				g2.drawString("UNO", CARD_WIDTH / 2 - stringWidth, CARD_HEIGHT / 2 + fontHeight);
+				g2.setColor(Color.white);
+				g2.drawString("UNO", CARD_WIDTH / 2 + 2 - stringWidth, CARD_HEIGHT / 2 + fontHeight + 2);
 			}
 		};
 		panelLogo.setBounds(379, 39, 215, 150);
