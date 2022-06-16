@@ -198,7 +198,7 @@ public class MainApp extends JFrame
 		JLabel lblNewLabel = new JLabel("Card game");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 15));
-		lblNewLabel.setBounds(379, 168, 131, 21);
+		lblNewLabel.setBounds(400, 168, 131, 21);
 		bannerPanel.add(lblNewLabel);
 	}
 

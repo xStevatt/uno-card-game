@@ -1,11 +1,16 @@
 package unibs.pajc.uno.view;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
+
+import unibs.pajc.uno.controller.AIPlayerController;
 
 public class PlayerDetailsInfoSinglePlayer extends JFrame
 {
@@ -46,6 +51,13 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 		getContentPane().add(comboBox_1_1);
 
 		JButton btnStartGame = new JButton("Start game! ");
+		btnStartGame.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				AIPlayerController aicontroller = new AIPlayerController();
+			}
+		});
 		btnStartGame.setBounds(166, 215, 116, 51);
 		getContentPane().add(btnStartGame);
 
