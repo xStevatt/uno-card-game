@@ -41,10 +41,6 @@ import unibs.pajc.uno.model.player.HandCards;
 
 public class TableView extends JFrame
 {
-
-	public static boolean isLocalPlayerUnoButtonPressed = false;
-	public static boolean isAdversaryPlayerUnoButtonPressed = false;
-
 	private JPanel contentPane;
 	private JTextField txtSendMessageField;
 

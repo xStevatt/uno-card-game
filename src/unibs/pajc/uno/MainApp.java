@@ -328,7 +328,7 @@ public class MainApp extends JFrame
 		newLocalGameButton.addMouseListener(
 				new HoverButtonEvent("Start a multiplayer game.", DEFAULT_APP_TITLE, descriptorLabel));
 
-		newLocalGameButton
+		newAIGameButton
 				.addMouseListener(new HoverButtonEvent("Start a game against AI", DEFAULT_APP_TITLE, descriptorLabel));
 	}
 }
