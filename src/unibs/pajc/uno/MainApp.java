@@ -34,6 +34,7 @@ import unibs.pajc.uno.view.CardBackView;
 import unibs.pajc.uno.view.CardView;
 import unibs.pajc.uno.view.PlayerDetailsInfoOffline;
 import unibs.pajc.uno.view.PlayerDetailsInfoOnline;
+import unibs.pajc.uno.view.PlayerDetailsInfoSinglePlayer;
 import unibs.pajc.uno.view.events.HoverButtonEvent;
 
 /**
@@ -68,6 +69,7 @@ public class MainApp extends JFrame
 
 	private PlayerDetailsInfoOnline playerInfoFrameOnline;
 	private PlayerDetailsInfoOffline playerInfoFrameOffline;
+	private PlayerDetailsInfoSinglePlayer playerInfoSinglePlayer;
 
 	public static void main(String[] args)
 	{
@@ -292,12 +294,13 @@ public class MainApp extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println("Start an AI game!");
+				System.out.println("Start a singleplayer game!");
 				setVisible(false);
 
-				playerInfoFrameOffline.setTitle("Input Window");
-				playerInfoFrameOffline.setResizable(false);
-				playerInfoFrameOffline.setVisible(true);
+				playerInfoSinglePlayer = new PlayerDetailsInfoSinglePlayer();
+				playerInfoSinglePlayer.setTitle("Input Window");
+				playerInfoSinglePlayer.setResizable(false);
+				playerInfoSinglePlayer.setVisible(true);
 			}
 		});
 
