@@ -292,7 +292,7 @@ public class NetClient
 
 			if (newColorSelection)
 			{
-				DialogSelectNewColor dialogColor = new DialogSelectNewColor();
+				DialogSelectNewColor dialogColor = new DialogSelectNewColor(view);
 				CardColor cardColor = dialogColor.show();
 				model.setCurrentCardColor(cardColor);
 			}

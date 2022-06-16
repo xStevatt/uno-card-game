@@ -9,6 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
@@ -70,6 +71,10 @@ public class MainApp extends JFrame
 	private PlayerDetailsInfoOnline playerInfoFrameOnline;
 	private PlayerDetailsInfoOffline playerInfoFrameOffline;
 	private PlayerDetailsInfoSinglePlayer playerInfoSinglePlayer;
+
+	private JPanel panelLogo;
+	private Graphics2D g2;
+	private JLabel descriptorLabel;
 
 	public static void main(String[] args)
 	{
@@ -156,18 +161,20 @@ public class MainApp extends JFrame
 
 		panelCards.moveToFront(backView);
 
-		JPanel panelLogo = new JPanel()
+		panelLogo = new JPanel()
 		{
 			@Override
 			public void paintComponent(Graphics g)
 			{
-				Graphics2D g2 = (Graphics2D) g;
+				g2 = (Graphics2D) g;
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 				int CARD_WIDTH = (int) ((int) 100 * 1.2);
 				int CARD_HEIGHT = (int) ((int) 150 * 1.2);
 
 				// var defaultFont = new Font(Util.DEFAULT_FONT, Font.BOLD, cardWidth / 2 + 5);
-				var defaultFont = new Font("Arial", Font.ITALIC + Font.BOLD, 60);
+				var defaultFont = new Font("Corbel", Font.ITALIC + Font.BOLD, 55);
 				var fontMetrics = this.getFontMetrics(defaultFont);
 				int stringWidth = fontMetrics.stringWidth("UNO") / 2;
 				int fontHeight = defaultFont.getSize() / 2;
@@ -175,18 +182,24 @@ public class MainApp extends JFrame
 				g2.setColor(Color.black);
 
 				AffineTransform affineTransform = new AffineTransform();
-				affineTransform.rotate(Math.toRadians(0), 0, 0);
+				affineTransform.rotate(Math.toRadians(-8), 0, 0);
 				Font rotatedFont = defaultFont.deriveFont(affineTransform);
 
 				g2.setFont(rotatedFont);
 				g2.drawString("UNO", CARD_WIDTH / 2 - stringWidth, CARD_HEIGHT / 2 + fontHeight);
-				g2.setColor(Color.white);
+				g2.setColor(new Color(88, 24, 31));
 				g2.drawString("UNO", CARD_WIDTH / 2 + 2 - stringWidth, CARD_HEIGHT / 2 + fontHeight + 2);
 			}
 		};
-		panelLogo.setBounds(379, 39, 215, 150);
+		panelLogo.setBounds(379, 39, 215, 130);
 		panelLogo.setOpaque(false);
 		bannerPanel.add(panelLogo);
+
+		JLabel lblNewLabel = new JLabel("Card game");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblNewLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 15));
+		lblNewLabel.setBounds(379, 168, 131, 21);
+		bannerPanel.add(lblNewLabel);
 	}
 
 	protected void initializeBannerPanel()
@@ -204,7 +217,7 @@ public class MainApp extends JFrame
 		bannerLabel.setIconTextGap(25);
 
 		bannerPanel = new JPanel();
-		bannerPanel.setBorder(new LineBorder(new Color(165, 42, 42), 7));
+		bannerPanel.setBorder(new LineBorder(new Color(165, 42, 42), 4));
 		bannerPanel.setPreferredSize(new Dimension(600, 250));
 		bannerPanel.setLayout(null);
 		bannerPanel.add(bannerLabel);
@@ -219,17 +232,17 @@ public class MainApp extends JFrame
 		newAIGameButton = new JButton("Against AI");
 
 		newGameButtonPanel = new JPanel(new GridLayout());
-		newGameButtonPanel.setBackground(Color.LIGHT_GRAY);
+		newGameButtonPanel.setBackground(new Color(224, 255, 255));
 		newGameButtonPanel.setBorder(BorderFactory.createEmptyBorder(30, 50, 40, 25));
 		newGameButtonPanel.add(newOnlineGameButton);
 
 		newOnlineGamePanel = new JPanel(new GridLayout(1, 1));
-		newOnlineGamePanel.setBackground(Color.LIGHT_GRAY);
+		newOnlineGamePanel.setBackground(new Color(224, 255, 255));
 		newOnlineGamePanel.setBorder(BorderFactory.createEmptyBorder(30, 25, 40, 25));
 		newOnlineGamePanel.add(newLocalGameButton);
 
 		AIGamePanel = new JPanel(new GridLayout());
-		AIGamePanel.setBackground(Color.LIGHT_GRAY);
+		AIGamePanel.setBackground(new Color(224, 255, 255));
 		AIGamePanel.setBorder(BorderFactory.createEmptyBorder(30, 25, 40, 40));
 		AIGamePanel.add(newAIGameButton);
 
@@ -239,14 +252,14 @@ public class MainApp extends JFrame
 		buttonsPanel.add(newOnlineGamePanel);
 		buttonsPanel.add(AIGamePanel);
 
-		JLabel descriptorLabel = new JLabel(DEFAULT_APP_TITLE, SwingConstants.CENTER);
+		descriptorLabel = new JLabel(DEFAULT_APP_TITLE, SwingConstants.CENTER);
 		JLabel authorLabel = new JLabel(APP_SIGNATURE, SwingConstants.CENTER);
 
 		JPanel descriptorPanelNorth = new JPanel();
-		descriptorPanelNorth.setBackground(Color.LIGHT_GRAY);
+		descriptorPanelNorth.setBackground(new Color(224, 255, 255));
 		descriptorPanelNorth.setBorder(BorderFactory.createEmptyBorder(10, 25, 1, 40));
 		JPanel descriptionPaneSouth = new JPanel();
-		descriptionPaneSouth.setBackground(Color.LIGHT_GRAY);
+		descriptionPaneSouth.setBackground(new Color(224, 255, 255));
 		descriptionPaneSouth.setBorder(BorderFactory.createEmptyBorder(1, 25, 1, 40));
 
 		descriptorPanelNorth.add(descriptorLabel);
@@ -267,6 +280,7 @@ public class MainApp extends JFrame
 				System.out.println("Start a new local game!");
 				setVisible(false);
 				playerInfoFrameOffline = new PlayerDetailsInfoOffline();
+				playerInfoFrameOffline.setLocationRelativeTo(bannerLabel);
 
 				playerInfoFrameOffline.setTitle("Input Window");
 				playerInfoFrameOffline.setResizable(false);
@@ -282,6 +296,7 @@ public class MainApp extends JFrame
 				System.out.println("Start a new LAN game!");
 				setVisible(false);
 				playerInfoFrameOnline = new PlayerDetailsInfoOnline();
+				playerInfoFrameOnline.setLocationRelativeTo(bannerLabel);
 
 				playerInfoFrameOnline.setTitle("Input Window");
 				playerInfoFrameOnline.setResizable(false);
@@ -298,6 +313,8 @@ public class MainApp extends JFrame
 				setVisible(false);
 
 				playerInfoSinglePlayer = new PlayerDetailsInfoSinglePlayer();
+				playerInfoSinglePlayer.setLocationRelativeTo(bannerLabel);
+
 				playerInfoSinglePlayer.setTitle("Input Window");
 				playerInfoSinglePlayer.setResizable(false);
 				playerInfoSinglePlayer.setVisible(true);
@@ -305,7 +322,6 @@ public class MainApp extends JFrame
 		});
 
 		// ADDING MOUSE LISTENER TO CHANGE TEXT WHEN BUTTON IS HOVERED
-
 		newOnlineGameButton.addMouseListener(
 				new HoverButtonEvent("Start a singleplayer game.", DEFAULT_APP_TITLE, descriptorLabel));
 
@@ -314,6 +330,5 @@ public class MainApp extends JFrame
 
 		newLocalGameButton
 				.addMouseListener(new HoverButtonEvent("Start a game against AI", DEFAULT_APP_TITLE, descriptorLabel));
-
 	}
 }

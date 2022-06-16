@@ -195,7 +195,7 @@ public class LocalPlayerController
 				{
 					try
 					{
-						DialogSelectNewColor dialogColor = new DialogSelectNewColor();
+						DialogSelectNewColor dialogColor = new DialogSelectNewColor(gameView);
 						CardColor cardColor = dialogColor.show();
 						model.setCurrentCardColor(cardColor);
 						colorSelectionValid = true;

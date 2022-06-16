@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.util.function.Consumer;
 
 import javax.swing.BorderFactory;
@@ -40,6 +41,8 @@ public class CardDropped extends JPanel
 
 	public CardDropped(Card card, Consumer<Card> onCardClick)
 	{
+		super(true);
+
 		this.card = card;
 		this.value = Util.getValueToDisplay(card);
 
@@ -63,6 +66,9 @@ public class CardDropped extends JPanel
 		super.paintComponent(g);
 
 		Graphics2D g2 = (Graphics2D) g;
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
 		var cardColor = Util.convertCardColor(card.getCardColor());
 
 		fillBackground(g2, cardColor);

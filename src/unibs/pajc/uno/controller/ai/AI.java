@@ -3,21 +3,21 @@ package unibs.pajc.uno.controller.ai;
 import java.util.HashMap;
 
 import unibs.pajc.uno.model.card.Card;
-import unibs.pajc.uno.model.card.CardColor;
-import unibs.pajc.uno.model.card.NumberCard;
 import unibs.pajc.uno.model.player.HandCards;
 
 public class AI
 {
-	private HashMap<CardColor, Integer> hashMap;
+	private HashMap<Card, Integer> hashMapCards;
 
 	public AI()
 	{
-
+		hashMapCards = new HashMap<>();
 	}
 
-	public Card evalMossa(HandCards handCards, Card cardPlaced)
+	public Card findNextMossa(HandCards handCards, Card cardPlaced)
 	{
-		return new NumberCard(CardColor.RED, 0);
+		HandCards possibleSelections = (HandCards) handCards.getCardList().stream().filter(e -> e.isCardSpecialWild());
+
+		return null;
 	}
 }
