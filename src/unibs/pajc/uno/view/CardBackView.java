@@ -21,7 +21,7 @@ public class CardBackView extends JPanel
 	private final int cardHeight = 150;
 	private static final int margin = 5;
 
-	private boolean shouldCardMove = false;
+	private boolean shouldCardWork = false;
 
 	public static volatile boolean isCardDrawnFromDeck;
 
@@ -37,7 +37,7 @@ public class CardBackView extends JPanel
 		// SETS DOUBLE BUFFERING (ANTI ALIASING)
 		super(true);
 
-		this.shouldCardMove = shouldCardMove;
+		this.shouldCardWork = shouldCardMove;
 
 		initView();
 	}
@@ -60,7 +60,7 @@ public class CardBackView extends JPanel
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				if (shouldCardMove)
+				if (shouldCardWork)
 				{
 					CardBackView.isCardDrawnFromDeck = true;
 				}
@@ -69,7 +69,7 @@ public class CardBackView extends JPanel
 			@Override
 			public void mouseEntered(MouseEvent e)
 			{
-				if (shouldCardMove)
+				if (shouldCardWork)
 				{
 					setBorder(focusedBorder);
 					setToolTipText("Draw a card!");
@@ -79,7 +79,7 @@ public class CardBackView extends JPanel
 			@Override
 			public void mouseExited(MouseEvent e)
 			{
-				if (shouldCardMove)
+				if (shouldCardWork)
 				{
 					setBorder(defaultBorder);
 					setToolTipText(null);

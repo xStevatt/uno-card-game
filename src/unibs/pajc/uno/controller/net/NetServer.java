@@ -18,10 +18,11 @@ import javax.swing.SwingUtilities;
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.player.Player;
-import unibs.pajc.uno.view.CardBackView;
 import unibs.pajc.uno.view.CardView;
 import unibs.pajc.uno.view.DialogSelectNewColor;
 import unibs.pajc.uno.view.TableView;
+import unibs.pajc.uno.view.events.CardDrawnEvent;
+import unibs.pajc.uno.view.events.CardSelectedEvent;
 
 public class NetServer
 {
@@ -41,7 +42,12 @@ public class NetServer
 	private String playerNameServer = null;
 	private String playerNameClient = null;
 
+	private CardSelectedEvent mouseListener;
+	private CardDrawnEvent mouseListenerDrawnCard;
+
+	private Object syncCardSelected = new Object();
 	private Object syncObjectModel = new Object();
+	private Object syncObjectChat = new Object();
 
 	public NetServer(String IP_ADDRESS, int PORT, String playerNameServer)
 	{
@@ -52,10 +58,13 @@ public class NetServer
 		System.out.println(playerNameServer);
 
 		startServer();
-		view = new TableView(playerNameServer, playerNameClient, false);
+		view = new TableView(playerNameServer, playerNameClient, false, syncObjectChat);
 		view.setVisible(true);
 		view.setResizable(false);
 		view.setTitle(playerNameServer);
+
+		mouseListenerDrawnCard = new CardDrawnEvent(syncCardSelected);
+		view.getCardDeckView().addMouseListener(mouseListenerDrawnCard);
 
 		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
@@ -78,13 +87,26 @@ public class NetServer
 			{
 				view.repaint();
 
+				// SETS LABELS
 				view.setPanelTitles(server.getNamePlayer(), client.getNamePlayer());
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
+				// LOADS CARDS (Player and adversary)
 				view.loadCards(server.getHandCards(), 0);
-				view.addCardsToViewBack(client.getHandCards().getNumberOfCards());
+				view.loadCardsAdversary(client.getHandCards().getNumberOfCards());
+
+				// CHANGES THE LAST CARD USED
 				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
 
+				// ADDS ACTION LISTENERS
+				ArrayList<CardView> panelPlayerOneCards = view.getAllCards(0,
+						model.getPlayers().get(0).getHandCards().getNumberOfCards());
+
+				mouseListener = new CardSelectedEvent(syncCardSelected);
+				panelPlayerOneCards.forEach(e -> e.addMouseListener(mouseListener));
+
+				// ENABLES / DISABLES CARDS
+				changeTurnView(model.getCurrentPlayerIndex());
 				view.repaint();
 			}
 		});
@@ -135,26 +157,27 @@ public class NetServer
 				// SENDING MODEL TO CLIENT
 				sendToClient(model);
 
-				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
-
 				while (!model.isGameOver())
 				{
+					updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+
 					if (model.getCurrentPlayerIndex() == 0)
 					{
-						changeTurnView(0);
-
-						checkPlayerSaidUno();
-
-						manageCurrentAction();
-
-						sendToClient(model);
-
-						System.out.println("Current turn: " + model.getCurrentPlayerIndex());
+						synchronized (syncCardSelected)
+						{
+							try
+							{
+								syncCardSelected.wait();
+								turnGame();
+							}
+							catch (InterruptedException e)
+							{
+								e.printStackTrace();
+							}
+						}
 
 						updateView(model.getPlayers().get(0), model.getPlayers().get(1));
-
-						CardView.isCardSelected = false;
-						CardBackView.isCardDrawnFromDeck = false;
+						sendToClient(model);
 					}
 					else if (model.getCurrentPlayerIndex() == 1)
 					{
@@ -179,10 +202,10 @@ public class NetServer
 						updatedModel = null;
 						objReceivedGame = null;
 
-						System.out.println("Current turn: " + model.getCurrentPlayerIndex());
-
 						updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 					}
+
+					updateView(server, client);
 				}
 
 				if (model.getWinnerPlayer().getIndex() == 0)
@@ -197,54 +220,27 @@ public class NetServer
 				}
 
 				System.exit(0);
-
-				CardView.isCardSelected = false;
-				CardBackView.isCardDrawnFromDeck = false;
 			}
 		}).start();
 	}
 
-	/**
-	 * 
-	 */
-	public void manageCurrentAction()
-	{
-		while (CardView.isCardSelected == false && CardBackView.isCardDrawnFromDeck == false
-				&& model.getCurrentPlayerIndex() == 0)
-		{
-			turnGame();
-		}
-	}
-
 	public void turnGame()
 	{
-		try
-		{
-			Thread.sleep(10);
-		}
-		catch (InterruptedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (CardView.isCardSelected == true)
+		if (mouseListener.getCardSelected() != null)
 		{
 			System.out.println("[SERVER] - Card selected");
 			manageCardSelected();
 		}
-		if (CardBackView.isCardDrawnFromDeck == true && model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
+		if (mouseListenerDrawnCard.isCardDrawn() && model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
 		{
 			System.out.println("[SERVER] - Card card drawn");
 			manageCardDrawn();
 		}
-		else if (CardBackView.isCardDrawnFromDeck == true
+		else if (mouseListenerDrawnCard.isCardDrawn()
 				&& model.getCurrentPlayer().getHandCards().getNumberOfCards() >= 30)
 		{
 			JOptionPane.showMessageDialog(view, "Hai già troppe carte!");
 		}
-
-		CardView.isCardSelected = false;
-		CardBackView.isCardDrawnFromDeck = false;
 	}
 
 	public void manageCardDrawn()
@@ -256,6 +252,7 @@ public class NetServer
 		}
 
 		model.getCurrentPlayer().addCard(model.getCardFromDeck());
+		mouseListenerDrawnCard.setCardDrawn(false);
 		model.nextTurn();
 	}
 
@@ -270,20 +267,10 @@ public class NetServer
 			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
 		}
 
-		try
+		if (model.isPlacedCardValid(mouseListener.getCardSelected()))
 		{
-			Thread.sleep(100);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
-
-		if (model.isPlacedCardValid(CardView.cardSelected))
-		{
-			view.changeDroppedCardView(CardView.cardSelected, model.getCurrentCardColor());
-			boolean newColorSelection = model.evalMossa(CardView.cardSelected);
-			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+			view.changeDroppedCardView(mouseListener.getCardSelected(), model.getCurrentCardColor());
+			boolean newColorSelection = model.evalMossa(mouseListener.getCardSelected());
 
 			if (newColorSelection)
 			{
@@ -291,16 +278,13 @@ public class NetServer
 				CardColor cardColor = dialogColor.show();
 				model.setCurrentCardColor(cardColor);
 			}
-
-			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 		}
 		else
 		{
 			JOptionPane.showMessageDialog(null, "Please select a valid card!", "Error", JOptionPane.ERROR_MESSAGE);
-			CardView.isCardSelected = false;
 		}
 
-		CardView.isCardSelected = false;
+		mouseListener.setCardSelectedNull();
 	}
 
 	public GameModel waitForClient()
@@ -419,13 +403,13 @@ public class NetServer
 			}
 			catch (EOFException e)
 			{
-				System.out.println("Error while connected!");
+				JOptionPane.showMessageDialog(view, "Network error!");
+				System.exit(0);
 			}
 			catch (IOException e)
 			{
 				System.out.println("Errors in listening to the client");
 				System.exit(0);
-
 			}
 			catch (ClassNotFoundException e)
 			{
@@ -442,28 +426,18 @@ public class NetServer
 	{
 		while (true)
 		{
-			try
+			synchronized (syncObjectChat)
 			{
-				Thread.sleep(100);
-			}
-			catch (InterruptedException e1)
-			{
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			if (TableView.message.equals("") == false)
-			{
-				sendToClient(TableView.message);
-
 				try
 				{
-					Thread.sleep(1000);
+					syncObjectChat.wait();
 				}
 				catch (InterruptedException e)
 				{
 					e.printStackTrace();
 				}
-				TableView.message = "";
+
+				sendToClient(view.getMessage());
 			}
 		}
 	}

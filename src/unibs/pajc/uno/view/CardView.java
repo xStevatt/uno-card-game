@@ -7,8 +7,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
@@ -63,33 +61,6 @@ public class CardView extends JPanel
 	{
 		setPreferredSize(dimension);
 		setBorder(defaultBorder);
-
-		addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				super.mouseEntered(e);
-				showHoverEffect();
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				super.mouseExited(e);
-				removeHoverEffect();
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e)
-			{
-				if (active)
-				{
-					CardView.cardSelected = card;
-					isCardSelected = true;
-				}
-			}
-		});
 	}
 
 	@Override
@@ -149,7 +120,7 @@ public class CardView extends JPanel
 		g2.drawString(value, margin, 5 * margin);
 	}
 
-	private void showHoverEffect()
+	public void showHoverEffect()
 	{
 		if (active)
 		{
@@ -160,7 +131,7 @@ public class CardView extends JPanel
 		}
 	}
 
-	private void removeHoverEffect()
+	public void removeHoverEffect()
 	{
 		if (active)
 		{

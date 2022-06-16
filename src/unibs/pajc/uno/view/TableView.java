@@ -82,7 +82,7 @@ public class TableView extends JFrame
 	private JLabel turnFinalLabel;
 	private JLabel lblPlayerTurn;
 
-	public static String message = "";
+	public String message = "";
 
 	private JSeparator separatorInfo1;
 	private JSeparator separatorInfo2;
@@ -92,13 +92,8 @@ public class TableView extends JFrame
 	private JSeparator separator;
 	private JScrollPane scroll;
 
-	/**
-	 * Constructor to create the form.
-	 * 
-	 * @param namePlayerOne
-	 * @param namePlayerTwo
-	 * @param firstRandomCard
-	 */
+	private Object syncObjectChat;
+
 	public TableView(String namePlayerOne, String namePlayerTwo, boolean isGameLocal)
 	{
 		super("Uno - cards game");
@@ -233,7 +228,13 @@ public class TableView extends JFrame
 				{
 					txtSendMessageField.setText("");
 					addChatMessage(messageInput, "You");
-					TableView.message = messageInput;
+
+					message = messageInput;
+
+					synchronized (syncObjectChat)
+					{
+						syncObjectChat.notify();
+					}
 				}
 			}
 		});
@@ -320,6 +321,22 @@ public class TableView extends JFrame
 		}
 
 		initTimer();
+	}
+
+	/**
+	 * Constructor to create the form.
+	 * 
+	 * @param namePlayerOne
+	 * @param namePlayerTwo
+	 * @param firstRandomCard
+	 * @wbp.parser.constructor
+	 * 
+	 * 
+	 */
+	public TableView(String namePlayerOne, String namePlayerTwo, boolean isGameLocal, Object syncObjectChat)
+	{
+		this(namePlayerOne, namePlayerTwo, isGameLocal);
+		this.syncObjectChat = syncObjectChat;
 	}
 
 	public void setPanelTitles(String actualPlyer, String adversaryPlayer)
@@ -570,7 +587,7 @@ public class TableView extends JFrame
 	 * @param panelToAddCards
 	 * @param cardsView
 	 */
-	public void addCardsToViewBack(int numberOfCards)
+	public void loadCardsAdversary(int numberOfCards)
 	{
 		handCardsViewAdversary.removeAll();
 
@@ -680,6 +697,16 @@ public class TableView extends JFrame
 		return list;
 	}
 
+	public void setMessage(String message)
+	{
+		this.message = message;
+	}
+
+	public String getMessage()
+	{
+		return message;
+	}
+
 	public CardBackView getCardDeckView()
 	{
 		return backView;
@@ -703,11 +730,6 @@ public class TableView extends JFrame
 	public void setUnoButtonPressed(boolean unoButtonPressed)
 	{
 		this.unoButtonPressed = unoButtonPressed;
-	}
-
-	public String getMessage()
-	{
-		return message;
 	}
 
 	public JPanel getMidTable()

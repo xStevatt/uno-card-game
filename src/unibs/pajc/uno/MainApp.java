@@ -46,6 +46,7 @@ import unibs.pajc.uno.view.events.HoverButtonEvent;
  */
 public class MainApp extends JFrame
 {
+	private static final long serialVersionUID = 1L;
 	private static final String APP_SIGNATURE = "Made by Stefano Valloncini, Yuhang Ye, Luigi Amarante";
 	private static final String DEFAULT_APP_TITLE = "UnoPAJC, a remake of the uno card game, in Java";
 
@@ -67,6 +68,7 @@ public class MainApp extends JFrame
 	private JLayeredPane panelCards;
 	private Card cards[] = { new NumberCard(CardColor.RED, 6), new WildCard(CardType.SKIP, CardColor.YELLOW),
 			new NumberCard(CardColor.GREEN, 9) };
+	CardView cardViews[];
 
 	private PlayerDetailsInfoOnline playerInfoFrameOnline;
 	private PlayerDetailsInfoOffline playerInfoFrameOffline;
@@ -137,32 +139,30 @@ public class MainApp extends JFrame
 		this.setIconImage(bannerImage);
 		this.setLocationRelativeTo(null);
 
+		cardViews = new CardView[3];
+
 		CardBackView backView = new CardBackView(false);
 		backView.setBounds(0, 0, backView.getDimension().width, backView.getDimension().height);
 
-		// FIRST CARD
-		CardView cardone = new CardView(cards[0]);
-		cardone.setBounds(50, 0, cardone.getDimension().width, cardone.getDimension().height);
-
-		// SECOND CARD
-		CardView cardtwo = new CardView(cards[1]);
-
-		cardtwo.setBounds(100, 0, cardtwo.getDimension().width, cardtwo.getDimension().height);
-
-		// THIRD CARD
-		CardView cardThree = new CardView(cards[2]);
-
-		cardThree.setBounds(150, 0, cardThree.getDimension().width, cardThree.getDimension().height);
+		for (int i = 0, j = 50; i < 3; i++, j += 50)
+		{
+			cardViews[i] = new CardView(cards[i]);
+			cardViews[i].setBounds(j, 0, backView.getDimension().width, backView.getDimension().height);
+			cardViews[i].setActive(true);
+			cardViews[i].setEnabled(rootPaneCheckingEnabled);
+		}
 
 		panelCards.add(backView);
-		panelCards.add(cardone);
-		panelCards.add(cardtwo);
-		panelCards.add(cardThree);
+		panelCards.add(cardViews[0]);
+		panelCards.add(cardViews[1]);
+		panelCards.add(cardViews[2]);
 
 		panelCards.moveToFront(backView);
 
 		panelLogo = new JPanel()
 		{
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void paintComponent(Graphics g)
 			{
@@ -228,8 +228,11 @@ public class MainApp extends JFrame
 	protected void initializeButtonsPanel()
 	{
 		newOnlineGameButton = new JButton("Online Game");
+		newOnlineGameButton.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 		newLocalGameButton = new JButton("Offline Game");
-		newAIGameButton = new JButton("Against AI");
+		newLocalGameButton.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		newAIGameButton = new JButton("Singleplayer");
+		newAIGameButton.setFont(new Font("Lucida Grande", Font.BOLD, 13));
 
 		newGameButtonPanel = new JPanel(new GridLayout());
 		newGameButtonPanel.setBackground(new Color(224, 255, 255));
@@ -330,5 +333,31 @@ public class MainApp extends JFrame
 
 		newAIGameButton
 				.addMouseListener(new HoverButtonEvent("Start a game against AI", DEFAULT_APP_TITLE, descriptorLabel));
+	}
+
+	public void cardAnimation()
+	{
+		new Thread(() -> {
+
+			while (this.isVisible())
+			{
+				for (CardView card : cardViews)
+				{
+					card.showHoverEffect();
+
+					try
+					{
+						Thread.sleep(2000);
+					}
+					catch (InterruptedException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					card.removeHoverEffect();
+				}
+			}
+		}).start();
 	}
 }

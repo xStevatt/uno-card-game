@@ -45,7 +45,7 @@ public class CardDrawnEvent implements MouseListener
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
-		((CardBackView) e.getSource()).setToolTipText("Place card!");
+		((CardBackView) e.getSource()).setToolTipText("Draw a card!");
 	}
 
 	@Override

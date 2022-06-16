@@ -42,24 +42,26 @@ public class CardSelectedEvent implements MouseListener
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
+		((CardView) e.getSource()).removeHoverEffect();
 		((CardView) e.getSource()).setToolTipText("");
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
+		((CardView) e.getSource()).showHoverEffect();
 		((CardView) e.getSource()).setToolTipText("Place card!");
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e)
 	{
-		// NOT IMPLEMENTED
+		// NOT IMPLEMENTED YET
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e)
 	{
-		// NOT IMPLEMENTED
+		// NOT IMPLEMENTED YET
 	}
 }
