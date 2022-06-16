@@ -165,7 +165,7 @@ public class MainApp extends JFrame
 				int CARD_HEIGHT = (int) ((int) 150 * 1.2);
 
 				// var defaultFont = new Font(Util.DEFAULT_FONT, Font.BOLD, cardWidth / 2 + 5);
-				var defaultFont = new Font("Arial", Font.ITALIC + Font.BOLD, 50);
+				var defaultFont = new Font("Arial", Font.ITALIC + Font.BOLD, 60);
 				var fontMetrics = this.getFontMetrics(defaultFont);
 				int stringWidth = fontMetrics.stringWidth("UNO") / 2;
 				int fontHeight = defaultFont.getSize() / 2;
@@ -173,7 +173,7 @@ public class MainApp extends JFrame
 				g2.setColor(Color.black);
 
 				AffineTransform affineTransform = new AffineTransform();
-				// affineTransform.rotate(Math.toRadians(-8), 0, 0);
+				affineTransform.rotate(Math.toRadians(0), 0, 0);
 				Font rotatedFont = defaultFont.deriveFont(affineTransform);
 
 				g2.setFont(rotatedFont);
