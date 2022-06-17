@@ -85,7 +85,9 @@ public class NetServer
 			@Override
 			public void run()
 			{
-				view.repaint();
+				view.setMiddleCardClickable(model.getCurrentPlayerIndex() == 0 ? true : false);
+
+				view.setSayUnoButtonVisibile(model.hasPlayerOneCard(), 0);
 
 				// SETS LABELS
 				view.setPanelTitles(server.getNamePlayer(), client.getNamePlayer());
@@ -106,33 +108,9 @@ public class NetServer
 				panelPlayerOneCards.forEach(e -> e.addMouseListener(mouseListener));
 
 				// ENABLES / DISABLES CARDS
-				changeTurnView(model.getCurrentPlayerIndex());
-				view.repaint();
-			}
-		});
-	}
+				view.enableViewPlayer(0, model.getCurrentPlayerIndex() == 0 ? true : false);
 
-	/**
-	 * 
-	 * @param playingPlayer
-	 */
-	public void changeTurnView(int playingPlayer)
-	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				if (playingPlayer == 0)
-				{
-					view.enableViewPlayer(0, true);
-					view.getPanelPlaced().setEnabled(true);
-				}
-				if (playingPlayer == 1)
-				{
-					view.enableViewPlayer(0, false);
-					view.getPanelPlaced().setEnabled(false);
-				}
+				view.repaint();
 			}
 		});
 	}
@@ -142,86 +120,76 @@ public class NetServer
 	 */
 	public void runGameLogic()
 	{
-		new Thread(new Runnable()
+		model = new GameModel();
+
+		Player server = new Player(playerNameServer, model.generateStartingCards(), 0);
+		Player client = new Player(playerNameClient, model.generateStartingCards(), 1);
+
+		model.initPlayers(new ArrayList<Player>(Arrays.asList(new Player[] { server, client })));
+
+		// SENDING MODEL TO CLIENT
+		sendToClient(model);
+
+		while (!model.isGameOver())
 		{
-			@Override
-			public void run()
+			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+
+			if (model.getCurrentPlayerIndex() == 0)
 			{
-				model = new GameModel();
+				synchronized (syncCardSelected)
+				{
+					try
+					{
+						syncCardSelected.wait();
+						turnGame();
+					}
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
+				}
 
-				Player server = new Player(playerNameServer, model.generateStartingCards(), 0);
-				Player client = new Player(playerNameClient, model.generateStartingCards(), 1);
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
-				model.initPlayers(new ArrayList<Player>(Arrays.asList(new Player[] { server, client })));
-
-				// SENDING MODEL TO CLIENT
 				sendToClient(model);
-
-				while (!model.isGameOver())
-				{
-					updateView(model.getPlayers().get(0), model.getPlayers().get(1));
-
-					if (model.getCurrentPlayerIndex() == 0)
-					{
-						synchronized (syncCardSelected)
-						{
-							try
-							{
-								syncCardSelected.wait();
-								turnGame();
-							}
-							catch (InterruptedException e)
-							{
-								e.printStackTrace();
-							}
-						}
-
-						updateView(model.getPlayers().get(0), model.getPlayers().get(1));
-						sendToClient(model);
-					}
-					else if (model.getCurrentPlayerIndex() == 1)
-					{
-						changeTurnView(1);
-
-						GameModel updatedModel = null;
-
-						synchronized (syncObjectModel)
-						{
-							try
-							{
-								syncObjectModel.wait();
-								updatedModel = (GameModel) objReceivedGame;
-							}
-							catch (InterruptedException e)
-							{
-								e.printStackTrace();
-							}
-						}
-
-						model = updatedModel;
-						updatedModel = null;
-						objReceivedGame = null;
-
-						updateView(model.getPlayers().get(0), model.getPlayers().get(1));
-					}
-
-					updateView(server, client);
-				}
-
-				if (model.getWinnerPlayer().getIndex() == 0)
-				{
-					JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer()
-							+ " vincitore! Congratulazioni! Non hai vinto assolutamente nulla, se non un briciolo di misera gloria!");
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(null,
-							model.getWinnerPlayer().getNamePlayer() + " hai perso! L'importante è partecipare?");
-				}
-
-				System.exit(0);
 			}
-		}).start();
+			else if (model.getCurrentPlayerIndex() == 1)
+			{
+				GameModel updatedModel = null;
+
+				synchronized (syncObjectModel)
+				{
+					try
+					{
+						syncObjectModel.wait();
+						updatedModel = (GameModel) objReceivedGame;
+					}
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
+				}
+
+				model = updatedModel;
+				updatedModel = null;
+				objReceivedGame = null;
+
+				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+			}
+		}
+
+		if (model.getWinnerPlayer().getIndex() == 0)
+		{
+			JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer()
+					+ " vincitore! Congratulazioni! Non hai vinto assolutamente nulla, se non un briciolo di misera gloria!");
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(null,
+					model.getWinnerPlayer().getNamePlayer() + " hai perso! L'importante è partecipare?");
+		}
+
+		System.exit(0);
 	}
 
 	public void turnGame()

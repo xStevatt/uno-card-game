@@ -92,7 +92,9 @@ public class NetClient
 			@Override
 			public void run()
 			{
-				view.repaint();
+				view.setMiddleCardClickable(model.getCurrentPlayerIndex() == 1 ? true : false);
+
+				view.setSayUnoButtonVisibile(model.hasPlayerOneCard(), 1);
 
 				// SETS LABELS
 				view.setPanelTitles(client.getNamePlayer(), server.getNamePlayer());
@@ -113,7 +115,8 @@ public class NetClient
 				panelPlayerOneCards.forEach(e -> e.addMouseListener(mouseListener));
 
 				// ENABLES / DISABLES CARDS
-				changeTurnView(model.getCurrentPlayerIndex());
+				view.enableViewPlayer(0, model.getCurrentPlayerIndex() == 1 ? true : false);
+
 				view.repaint();
 			}
 		});

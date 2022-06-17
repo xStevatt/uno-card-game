@@ -88,6 +88,16 @@ public class CardBackView extends JPanel
 		});
 	}
 
+	public void setSelectedBorder()
+	{
+		setBorder(focusedBorder);
+	}
+
+	public void setDefaultBorder()
+	{
+		setBorder(defaultBorder);
+	}
+
 	@Override
 	protected void paintComponent(Graphics g)
 	{
@@ -146,5 +156,15 @@ public class CardBackView extends JPanel
 
 		g2.setFont(rotatedFont);
 		g2.drawString("Uno", cardWidth / 2 - stringWidth, cardHeight / 2 + fontHeight);
+	}
+
+	public boolean isShouldCardWork()
+	{
+		return shouldCardWork;
+	}
+
+	public void setShouldCardWork(boolean shouldCardWork)
+	{
+		this.shouldCardWork = shouldCardWork;
 	}
 }

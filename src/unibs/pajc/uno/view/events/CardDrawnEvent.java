@@ -30,22 +30,43 @@ public class CardDrawnEvent implements MouseListener
 	{
 		synchronized (notifyObj)
 		{
-			isCardDrawn = true;
+			if (((CardBackView) e.getSource()).isShouldCardWork())
+			{
+				isCardDrawn = true;
 
-			notifyObj.notify();
+				notifyObj.notify();
+			}
 		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e)
 	{
-		((CardBackView) e.getSource()).setToolTipText("");
+		if (((CardBackView) e.getSource()).isShouldCardWork())
+		{
+			((CardBackView) e.getSource()).setDefaultBorder();
+			((CardBackView) e.getSource()).setToolTipText("");
+		}
+		else
+		{
+			((CardBackView) e.getSource()).setDefaultBorder();
+			((CardBackView) e.getSource()).setToolTipText("");
+		}
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e)
 	{
-		((CardBackView) e.getSource()).setToolTipText("Draw a card!");
+		if (((CardBackView) e.getSource()).isShouldCardWork())
+		{
+			((CardBackView) e.getSource()).setSelectedBorder();
+			((CardBackView) e.getSource()).setToolTipText("Draw a card!");
+		}
+		else
+		{
+			((CardBackView) e.getSource()).setDefaultBorder();
+			((CardBackView) e.getSource()).setToolTipText("");
+		}
 	}
 
 	@Override

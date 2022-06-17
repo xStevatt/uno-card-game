@@ -505,7 +505,7 @@ public class TableView extends JFrame
 	 */
 	public void setMiddleCardClickable(boolean isEnabled)
 	{
-		backView.setEnabled(isEnabled);
+		backView.setShouldCardWork(isEnabled);
 	}
 
 	/**
