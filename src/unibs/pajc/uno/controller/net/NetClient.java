@@ -94,7 +94,7 @@ public class NetClient
 			{
 				view.setMiddleCardClickable(model.getCurrentPlayerIndex() == 1 ? true : false);
 
-				view.setSayUnoButtonVisibile(model.hasPlayerOneCard(), 1);
+				view.setSayUnoButtonVisibile(model.hasPlayerOneCard() && model.getCurrentPlayerIndex() == 1, 0);
 
 				// SETS LABELS
 				view.setPanelTitles(client.getNamePlayer(), server.getNamePlayer());

@@ -87,7 +87,7 @@ public class NetServer
 			{
 				view.setMiddleCardClickable(model.getCurrentPlayerIndex() == 0 ? true : false);
 
-				view.setSayUnoButtonVisibile(model.hasPlayerOneCard(), 0);
+				view.setSayUnoButtonVisibile(model.hasPlayerOneCard() && model.getCurrentPlayerIndex() == 0, 0);
 
 				// SETS LABELS
 				view.setPanelTitles(server.getNamePlayer(), client.getNamePlayer());
