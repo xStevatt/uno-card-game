@@ -66,7 +66,7 @@ public class NetClient
 		executor.execute(this::runGameLogic);
 	}
 
-	public void initView()
+	private void initView()
 	{
 		SwingUtilities.invokeLater(new Runnable()
 		{
@@ -85,15 +85,15 @@ public class NetClient
 		});
 	}
 
-	public void updateView(Player server, Player client)
+	private void updateView(Player server, Player client)
 	{
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			@Override
 			public void run()
 			{
+				// CHECKS IF DECK CARD SHOULD BE ENABLED / CHECKS IF "SAY UNO" BUTTON IS VISIBLE
 				view.setMiddleCardClickable(model.getCurrentPlayerIndex() == 1 ? true : false);
-
 				view.setSayUnoButtonVisibile(model.hasPlayerOneCard() && model.getCurrentPlayerIndex() == 1, 0);
 
 				// SETS LABELS
@@ -117,14 +117,16 @@ public class NetClient
 				// ENABLES / DISABLES CARDS
 				view.enableViewPlayer(0, model.getCurrentPlayerIndex() == 1 ? true : false);
 
+				// RESETS IF PLAYER SAID UNO
 				view.setUnoButtonPressed(false);
 
+				// REPAINTS VIEW
 				view.repaint();
 			}
 		});
 	}
 
-	public void runGameLogic()
+	private void runGameLogic()
 	{
 		synchronized (syncObjectModel)
 		{
@@ -207,7 +209,7 @@ public class NetClient
 		System.exit(0);
 	}
 
-	public void turnGame()
+	private void turnGame()
 	{
 		if (mouseListener.getCardSelected() != null)
 		{
@@ -266,7 +268,7 @@ public class NetClient
 		}
 	}
 
-	public void playerSaidUno()
+	private void playerSaidUno()
 	{
 		if (model.hasPlayerOneCard() && view.isUnoButtonPressed() == false)
 		{
@@ -275,7 +277,7 @@ public class NetClient
 		}
 	}
 
-	public GameModel waitForServer()
+	private GameModel waitForServer()
 	{
 		if (objReceivedGame != null && objReceivedGame instanceof GameModel)
 		{
@@ -327,7 +329,7 @@ public class NetClient
 		}
 	}
 
-	public void listenToServerForModel()
+	private void listenToServerForModel()
 	{
 		while (true)
 		{
@@ -412,7 +414,7 @@ public class NetClient
 	/**
 	 * Listens for new messages to send
 	 */
-	public void listenForNewMessagesToSend()
+	private void listenForNewMessagesToSend()
 	{
 		while (true)
 		{

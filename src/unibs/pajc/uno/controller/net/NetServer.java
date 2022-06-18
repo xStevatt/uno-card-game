@@ -120,7 +120,7 @@ public class NetServer
 	/**
 	 * 
 	 */
-	public void runGameLogic()
+	private void runGameLogic()
 	{
 		model = new GameModel();
 
@@ -151,7 +151,6 @@ public class NetServer
 					}
 				}
 
-				playerSaidUno();
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 				sendToClient(model);
@@ -195,7 +194,7 @@ public class NetServer
 		System.exit(0);
 	}
 
-	public void turnGame()
+	private void turnGame()
 	{
 		if (mouseListener.getCardSelected() != null)
 		{
@@ -214,7 +213,7 @@ public class NetServer
 		}
 	}
 
-	public void manageCardDrawn()
+	private void manageCardDrawn()
 	{
 		model.getCurrentPlayer().addCard(model.getCardFromDeck());
 		mouseListenerDrawnCard.setCardDrawn(false);
@@ -224,7 +223,7 @@ public class NetServer
 	/**
 	 * 
 	 */
-	public void manageCardSelected()
+	private void manageCardSelected()
 	{
 		if (model.isPlacedCardValid(mouseListener.getCardSelected()))
 		{
@@ -259,7 +258,7 @@ public class NetServer
 		mouseListener.setCardSelectedNull();
 	}
 
-	public void playerSaidUno()
+	private void playerSaidUno()
 	{
 		if (model.hasPlayerOneCard() && view.isUnoButtonPressed() == false)
 		{
@@ -268,23 +267,10 @@ public class NetServer
 		}
 	}
 
-	public GameModel waitForClient()
-	{
-		while (objReceivedGame == null)
-		{
-			if (objReceivedGame != null && objReceivedGame instanceof GameModel)
-			{
-				return ((GameModel) objReceivedGame);
-			}
-		}
-
-		return null;
-	}
-
 	/**
 	 * Initializes the server
 	 */
-	public void startServer()
+	private void startServer()
 	{
 		try
 		{
@@ -339,7 +325,7 @@ public class NetServer
 	/**
 	 * Method that starts listening to the client
 	 */
-	public void listenToClient()
+	private void listenToClient()
 	{
 		while (true)
 		{
@@ -387,7 +373,7 @@ public class NetServer
 	/**
 	 * Listens for possible new messages to send to the client
 	 */
-	public void listenForNewMessagesToSend()
+	private void listenForNewMessagesToSend()
 	{
 		while (true)
 		{
@@ -412,7 +398,7 @@ public class NetServer
 	 * 
 	 * @param objToSend the object to send to the client
 	 */
-	public synchronized void sendToClient(Object objToSend)
+	private synchronized void sendToClient(Object objToSend)
 	{
 		try
 		{
