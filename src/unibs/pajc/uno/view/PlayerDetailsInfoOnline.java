@@ -3,6 +3,8 @@ package unibs.pajc.uno.view;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -38,6 +40,8 @@ public class PlayerDetailsInfoOnline extends JFrame
 	private JRadioButton rdbtnClient;
 	private JLabel lblNewLabel;
 	private JRadioButton rdbtnServer;
+
+	String machineIP = null;
 
 	/**
 	 * Create the frame.
@@ -140,7 +144,21 @@ public class PlayerDetailsInfoOnline extends JFrame
 		panelSettingsClient.add(lblNewLabel_1_1);
 
 		txtIPAddress = new JTextField();
-		txtIPAddress.setText("127.0.0.1");
+
+		try
+		{
+			machineIP = Inet4Address.getLocalHost().toString();
+		}
+		catch (UnknownHostException e1)
+		{
+			System.out.println("Couldn't retrieve IP Address");
+			e1.printStackTrace();
+		}
+
+		machineIP.trim();
+		String splittedIP[] = machineIP.split("/");
+		txtIPAddress.setText(splittedIP[splittedIP.length - 1]);
+
 		txtIPAddress.setBounds(108, 23, 130, 31);
 		panelSettingsClient.add(txtIPAddress);
 		txtIPAddress.setColumns(10);
@@ -178,6 +196,9 @@ public class PlayerDetailsInfoOnline extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				txtIPAddress.setEditable(true);
+				txtIPAddress.setEnabled(true);
+				txtIPAddress.setText(null);
 				txtName.setText("Client");
 				panelSettingsClient.setBorder(new TitledBorder(null, "Edit client details", TitledBorder.LEADING,
 						TitledBorder.TOP, null, null));
@@ -189,12 +210,20 @@ public class PlayerDetailsInfoOnline extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				txtIPAddress.setEditable(false);
+				txtIPAddress.setEnabled(false);
+
+				machineIP.trim();
+				String splittedIP[] = machineIP.split("/");
+				txtIPAddress.setText(splittedIP[splittedIP.length - 1]);
+
 				txtName.setText("Server");
 				panelSettingsClient.setBorder(new TitledBorder(null, "Edit server details", TitledBorder.LEADING,
 						TitledBorder.TOP, null, null));
 			}
 		});
 
+		rdbtnServer.doClick();
 		this.setLocationRelativeTo(null);
 	}
 }

@@ -12,6 +12,8 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 
 import javax.swing.BorderFactory;
@@ -157,6 +159,16 @@ public class MainApp extends JFrame
 		panelCards.add(cardViews[1]);
 		panelCards.add(cardViews[2]);
 
+		backView.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mousePressed(MouseEvent e)
+			{
+				System.out.println("HERE");
+				cardAnimation();
+			}
+		});
+
 		panelCards.moveToFront(backView);
 
 		panelLogo = new JPanel()
@@ -197,7 +209,7 @@ public class MainApp extends JFrame
 
 		JLabel lblNewLabel = new JLabel("Card game");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		lblNewLabel.setFont(new Font("Lucida Grande", Font.ITALIC, 15));
+		lblNewLabel.setFont(new Font("Lucida Grande", Font.BOLD | Font.ITALIC, 15));
 		lblNewLabel.setBounds(400, 168, 131, 21);
 		bannerPanel.add(lblNewLabel);
 	}
@@ -338,25 +350,21 @@ public class MainApp extends JFrame
 	public void cardAnimation()
 	{
 		new Thread(() -> {
-
-			while (this.isVisible())
+			for (CardView card : cardViews)
 			{
-				for (CardView card : cardViews)
+				card.showHoverEffect();
+
+				try
 				{
-					card.showHoverEffect();
-
-					try
-					{
-						Thread.sleep(2000);
-					}
-					catch (InterruptedException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					card.removeHoverEffect();
+					Thread.sleep(500);
 				}
+				catch (InterruptedException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				card.removeHoverEffect();
 			}
 		}).start();
 	}

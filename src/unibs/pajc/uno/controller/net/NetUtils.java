@@ -8,8 +8,13 @@ public class NetUtils
 	public static final int DEFAULT_CLIENT_TIME_OUT = 1000;
 
 	public static final boolean ONLINE_GAME = false;
-	private static final boolean OFFLINE_GAME = true;
 
+	/**
+	 * Validates a given IP address.
+	 * 
+	 * @param IPAddress the IP address that needs to be validated
+	 * @return boolean value, true if IP is valid
+	 */
 	public static boolean validateIPAddress(String IPAddress)
 	{
 		String[] splittedString = IPAddress.split("-");
