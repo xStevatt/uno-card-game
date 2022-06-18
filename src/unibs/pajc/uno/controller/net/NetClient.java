@@ -274,9 +274,22 @@ public class NetClient
 
 			if (newColorSelection)
 			{
-				DialogSelectNewColor dialogColor = new DialogSelectNewColor(view);
-				CardColor cardColor = dialogColor.show();
-				model.setCurrentCardColor(cardColor);
+				boolean colorSelectionValid = false;
+
+				while (colorSelectionValid == false)
+				{
+					try
+					{
+						DialogSelectNewColor dialogColor = new DialogSelectNewColor(view);
+						CardColor cardColor = dialogColor.show();
+						model.setCurrentCardColor(cardColor);
+						colorSelectionValid = true;
+					}
+					catch (NullPointerException e)
+					{
+						colorSelectionValid = false;
+					}
+				}
 			}
 		}
 		else

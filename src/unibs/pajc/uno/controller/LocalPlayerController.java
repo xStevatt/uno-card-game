@@ -97,30 +97,13 @@ public class LocalPlayerController
 			panelPlayerOneCards.forEach(e -> e.addMouseListener(mouseListener));
 			panelPlayerTwoCards.forEach(e -> e.addMouseListener(mouseListener));
 
-			// CHECKS THAT PLAYER HAS SAID UNO
-			if (model.hasPlayerOneCard(model.getCurrentPlayer()))
-			{
-				gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
-				gameView.repaint();
-			}
-
 			// ENABLES / DISABLE VIEW FOR PLAYERS
 			gameView.enableViewPlayer(model.getCurrentPlayerIndex(), true);
 			gameView.enableViewPlayer(model.getNextPlayerIndex(), false);
 
 			// CHECKS IF UNO BUTTON SHOULD BE ENABLED
-			if (model.hasPlayerOneCard(model.getCurrentPlayer()))
-			{
-				SwingUtilities.invokeLater(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						gameView.setSayUnoButtonVisibile(true, model.getCurrentPlayerIndex());
-						gameView.repaint();
-					}
-				});
-			}
+			gameView.setSayUnoButtonVisibile(model.hasPlayerOneCard(model.getCurrentPlayer()),
+					model.getCurrentPlayerIndex());
 
 			// REPAINTS VIEW
 			gameView.repaint();

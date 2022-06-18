@@ -50,7 +50,7 @@ public class CardDrawnEvent implements MouseListener
 		else
 		{
 			((CardBackView) e.getSource()).setDefaultBorder();
-			((CardBackView) e.getSource()).setToolTipText("");
+			((CardBackView) e.getSource()).setToolTipText(null);
 		}
 	}
 
@@ -65,7 +65,7 @@ public class CardDrawnEvent implements MouseListener
 		else
 		{
 			((CardBackView) e.getSource()).setDefaultBorder();
-			((CardBackView) e.getSource()).setToolTipText("");
+			((CardBackView) e.getSource()).setToolTipText(null);
 		}
 	}
 
