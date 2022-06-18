@@ -8,6 +8,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import unibs.pajc.uno.controller.AIPlayerController;
@@ -19,42 +20,71 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private JLabel lblTitle;
+	private JComboBox comboBoxPlayerOne;
+	private JLabel playerOneLabel;
+	private JLabel playerTwoLabel;
+	private JComboBox comboBoxPlayerTwo;
+	private JTextField txtFieldPlayerOne;
+	private JTextField txtFieldPlayerTwo;
+
 	public PlayerDetailsInfoSinglePlayer()
 	{
 		getContentPane().setLayout(null);
 
 		this.setSize(460, 305);
 
-		JLabel lblTitle = new JLabel("Insert your details!");
+		lblTitle = new JLabel("Insert your details!");
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitle.setBounds(6, 6, 438, 42);
+		lblTitle.setBounds(12, 6, 438, 42);
 		getContentPane().add(lblTitle);
 
 		String options[] = { "Human", "Computer" };
 
-		JComboBox comboBox_1 = new JComboBox(options);
-		comboBox_1.setBounds(192, 132, 206, 60);
-		getContentPane().add(comboBox_1);
+		comboBoxPlayerOne = new JComboBox(options);
+		comboBoxPlayerOne.setBounds(192, 132, 116, 60);
+		getContentPane().add(comboBoxPlayerOne);
 
-		JLabel playerOneLabel = new JLabel("Player 1");
+		playerOneLabel = new JLabel("Player 1");
 		playerOneLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		playerOneLabel.setBounds(64, 98, 116, 16);
 		getContentPane().add(playerOneLabel);
 
-		JLabel playerTwoLabel = new JLabel("Player 2");
+		playerTwoLabel = new JLabel("Player 2");
 		playerTwoLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		playerTwoLabel.setBounds(64, 153, 116, 16);
 		getContentPane().add(playerTwoLabel);
 
-		JComboBox comboBox_1_1 = new JComboBox(options);
-		comboBox_1_1.setBounds(192, 77, 206, 60);
-		getContentPane().add(comboBox_1_1);
+		comboBoxPlayerTwo = new JComboBox(options);
+		comboBoxPlayerTwo.setBounds(192, 77, 116, 60);
+		getContentPane().add(comboBoxPlayerTwo);
+
+		comboBoxPlayerTwo.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				String selection = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
+
+				switch (selection.trim())
+				{
+				case "Human":
+					txtFieldPlayerOne.setVisible(true);
+					break;
+				case "Computer":
+					break;
+				}
+			}
+		});
 
 		JButton btnStartGame = new JButton("Start game! ");
 		btnStartGame.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				String selectionPlayerOne = (String) comboBoxPlayerOne.getSelectedItem();
+				String selectionPlayerTwo = (String) comboBoxPlayerTwo.getSelectedItem();
+
 				AIPlayerController aicontroller = new AIPlayerController();
 			}
 		});
@@ -66,7 +96,47 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 		getContentPane().add(separator);
 
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(166, 53, 116, 12);
+		separator_1.setBounds(172, 53, 116, 12);
 		getContentPane().add(separator_1);
+
+		txtFieldPlayerOne = new JTextField();
+		txtFieldPlayerOne.setHorizontalAlignment(SwingConstants.CENTER);
+		txtFieldPlayerOne.setToolTipText("Insert your name");
+		txtFieldPlayerOne.setText("Insert your name");
+		txtFieldPlayerOne.setBounds(320, 93, 130, 26);
+		getContentPane().add(txtFieldPlayerOne);
+		txtFieldPlayerOne.setColumns(10);
+		txtFieldPlayerOne.setVisible(false);
+
+		txtFieldPlayerOne.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				txtFieldPlayerOne.requestFocus();
+				txtFieldPlayerOne.setText("");
+			}
+		});
+
+		txtFieldPlayerTwo = new JTextField();
+		txtFieldPlayerTwo.setHorizontalAlignment(SwingConstants.CENTER);
+		txtFieldPlayerTwo.setToolTipText("Insert your name");
+		txtFieldPlayerTwo.setText("Insert your name");
+		txtFieldPlayerTwo.setColumns(10);
+		txtFieldPlayerTwo.setBounds(320, 148, 130, 26);
+		txtFieldPlayerTwo.setVisible(false);
+
+		txtFieldPlayerOne.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				txtFieldPlayerOne.requestFocus();
+				txtFieldPlayerOne.setText("");
+			}
+		});
+
+		txtFieldPlayerOne.setVisible(true);
+		getContentPane().add(txtFieldPlayerTwo);
 	}
 }

@@ -117,28 +117,9 @@ public class NetClient
 				// ENABLES / DISABLES CARDS
 				view.enableViewPlayer(0, model.getCurrentPlayerIndex() == 1 ? true : false);
 
-				view.repaint();
-			}
-		});
-	}
+				view.setUnoButtonPressed(false);
 
-	public void changeTurnView(int playingPlayer)
-	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				if (playingPlayer == 0)
-				{
-					view.enableViewPlayer(0, false);
-					view.getPanelPlaced().getComponent(0).setEnabled(false);
-				}
-				if (playingPlayer == 1)
-				{
-					view.enableViewPlayer(0, true);
-					view.getPanelPlaced().getComponent(0).setEnabled(true);
-				}
+				view.repaint();
 			}
 		});
 	}
@@ -163,14 +144,12 @@ public class NetClient
 		this.playerNameClient = model.getPlayers().get(1).getNamePlayer();
 
 		updateView(model.getPlayers().get(0), model.getPlayers().get(1));
-		changeTurnView(0);
 
 		while (!model.isGameOver())
 		{
 			if (model.getCurrentPlayerIndex() == 0)
 			{
 				GameModel updatedModel = null;
-				changeTurnView(0);
 
 				synchronized (syncObjectModel)
 				{
@@ -191,7 +170,7 @@ public class NetClient
 
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 			}
-			else if (model.getCurrentPlayerIndex() == 1)
+			else if (model.getCurrentPlayerIndex() != 0)
 			{
 				synchronized (syncCardSelected)
 				{
@@ -206,6 +185,7 @@ public class NetClient
 					}
 				}
 
+				playerSaidUno();
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 				sendToServer(model);
@@ -248,12 +228,6 @@ public class NetClient
 
 	private void manageCardDrawn()
 	{
-		if (model.hasPlayerOneCard() && view.isUnoButtonPressed())
-		{
-			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
-			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
-		}
-
 		model.getCurrentPlayer().addCard(model.getCardFromDeck());
 		mouseListenerDrawnCard.setCardDrawn(false);
 		model.nextTurn();
@@ -261,12 +235,6 @@ public class NetClient
 
 	private void manageCardSelected()
 	{
-		if (model.hasPlayerOneCard() && !view.isUnoButtonPressed())
-		{
-			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
-			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
-		}
-
 		if (model.isPlacedCardValid(mouseListener.getCardSelected()))
 		{
 			view.changeDroppedCardView(mouseListener.getCardSelected(), model.getCurrentCardColor());
@@ -298,6 +266,15 @@ public class NetClient
 		}
 	}
 
+	public void playerSaidUno()
+	{
+		if (model.hasPlayerOneCard() && view.isUnoButtonPressed() == false)
+		{
+			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
+			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+		}
+	}
+
 	public GameModel waitForServer()
 	{
 		if (objReceivedGame != null && objReceivedGame instanceof GameModel)
@@ -308,22 +285,6 @@ public class NetClient
 		}
 
 		return null;
-	}
-
-	public void checkPlayerSaidUno()
-	{
-		if (model.hasPlayerOneCard(1))
-		{
-			SwingUtilities.invokeLater(() -> {
-				view.setSayUnoButtonVisibile(true, 0);
-			});
-		}
-		else
-		{
-			SwingUtilities.invokeLater(() -> {
-				view.setSayUnoButtonVisibile(false, 0);
-			});
-		}
 	}
 
 	private void startClient()

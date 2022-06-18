@@ -110,6 +110,8 @@ public class NetServer
 				// ENABLES / DISABLES CARDS
 				view.enableViewPlayer(0, model.getCurrentPlayerIndex() == 0 ? true : false);
 
+				view.setUnoButtonPressed(false);
+
 				view.repaint();
 			}
 		});
@@ -149,6 +151,7 @@ public class NetServer
 					}
 				}
 
+				playerSaidUno();
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 				sendToClient(model);
@@ -213,12 +216,6 @@ public class NetServer
 
 	public void manageCardDrawn()
 	{
-		if (model.hasPlayerOneCard() && view.isUnoButtonPressed())
-		{
-			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
-			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
-		}
-
 		model.getCurrentPlayer().addCard(model.getCardFromDeck());
 		mouseListenerDrawnCard.setCardDrawn(false);
 		model.nextTurn();
@@ -229,12 +226,6 @@ public class NetServer
 	 */
 	public void manageCardSelected()
 	{
-		if (model.hasPlayerOneCard() && !view.isUnoButtonPressed())
-		{
-			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
-			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
-		}
-
 		if (model.isPlacedCardValid(mouseListener.getCardSelected()))
 		{
 			view.changeDroppedCardView(mouseListener.getCardSelected(), model.getCurrentCardColor());
@@ -268,6 +259,15 @@ public class NetServer
 		mouseListener.setCardSelectedNull();
 	}
 
+	public void playerSaidUno()
+	{
+		if (model.hasPlayerOneCard() && view.isUnoButtonPressed() == false)
+		{
+			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
+			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+		}
+	}
+
 	public GameModel waitForClient()
 	{
 		while (objReceivedGame == null)
@@ -279,22 +279,6 @@ public class NetServer
 		}
 
 		return null;
-	}
-
-	public void checkPlayerSaidUno()
-	{
-		if (model.hasPlayerOneCard(0))
-		{
-			SwingUtilities.invokeLater(() -> {
-				view.setSayUnoButtonVisibile(true, 0);
-			});
-		}
-		else
-		{
-			SwingUtilities.invokeLater(() -> {
-				view.setSayUnoButtonVisibile(false, 0);
-			});
-		}
 	}
 
 	/**

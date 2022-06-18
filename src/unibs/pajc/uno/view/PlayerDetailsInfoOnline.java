@@ -54,6 +54,7 @@ public class PlayerDetailsInfoOnline extends JFrame
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		this.setVisible(true);
 
 		separator = new JSeparator();
 		separator.setBounds(24, 47, 404, 12);
@@ -198,7 +199,7 @@ public class PlayerDetailsInfoOnline extends JFrame
 			{
 				txtIPAddress.setEditable(true);
 				txtIPAddress.setEnabled(true);
-				txtIPAddress.setText(null);
+				txtIPAddress.setText("127.0.0.1");
 				txtName.setText("Client");
 				panelSettingsClient.setBorder(new TitledBorder(null, "Edit client details", TitledBorder.LEADING,
 						TitledBorder.TOP, null, null));

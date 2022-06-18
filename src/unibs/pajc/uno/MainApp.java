@@ -311,11 +311,6 @@ public class MainApp extends JFrame
 				System.out.println("Start a new LAN game!");
 				setVisible(false);
 				playerInfoFrameOnline = new PlayerDetailsInfoOnline();
-				playerInfoFrameOnline.setLocationRelativeTo(bannerLabel);
-
-				playerInfoFrameOnline.setTitle("Input Window");
-				playerInfoFrameOnline.setResizable(false);
-				playerInfoFrameOnline.setVisible(true);
 			}
 		});
 
