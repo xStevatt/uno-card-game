@@ -24,9 +24,6 @@ import unibs.pajc.uno.controller.net.NetServer;
 
 public class PlayerDetailsInfoOnline extends JFrame
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtIPAddress;
@@ -43,9 +40,6 @@ public class PlayerDetailsInfoOnline extends JFrame
 
 	String machineIP = null;
 
-	/**
-	 * Create the frame.
-	 */
 	public PlayerDetailsInfoOnline()
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -26,18 +26,20 @@ import unibs.pajc.uno.view.events.CardSelectedEvent;
 
 public class NetServer
 {
+	// MODEL AND VIEW
+	private GameModel model;
+	private TableView view;
+
+	// NETWORK ATTRIBUTES
 	private Socket client;
 	private ServerSocket serverSocket;
-	private String IP_ADDRESS;
 	private int PORT;
 	private boolean isConnected = false;
 
+	// OUTPUT / INPUT STREAMS
 	private ObjectInputStream objInputStream;
 	private ObjectOutputStream objOutputStream;
 	private Object objReceivedGame = null;
-
-	private TableView view;
-	private GameModel model;
 
 	private String playerNameServer = null;
 	private String playerNameClient = null;
@@ -45,7 +47,10 @@ public class NetServer
 	private CardSelectedEvent mouseListener;
 	private CardDrawnEvent mouseListenerDrawnCard;
 
+	// MULTIPLE CLIENTS
+	private ArrayList<Thread> threadList;
 	private int playerIndex = 0;
+
 	private Object syncCardSelected = new Object();
 	private Object syncObjectModel = new Object();
 	private Object syncObjectChat = new Object();
@@ -55,9 +60,9 @@ public class NetServer
 		this.PORT = PORT;
 
 		this.playerNameServer = playerNameServer;
-		System.out.println(playerNameServer);
 
 		startServer();
+
 		view = new TableView(playerNameServer, playerNameClient, false, syncObjectChat);
 		view.setVisible(true);
 		view.setResizable(false);
@@ -88,7 +93,10 @@ public class NetServer
 				Player player = model.getPlayers().get(playerIndex);
 
 				view.setMiddleCardClickable(model.getCurrentPlayerIndex() == 0 ? true : false);
+
+				// SETS UNIO BUTTON
 				view.setSayUnoButtonVisibile(model.hasPlayerOneCard() && model.getCurrentPlayerIndex() == 0, 0);
+				view.setUnoButtonPressed(false);
 
 				// SETS LABELS
 				view.setPanelTitles(player.getNamePlayer(), model.getPlayers().get(1).getNamePlayer());
@@ -109,8 +117,6 @@ public class NetServer
 
 				// ENABLES / DISABLES CARDS
 				view.enableViewPlayer(0, model.getCurrentPlayerIndex() == 0 ? true : false);
-
-				view.setUnoButtonPressed(false);
 
 				view.repaint();
 			}
@@ -150,8 +156,6 @@ public class NetServer
 					}
 				}
 
-				playerSaidUno();
-
 				sendToClient(model);
 			}
 			else if (model.getCurrentPlayerIndex() != 0)
@@ -176,6 +180,7 @@ public class NetServer
 				objReceivedGame = null;
 			}
 
+			playerSaidUno();
 			updateView();
 		}
 
@@ -259,10 +264,10 @@ public class NetServer
 
 	private void playerSaidUno()
 	{
-		if (model.hasPlayerOneCard(model.getPreviousPlayer()) && view.isUnoButtonPressed() == false)
+		if (model.hasPlayerOneCard(model.getCurrentPlayer()) && view.isUnoButtonPressed() == false)
 		{
 			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
-			model.playerDidNotSayUno(model.getPreviousPlayerIndex());
+			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
 		}
 	}
 

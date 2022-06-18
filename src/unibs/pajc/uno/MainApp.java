@@ -308,9 +308,11 @@ public class MainApp extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println("Start a new LAN game!");
 				setVisible(false);
+				System.out.println("Start a new LAN game!");
 				playerInfoFrameOnline = new PlayerDetailsInfoOnline();
+				playerInfoFrameOnline.setVisible(true);
+				playerInfoFrameOnline.setResizable(false);
 			}
 		});
 

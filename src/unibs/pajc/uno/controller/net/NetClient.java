@@ -79,6 +79,7 @@ public class NetClient
 						model.getPlayers().get(0).getNamePlayer());
 
 				view.setTitle(model.getPlayers().get(1).getNamePlayer());
+
 				updateView();
 			}
 		});
@@ -345,8 +346,6 @@ public class NetClient
 
 					System.out.println("Server name: " + playerNameServer);
 					view.addChatMessage((String) objReceived, playerNameServer);
-
-					Thread.sleep(100);
 				}
 				if (objReceived != null && objReceived instanceof GameModel)
 				{
@@ -372,11 +371,6 @@ public class NetClient
 			{
 				JOptionPane.showMessageDialog(null, "Server disconnected");
 				System.exit(0);
-			}
-			catch (InterruptedException e)
-			{
-				System.out.println("Interrupted execution");
-				e.printStackTrace();
 			}
 		}
 	}
