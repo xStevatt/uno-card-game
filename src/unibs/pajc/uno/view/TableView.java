@@ -21,7 +21,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
@@ -86,7 +85,6 @@ public class TableView extends JFrame
 
 	private JSeparator separatorInfo1;
 	private JSeparator separatorInfo2;
-	private JScrollBar scrollBar;
 
 	private JPanel panelInfo;
 	private JSeparator separator;
@@ -210,13 +208,6 @@ public class TableView extends JFrame
 		contentPane.add(panelChat);
 		panelChat.setLayout(null);
 
-		textAreaChat = new JTextArea();
-		textAreaChat.setLineWrap(true);
-		textAreaChat.setEditable(false);
-		textAreaChat.setRows(1);
-		textAreaChat.setBounds(17, 24, 216, 341);
-		panelChat.add(textAreaChat);
-
 		btnSendMessage = new JButton("Send");
 		btnSendMessage.addActionListener(new ActionListener()
 		{
@@ -247,17 +238,23 @@ public class TableView extends JFrame
 		panelChat.add(txtSendMessageField);
 		txtSendMessageField.setColumns(10);
 
-		scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		textAreaChat.add(scroll);
-
 		separator = new JSeparator();
 		separator.setBounds(17, 377, 216, 12);
 		panelChat.add(separator);
 
-		scrollBar = new JScrollBar();
-		scrollBar.setBounds(218, 24, 15, 341);
-		panelChat.add(scrollBar);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(17, 26, 216, 339);
+		panelChat.add(scrollPane);
+
+		textAreaChat = new JTextArea();
+		scrollPane.setViewportView(textAreaChat);
+		textAreaChat.setLineWrap(true);
+		textAreaChat.setEditable(false);
+		textAreaChat.setRows(1);
+
+		scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		textAreaChat.add(scroll);
 
 		panelInfo = new JPanel();
 		panelInfo.setBorder(new LineBorder(Color.DARK_GRAY));
