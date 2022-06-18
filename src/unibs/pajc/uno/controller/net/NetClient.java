@@ -270,10 +270,10 @@ public class NetClient
 
 	private void playerSaidUno()
 	{
-		if (model.hasPlayerOneCard() && view.isUnoButtonPressed() == false)
+		if (model.hasPlayerOneCard(model.getPreviousPlayer()) && view.isUnoButtonPressed() == false)
 		{
 			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
-			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+			model.playerDidNotSayUno(model.getPreviousPlayerIndex());
 		}
 	}
 
@@ -326,33 +326,6 @@ public class NetClient
 		{
 			System.err.println("Error in creating socket: " + e.toString());
 			System.exit(0);
-		}
-	}
-
-	private void listenToServerForModel()
-	{
-		while (true)
-		{
-			Object objReceivedModel = null;
-
-			try
-			{
-				objReceivedModel = objInputStream.readObject();
-
-				if (objReceivedModel != null && objReceivedModel instanceof String)
-				{
-					System.out.println("[CLIENT] - Message received from server: " + ((String) objReceivedModel));
-
-					System.out.println("Server name: " + playerNameServer);
-					view.addChatMessage((String) objReceivedModel, playerNameServer);
-
-					Thread.sleep(1000);
-				}
-			}
-			catch (Exception e)
-			{
-				e.printStackTrace();
-			}
 		}
 	}
 

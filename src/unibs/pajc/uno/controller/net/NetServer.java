@@ -151,11 +151,12 @@ public class NetServer
 					}
 				}
 
+				playerSaidUno();
 				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 				sendToClient(model);
 			}
-			else if (model.getCurrentPlayerIndex() == 1)
+			else if (model.getCurrentPlayerIndex() != 0)
 			{
 				GameModel updatedModel = null;
 
@@ -260,10 +261,10 @@ public class NetServer
 
 	private void playerSaidUno()
 	{
-		if (model.hasPlayerOneCard() && view.isUnoButtonPressed() == false)
+		if (model.hasPlayerOneCard(model.getPreviousPlayer()) && view.isUnoButtonPressed() == false)
 		{
 			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
-			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
+			model.playerDidNotSayUno(model.getPreviousPlayerIndex());
 		}
 	}
 
