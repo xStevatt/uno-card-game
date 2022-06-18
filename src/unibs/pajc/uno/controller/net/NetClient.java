@@ -15,7 +15,6 @@ import javax.swing.SwingUtilities;
 
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.model.card.CardColor;
-import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.view.CardView;
 import unibs.pajc.uno.view.DialogSelectNewColor;
 import unibs.pajc.uno.view.TableView;
@@ -80,12 +79,12 @@ public class NetClient
 						model.getPlayers().get(0).getNamePlayer());
 
 				view.setTitle(model.getPlayers().get(1).getNamePlayer());
-				view.repaint();
+				updateView();
 			}
 		});
 	}
 
-	private void updateView(Player server, Player client)
+	private void updateView()
 	{
 		SwingUtilities.invokeLater(new Runnable()
 		{
@@ -97,12 +96,13 @@ public class NetClient
 				view.setSayUnoButtonVisibile(model.hasPlayerOneCard() && model.getCurrentPlayerIndex() == 1, 0);
 
 				// SETS LABELS
-				view.setPanelTitles(client.getNamePlayer(), server.getNamePlayer());
+				view.setPanelTitles(model.getPlayers().get(1).getNamePlayer(),
+						model.getPlayers().get(0).getNamePlayer());
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
 				// LOADS CARDS (Player and adversary)
-				view.loadCards(client.getHandCards(), 0);
-				view.loadCardsAdversary(server.getHandCards().getNumberOfCards());
+				view.loadCards(model.getPlayers().get(1).getHandCards(), 0);
+				view.loadCardsAdversary(model.getPlayers().get(0).getHandCards().getNumberOfCards());
 
 				// CHANGES THE LAST CARD USED
 				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
@@ -141,11 +141,10 @@ public class NetClient
 			}
 		}
 
-		initView();
 		this.playerNameServer = model.getPlayers().get(0).getNamePlayer();
 		this.playerNameClient = model.getPlayers().get(1).getNamePlayer();
 
-		updateView(model.getPlayers().get(0), model.getPlayers().get(1));
+		initView();
 
 		while (!model.isGameOver())
 		{
@@ -169,8 +168,6 @@ public class NetClient
 				this.model = updatedModel;
 				updatedModel = null;
 				objReceivedGame = null;
-
-				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 			}
 			else if (model.getCurrentPlayerIndex() != 0)
 			{
@@ -188,11 +185,11 @@ public class NetClient
 				}
 
 				playerSaidUno();
-				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 				sendToServer(model);
 			}
-			mouseListener.getCardSelected();
+
+			updateView();
 		}
 
 		if (model.getWinnerPlayer().getIndex() == 1)

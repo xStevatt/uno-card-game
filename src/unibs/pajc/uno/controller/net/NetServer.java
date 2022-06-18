@@ -45,13 +45,13 @@ public class NetServer
 	private CardSelectedEvent mouseListener;
 	private CardDrawnEvent mouseListenerDrawnCard;
 
+	private int playerIndex = 0;
 	private Object syncCardSelected = new Object();
 	private Object syncObjectModel = new Object();
 	private Object syncObjectChat = new Object();
 
-	public NetServer(String IP_ADDRESS, int PORT, String playerNameServer)
+	public NetServer(int PORT, String playerNameServer)
 	{
-		this.IP_ADDRESS = IP_ADDRESS;
 		this.PORT = PORT;
 
 		this.playerNameServer = playerNameServer;
@@ -78,31 +78,31 @@ public class NetServer
 	 * @param server
 	 * @param client
 	 */
-	public void updateView(Player server, Player client)
+	public void updateView()
 	{
 		SwingUtilities.invokeLater(new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				view.setMiddleCardClickable(model.getCurrentPlayerIndex() == 0 ? true : false);
+				Player player = model.getPlayers().get(playerIndex);
 
+				view.setMiddleCardClickable(model.getCurrentPlayerIndex() == 0 ? true : false);
 				view.setSayUnoButtonVisibile(model.hasPlayerOneCard() && model.getCurrentPlayerIndex() == 0, 0);
 
 				// SETS LABELS
-				view.setPanelTitles(server.getNamePlayer(), client.getNamePlayer());
+				view.setPanelTitles(player.getNamePlayer(), model.getPlayers().get(1).getNamePlayer());
 				view.setTurn(model.getCurrentPlayer().getNamePlayer());
 
 				// LOADS CARDS (Player and adversary)
-				view.loadCards(server.getHandCards(), 0);
-				view.loadCardsAdversary(client.getHandCards().getNumberOfCards());
+				view.loadCards(player.getHandCards(), 0);
+				view.loadCardsAdversary(model.getPlayers().get(1).getHandCards().getNumberOfCards());
 
 				// CHANGES THE LAST CARD USED
 				view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
 
 				// ADDS ACTION LISTENERS
-				ArrayList<CardView> panelPlayerOneCards = view.getAllCards(0,
-						model.getPlayers().get(0).getHandCards().getNumberOfCards());
+				ArrayList<CardView> panelPlayerOneCards = view.getAllCards(0, player.getHandCards().getNumberOfCards());
 
 				mouseListener = new CardSelectedEvent(syncCardSelected);
 				panelPlayerOneCards.forEach(e -> e.addMouseListener(mouseListener));
@@ -131,11 +131,10 @@ public class NetServer
 
 		// SENDING MODEL TO CLIENT
 		sendToClient(model);
+		updateView();
 
 		while (!model.isGameOver())
 		{
-			updateView(model.getPlayers().get(0), model.getPlayers().get(1));
-
 			if (model.getCurrentPlayerIndex() == 0)
 			{
 				synchronized (syncCardSelected)
@@ -152,7 +151,6 @@ public class NetServer
 				}
 
 				playerSaidUno();
-				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 
 				sendToClient(model);
 			}
@@ -176,9 +174,9 @@ public class NetServer
 				model = updatedModel;
 				updatedModel = null;
 				objReceivedGame = null;
-
-				updateView(model.getPlayers().get(0), model.getPlayers().get(1));
 			}
+
+			updateView();
 		}
 
 		if (model.getWinnerPlayer().getIndex() == 0)

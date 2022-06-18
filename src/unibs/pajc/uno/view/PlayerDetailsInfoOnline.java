@@ -101,7 +101,7 @@ public class PlayerDetailsInfoOnline extends JFrame
 				{
 					if (portNumber != 0 || txtIPAddress.getText().length() == 0 || txtName.getText().length() > 0)
 					{
-						new NetServer(txtIPAddress.getText(), portNumber, txtName.getText());
+						new NetServer(portNumber, txtName.getText());
 						setVisible(false);
 					}
 					else
