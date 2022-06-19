@@ -20,7 +20,7 @@ import unibs.pajc.uno.view.events.CardSelectedEvent;
 
 public class LocalPlayerController
 {
-	private TableView gameView;
+	private TableView view;
 	private GameModel model;
 	private ExecutorService executor;
 
@@ -38,7 +38,7 @@ public class LocalPlayerController
 		initModel(playerOneName, playerTwoName);
 
 		// INITS VIEW
-		gameView = new TableView(playerOneName, playerTwoName, true);
+		view = new TableView(playerOneName, playerTwoName, true);
 		initView();
 
 		// START RUNNING GAME
@@ -58,13 +58,13 @@ public class LocalPlayerController
 	public void initView()
 	{
 		// SHOWS GUI
-		gameView.setVisible(true);
-		gameView.setResizable(false);
-		gameView.setLocationRelativeTo(null);
+		view.setVisible(true);
+		view.setResizable(false);
+		view.setLocationRelativeTo(null);
 
 		// CREATES ACTION LISTER TO DRAW A CARD
 		mouseListenerDrawnCard = new CardDrawnEvent(notifyObj);
-		gameView.getCardDeckView().addMouseListener(mouseListenerDrawnCard);
+		view.getCardDeckView().addMouseListener(mouseListenerDrawnCard);
 
 		updateView();
 	}
@@ -77,19 +77,19 @@ public class LocalPlayerController
 		SwingUtilities.invokeLater(() -> {
 
 			// SETS TURN AND LOADS CARDS
-			gameView.setTurn(model.getCurrentPlayer().getNamePlayer());
-			gameView.loadCards(model.getPlayers().get(0).getHandCards(), 0);
-			gameView.loadCards(model.getPlayers().get(1).getHandCards(), 1);
-			gameView.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
+			view.setTurn(model.getCurrentPlayer().getNamePlayer());
+			view.loadCards(model.getPlayers().get(0).getHandCards(), 0);
+			view.loadCards(model.getPlayers().get(1).getHandCards(), 1);
+			view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
 
 			// DISABLE BUTTONS
-			gameView.setSayUnoButtonVisibile(false, model.getPreviousPlayerIndex());
-			gameView.setSayUnoButtonVisibile(false, model.getCurrentPlayerIndex());
+			view.setSayUnoButtonVisibile(false, model.getPreviousPlayerIndex());
+			view.setSayUnoButtonVisibile(false, model.getCurrentPlayerIndex());
 
 			// GETS ALL CARDS VIEWS FROM GAMEVIEW
-			ArrayList<CardView> panelPlayerOneCards = gameView.getAllCards(0,
+			ArrayList<CardView> panelPlayerOneCards = view.getAllCards(0,
 					model.getPlayers().get(0).getHandCards().getNumberOfCards());
-			ArrayList<CardView> panelPlayerTwoCards = gameView.getAllCards(1,
+			ArrayList<CardView> panelPlayerTwoCards = view.getAllCards(1,
 					model.getPlayers().get(1).getHandCards().getNumberOfCards());
 
 			// ADD MOUSE LISTENERS TO CARDS
@@ -98,15 +98,15 @@ public class LocalPlayerController
 			panelPlayerTwoCards.forEach(e -> e.addMouseListener(mouseListener));
 
 			// ENABLES / DISABLE VIEW FOR PLAYERS
-			gameView.enableViewPlayer(model.getCurrentPlayerIndex(), true);
-			gameView.enableViewPlayer(model.getNextPlayerIndex(), false);
+			view.enableViewPlayer(model.getCurrentPlayerIndex(), true);
+			view.enableViewPlayer(model.getNextPlayerIndex(), false);
 
 			// CHECKS IF UNO BUTTON SHOULD BE ENABLED
-			gameView.setSayUnoButtonVisibile(model.hasPlayerOneCard(model.getCurrentPlayer()),
+			view.setSayUnoButtonVisibile(model.hasPlayerOneCard(model.getCurrentPlayer()),
 					model.getCurrentPlayerIndex());
 
 			// REPAINTS VIEW
-			gameView.repaint();
+			view.repaint();
 		});
 	}
 
@@ -165,7 +165,7 @@ public class LocalPlayerController
 
 		if (model.isPlacedCardValid(cardSelected))
 		{
-			gameView.changeDroppedCardView(cardSelected, model.getCurrentCardColor());
+			view.changeDroppedCardView(cardSelected, model.getCurrentCardColor());
 
 			// CHECKS IF A NEW COLOR SELECTION IS NEEDED
 			boolean newColorSelection = model.evalMossa(cardSelected);
@@ -178,7 +178,7 @@ public class LocalPlayerController
 				{
 					try
 					{
-						DialogSelectNewColor dialogColor = new DialogSelectNewColor(gameView);
+						DialogSelectNewColor dialogColor = new DialogSelectNewColor(view);
 						CardColor cardColor = dialogColor.show();
 						model.setCurrentCardColor(cardColor);
 						colorSelectionValid = true;
@@ -202,15 +202,15 @@ public class LocalPlayerController
 	public void checkPlayerUno()
 	{
 		// PLAYER DID NOT SAY UNO
-		if (model.hasPlayerOneCard(model.getPreviousPlayer()) && !gameView.isUnoButtonPressed())
+		if (model.hasPlayerOneCard(model.getPreviousPlayer()) && !view.isUnoButtonPressed())
 		{
-			JOptionPane.showMessageDialog(gameView, "You didn't say UNO! Two more cards for you.");
+			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
 			model.playerDidNotSayUno(model.getPreviousPlayerIndex());
 		}
 		// PLAYER SAID UNO
-		if (model.hasPlayerOneCard(model.getPreviousPlayer()) && gameView.isUnoButtonPressed())
+		if (model.hasPlayerOneCard(model.getPreviousPlayer()) && view.isUnoButtonPressed())
 		{
-			gameView.setUnoButtonPressed(false);
+			view.setUnoButtonPressed(false);
 		}
 	}
 
@@ -227,24 +227,24 @@ public class LocalPlayerController
 		JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer()
 				+ " vincitore! Congratulazioni! Non hai vinto assolutamente nulla, se non un briciolo di misera gloria!");
 
-		int selection = JOptionPane.showOptionDialog(gameView, "Do you want to rematch?", "Select an option.",
+		int selection = JOptionPane.showOptionDialog(view, "Do you want to rematch?", "Select an option.",
 				JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
 				new String[] { "Yes", "No", "Yes, but with new players" }, "No");
 
 		switch (selection)
 		{
 		case 0:
-			gameView.dispose();
+			view.dispose();
 
 			new LocalPlayerController(model.getPlayers().get(0).getNamePlayer(),
 					model.getPlayers().get(1).getNamePlayer());
 			break;
 		case 1:
-			gameView.dispose();
+			view.dispose();
 			System.exit(0);
 			break;
 		case 2:
-			gameView.dispose();
+			view.dispose();
 			new PlayerDetailsInfoOffline().setVisible(true);
 			break;
 		}
