@@ -2,7 +2,7 @@ package unibs.pajc.uno.controller.ai;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Map.Entry;
 
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.model.card.Card;
@@ -18,6 +18,12 @@ public class AI
 		this.model = gameModel;
 	}
 
+	/**
+	 * Method checks if player has any wild cards
+	 * 
+	 * @param cardsList the cardsList to check
+	 * @return method returns true if player has any special wild cards
+	 */
 	private Card hasSpecialWildCard(ArrayList<Card> cardsList)
 	{
 		cardsList.stream().filter(e -> e.isCardSpecialWild());
@@ -28,9 +34,17 @@ public class AI
 		return null;
 	}
 
+	/**
+	 * Method
+	 * 
+	 * @param cardsList
+	 * @return
+	 */
 	private CardColor determineMostPresentColor(ArrayList<Card> cardsList)
 	{
 		HashMap<CardColor, Integer> hashColorMap = new HashMap<CardColor, Integer>();
+		CardColor maxColor = null;
+		int maxOccurencies = 0;
 
 		for (Card card : cardsList)
 		{
@@ -44,12 +58,18 @@ public class AI
 			}
 		}
 
-		for (Map.Entry entry : hashColorMap.entrySet())
+		if (!hashColorMap.isEmpty())
 		{
-			System.out.println(entry.getKey() + " " + entry.getValue());
+			for (Entry<CardColor, Integer> entry : hashColorMap.entrySet())
+			{
+				if (entry.getValue() >= maxOccurencies)
+				{
+					maxColor = entry.getKey();
+				}
+			}
 		}
 
-		return CardColor.RED;
+		return maxColor != null ? maxColor : CardColor.RED;
 	}
 
 	public Card determineNexMossa()
@@ -86,6 +106,7 @@ public class AI
 
 	private Card drawCard()
 	{
+		System.out.println("AI - Drawing a card");
 		return null;
 	}
 
