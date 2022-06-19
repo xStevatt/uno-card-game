@@ -36,11 +36,11 @@ public class AI
 		{
 			if (hashColorMap.containsKey(card.getCardColor()))
 			{
-				hashColorMap.put(card.getCardColor(), 0);
+				hashColorMap.put(card.getCardColor(), hashColorMap.get(card.getCardColor()) + 1);
 			}
 			else
 			{
-				hashColorMap.put(card.getCardColor(), hashColorMap.get(card.getCardColor()) + 1);
+				hashColorMap.put(card.getCardColor(), 0);
 			}
 		}
 
@@ -62,8 +62,9 @@ public class AI
 				.get(model.getNextPlayerIndex()).getHandCards().getCardList().size();
 
 		// FILTERS OUT ONLY VALID CARDS
-		playerCardList.stream().filter(e -> model.isPlacedCardValid(e));
-		System.out.println(playerCardList.size() + " valid cards found");
+
+		playerCardList.stream().filter(e -> model.isPlacedCardValid(e))
+				.forEach(e -> System.out.println(e.getCardColor() + ", " + e.getCardType()));
 
 		if (playerCardList.size() != 0)
 		{
