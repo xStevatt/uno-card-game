@@ -11,22 +11,19 @@ import unibs.pajc.uno.model.player.Player;
 
 public class AI
 {
-	private GameModel gameModel;
-	private ArrayList<Card> cardList;
+	private GameModel model;
 
 	public AI(GameModel gameModel)
 	{
-		this.gameModel = gameModel;
+		this.model = gameModel;
 	}
 
 	private Card hasSpecialWildCard(ArrayList<Card> cardsList)
 	{
 		cardsList.stream().filter(e -> e.isCardSpecialWild());
 
-		CardColor cardColor = determineMostPresentColor(cardsList);
-
-		if (!cardList.isEmpty())
-			return cardList.get((int) (Math.random() * cardList.size()));
+		if (!cardsList.isEmpty())
+			return cardsList.get((int) (Math.random() * cardsList.size()));
 
 		return null;
 	}
@@ -35,9 +32,16 @@ public class AI
 	{
 		HashMap<CardColor, Integer> hashColorMap = new HashMap<CardColor, Integer>();
 
-		for (Card card : cardList)
+		for (Card card : cardsList)
 		{
-			hashColorMap.put(card.getCardColor(), hashColorMap.get(card.getCardColor()) + 1);
+			if (hashColorMap.containsKey(card.getCardColor()))
+			{
+				hashColorMap.put(card.getCardColor(), 0);
+			}
+			else
+			{
+				hashColorMap.put(card.getCardColor(), hashColorMap.get(card.getCardColor()) + 1);
+			}
 		}
 
 		for (Map.Entry entry : hashColorMap.entrySet())
@@ -50,25 +54,26 @@ public class AI
 
 	public Card determineNexMossa()
 	{
-		Player currentPlayer = gameModel.getCurrentPlayer();
+		Player currentPlayer = model.getCurrentPlayer();
 		ArrayList<Card> playerCardList = currentPlayer.getHandCards().getCardList();
 
 		// CHECKS IF NEXT ADVERSARY HAS MORE CARDS THAN CURRENT PLAYER
-		boolean hasPlayerMoreCards = gameModel.getCurrentPlayer().getHandCards().getCardList().size() < gameModel
-				.getPlayers().get(gameModel.getNextPlayerIndex()).getHandCards().getCardList().size();
+		boolean hasPlayerMoreCards = model.getCurrentPlayer().getHandCards().getCardList().size() < model.getPlayers()
+				.get(model.getNextPlayerIndex()).getHandCards().getCardList().size();
 
 		// FILTERS OUT ONLY VALID CARDS
-		playerCardList.stream().filter(e -> gameModel.isPlacedCardValid(e));
+		playerCardList.stream().filter(e -> model.isPlacedCardValid(e));
 		System.out.println(playerCardList.size() + " valid cards found");
 
 		if (playerCardList.size() != 0)
 		{
-			if (!hasPlayerMoreCards && hasSpecialWildCard(cardList) != null)
+			if (hasSpecialWildCard(playerCardList) != null)
 			{
-				System.out.println("Player ahs special card list");
+				System.out.println("Player has special card list");
+				this.model.setCurrentCardColor(determineMostPresentColor(playerCardList));
 			}
 
-			else if (!hasPlayerMoreCards && hasSpecialWildCard(cardList) != null)
+			else if (!hasPlayerMoreCards && hasSpecialWildCard(playerCardList) != null)
 			{
 				System.out.println("Player has not special cards list");
 			}
@@ -78,8 +83,13 @@ public class AI
 		return drawCard();
 	}
 
-	public Card drawCard()
+	private Card drawCard()
 	{
 		return null;
+	}
+
+	public GameModel getModel()
+	{
+		return model;
 	}
 }

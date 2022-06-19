@@ -84,7 +84,6 @@ public class AIPlayerController
 		view.changeDroppedCardView(model.getLastCardUsed(), model.getCurrentCardColor());
 
 		// DISABLE BUTTONS
-		view.setSayUnoButtonVisibile(false, model.getPreviousPlayerIndex());
 		view.setSayUnoButtonVisibile(false, model.getCurrentPlayerIndex());
 
 		// GETS ALL CARDS VIEWS FROM GAMEVIEW
@@ -96,7 +95,7 @@ public class AIPlayerController
 		panelPlayerOneCards.forEach(e -> e.addMouseListener(mouseListener));
 
 		// ENABLES / DISABLE VIEW FOR PLAYERS
-		view.enableViewPlayer(model.getCurrentPlayerIndex(), model.getCurrentPlayerIndex() == 0);
+		view.enableViewPlayer(0, model.getCurrentPlayerIndex() == 0);
 
 		// CHECKS IF UNO BUTTON SHOULD BE ENABLED
 		view.setSayUnoButtonVisibile(model.hasPlayerOneCard(model.getCurrentPlayer()), model.getCurrentPlayerIndex());
@@ -109,31 +108,39 @@ public class AIPlayerController
 	{
 		while (!model.isGameOver())
 		{
-			synchronized (notifyObj)
+			if (model.getCurrentPlayerIndex() == 0)
 			{
-				try
+				synchronized (notifyObj)
 				{
-					notifyObj.wait();
-
-					checkPlayerUno();
-
-					if (mouseListenerDrawnCard.isCardDrawn()
-							&& model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
+					try
 					{
-						if (model.getCurrentPlayer().getHandCards().getNumberOfCards() <= 30)
+						notifyObj.wait();
+
+						checkPlayerUno();
+
+						if (mouseListenerDrawnCard.isCardDrawn()
+								&& model.getCurrentPlayer().getHandCards().getNumberOfCards() < 30)
 						{
-							playerDrawCard();
+							if (model.getCurrentPlayer().getHandCards().getNumberOfCards() <= 30)
+							{
+								playerDrawCard();
+							}
+						}
+						if (mouseListener.getCardSelected() != null)
+						{
+							playerSelectedCard();
 						}
 					}
-					if (mouseListener.getCardSelected() != null)
+					catch (InterruptedException e)
 					{
-						playerSelectedCard();
+						e.printStackTrace();
 					}
 				}
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
+			}
+			else
+			{
+				ai.determineNexMossa();
+				this.model = ai.getModel();
 			}
 
 			updateView();
