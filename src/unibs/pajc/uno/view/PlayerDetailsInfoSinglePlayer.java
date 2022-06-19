@@ -85,7 +85,7 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 				String selectionPlayerOne = (String) comboBoxPlayerOne.getSelectedItem();
 				String selectionPlayerTwo = (String) comboBoxPlayerTwo.getSelectedItem();
 
-				AIPlayerController aicontroller = new AIPlayerController();
+				AIPlayerController aicontroller = new AIPlayerController("Vallo");
 			}
 		});
 		btnStartGame.setBounds(166, 215, 116, 51);

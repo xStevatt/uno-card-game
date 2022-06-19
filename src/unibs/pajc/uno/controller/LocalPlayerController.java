@@ -46,7 +46,7 @@ public class LocalPlayerController
 		executor.execute(this::runGame);
 	}
 
-	public void initModel(String playerOneName, String playerTwoName)
+	private void initModel(String playerOneName, String playerTwoName)
 	{
 		Player playerOne = new Player(playerOneName, model.generateStartingCards(), 0);
 		Player playerTwo = new Player(playerTwoName, model.generateStartingCards(), 1);
@@ -55,7 +55,7 @@ public class LocalPlayerController
 		model.initPlayer(playerTwo);
 	}
 
-	public void initView()
+	private void initView()
 	{
 		// SHOWS GUI
 		view.setVisible(true);
@@ -72,7 +72,7 @@ public class LocalPlayerController
 	/**
 	 * Updates game view, loading all the new data available and setting up
 	 */
-	public synchronized void updateView()
+	private void updateView()
 	{
 		SwingUtilities.invokeLater(() -> {
 
@@ -110,7 +110,7 @@ public class LocalPlayerController
 		});
 	}
 
-	public void runGame()
+	private void runGame()
 	{
 		while (!model.isGameOver())
 		{
@@ -150,14 +150,14 @@ public class LocalPlayerController
 		gameOver();
 	}
 
-	public void playerDrawCard()
+	private void playerDrawCard()
 	{
 		// CHECK IF PLAYER SAID UNO
 		model.getCurrentPlayer().addCard(model.getCardFromDeck());
 		model.nextTurn();
 	}
 
-	public void playerSelectedCard()
+	private void playerSelectedCard()
 	{
 		// CHECK IF PLAYER SAID UNO
 
@@ -199,7 +199,7 @@ public class LocalPlayerController
 	/**
 	 * 
 	 */
-	public void checkPlayerUno()
+	private void checkPlayerUno()
 	{
 		// PLAYER DID NOT SAY UNO
 		if (model.hasPlayerOneCard(model.getPreviousPlayer()) && !view.isUnoButtonPressed())
@@ -214,15 +214,7 @@ public class LocalPlayerController
 		}
 	}
 
-	/**
-	 * 
-	 */
-	public void checkEnableUnoButton()
-	{
-
-	}
-
-	public void gameOver()
+	private void gameOver()
 	{
 		JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer()
 				+ " vincitore! Congratulazioni! Non hai vinto assolutamente nulla, se non un briciolo di misera gloria!");
