@@ -141,6 +141,8 @@ public class NetServer
 
 		while (!model.isGameOver())
 		{
+			updateView();
+
 			if (model.getCurrentPlayerIndex() == 0)
 			{
 				synchronized (syncCardSelected)
@@ -148,6 +150,7 @@ public class NetServer
 					try
 					{
 						syncCardSelected.wait();
+						playerSaidUno();
 						turnGame();
 					}
 					catch (InterruptedException e)
@@ -179,9 +182,6 @@ public class NetServer
 				updatedModel = null;
 				objReceivedGame = null;
 			}
-
-			playerSaidUno();
-			updateView();
 		}
 
 		if (model.getWinnerPlayer().getIndex() == 0)

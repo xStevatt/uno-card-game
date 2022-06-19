@@ -189,10 +189,12 @@ public class TableView2 extends JFrame
 		panelDeck.add(backView);
 
 		panel = new JPanel();
+		panel.setBorder(new TitledBorder(null, "Player 2", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel.setBounds(835, 30, 180, 600);
 		centerPanel.add(panel);
 
 		panel_1 = new JPanel();
+		panel_1.setBorder(new TitledBorder(null, "Player 4", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_1.setBounds(20, 30, 180, 600);
 		centerPanel.add(panel_1);
 

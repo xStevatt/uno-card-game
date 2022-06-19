@@ -95,6 +95,7 @@ public class NetClient
 				// CHECKS IF DECK CARD SHOULD BE ENABLED / CHECKS IF "SAY UNO" BUTTON IS VISIBLE
 				view.setMiddleCardClickable(model.getCurrentPlayerIndex() == 1 ? true : false);
 				view.setSayUnoButtonVisibile(model.hasPlayerOneCard() && model.getCurrentPlayerIndex() == 1, 0);
+				view.setUnoButtonPressed(false);
 
 				// SETS LABELS
 				view.setPanelTitles(model.getPlayers().get(1).getNamePlayer(),
@@ -117,9 +118,6 @@ public class NetClient
 
 				// ENABLES / DISABLES CARDS
 				view.enableViewPlayer(0, model.getCurrentPlayerIndex() == 1 ? true : false);
-
-				// RESETS IF PLAYER SAID UNO
-				view.setUnoButtonPressed(false);
 
 				// REPAINTS VIEW
 				view.repaint();
@@ -149,6 +147,8 @@ public class NetClient
 
 		while (!model.isGameOver())
 		{
+			updateView();
+
 			if (model.getCurrentPlayerIndex() == 0)
 			{
 				GameModel updatedModel = null;
@@ -177,6 +177,7 @@ public class NetClient
 					try
 					{
 						syncCardSelected.wait();
+						playerSaidUno();
 						turnGame();
 					}
 					catch (InterruptedException e)
@@ -184,13 +185,8 @@ public class NetClient
 						e.printStackTrace();
 					}
 				}
-
-				playerSaidUno();
-
 				sendToServer(model);
 			}
-
-			updateView();
 		}
 
 		if (model.getWinnerPlayer().getIndex() == 1)
@@ -268,10 +264,10 @@ public class NetClient
 
 	private void playerSaidUno()
 	{
-		if (model.hasPlayerOneCard(model.getPreviousPlayer()) && view.isUnoButtonPressed() == false)
+		if (model.hasPlayerOneCard(model.getCurrentPlayer()) && view.isUnoButtonPressed() == false)
 		{
 			JOptionPane.showMessageDialog(view, "You didn't say UNO! Two more cards for you.");
-			model.playerDidNotSayUno(model.getPreviousPlayerIndex());
+			model.playerDidNotSayUno(model.getCurrentPlayerIndex());
 		}
 	}
 
