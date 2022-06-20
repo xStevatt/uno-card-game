@@ -1,14 +1,12 @@
 package unibs.pajc.uno.controller;
 
 import java.util.ArrayList;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.JOptionPane;
 
 import unibs.pajc.uno.controller.ai.AI;
 import unibs.pajc.uno.model.GameModel;
-import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.view.CardView;
@@ -18,20 +16,9 @@ import unibs.pajc.uno.view.TableView;
 import unibs.pajc.uno.view.events.CardDrawnEvent;
 import unibs.pajc.uno.view.events.CardSelectedEvent;
 
-public class AIPlayerController
+public class AIPlayerController extends PlayerController
 {
-	private TableView view;
-	private GameModel model;
 	private AI ai;
-
-	private ExecutorService executor;
-
-	private Object notifyObj = new Object();
-
-	private Card cardSelected = null;
-
-	private CardSelectedEvent mouseListener;
-	private CardDrawnEvent mouseListenerDrawnCard;
 
 	public AIPlayerController(String nameHuman1)
 	{
@@ -48,7 +35,7 @@ public class AIPlayerController
 		executor.execute(this::runGame);
 	}
 
-	private void initView()
+	protected void initView()
 	{
 		// SHOWS GUI
 		view.setVisible(true);
@@ -62,7 +49,7 @@ public class AIPlayerController
 		updateView();
 	}
 
-	private void initModel(String namePlayerOne, String namePlayerTwo)
+	protected void initModel(String namePlayerOne, String namePlayerTwo)
 	{
 		Player playerOne = new Player("Human", model.generateStartingCards(), 0);
 		Player playerTwo = new Player("Robot", model.generateStartingCards(), 1);
@@ -73,7 +60,7 @@ public class AIPlayerController
 		ai = new AI(model);
 	}
 
-	private void updateView()
+	protected void updateView()
 	{
 
 		// SETS TURN AND LOADS CARDS
@@ -104,7 +91,7 @@ public class AIPlayerController
 		view.repaint();
 	}
 
-	private void runGame()
+	protected void runGame()
 	{
 		while (!model.isGameOver())
 		{
@@ -164,14 +151,14 @@ public class AIPlayerController
 		gameOver();
 	}
 
-	private void playerDrawCard()
+	protected void playerDrawCard()
 	{
 		// CHECK IF PLAYER SAID UNO
 		model.getCurrentPlayer().addCard(model.getCardFromDeck());
 		model.nextTurn();
 	}
 
-	private void playerSelectedCard()
+	protected void playerSelectedCard()
 	{
 		// CHECK IF PLAYER SAID UNO
 
@@ -211,9 +198,10 @@ public class AIPlayerController
 	}
 
 	/**
-	 * 
+	 * Controlla che un giocatore abbia detto uno. Se il giocatore non ha detto uno,
+	 * allora vengono aggiunte due carte al gicoatore che non ha detto uno.
 	 */
-	private void checkPlayerUno()
+	protected void checkPlayerUno()
 	{
 		// PLAYER DID NOT SAY UNO
 		if (model.hasPlayerOneCard(model.getPreviousPlayer()) && !view.isUnoButtonPressed())
@@ -228,7 +216,11 @@ public class AIPlayerController
 		}
 	}
 
-	private void gameOver()
+	/**
+	 * Mostra i risultati di fine gioco. Viene visualizzato un pannello con il nome
+	 * del giocatore vincitore.
+	 */
+	protected void gameOver()
 	{
 		JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer()
 				+ " vincitore! Congratulazioni! Non hai vinto assolutamente nulla, se non un briciolo di misera gloria!");

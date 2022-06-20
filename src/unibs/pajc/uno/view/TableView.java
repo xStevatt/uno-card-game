@@ -520,12 +520,14 @@ public class TableView extends JFrame
 			{
 				handCardsViewActual.removeAll();
 				panelActualPlayer.removeAll();
+
 				addCardsToView(cards, panelActualPlayer, handCardsViewActual);
 			}
 			if (playingPlayer == 1)
 			{
 				handCardsViewAdversary.removeAll();
 				panelAdversaryPlayer.removeAll();
+
 				addCardsToView(cards, panelAdversaryPlayer, handCardsViewAdversary);
 			}
 		}
