@@ -26,10 +26,11 @@ public class AI
 	 */
 	private Card hasSpecialWildCard(ArrayList<Card> cardsList)
 	{
-		cardsList.stream().filter(e -> e.isCardSpecialWild());
-
-		if (!cardsList.isEmpty())
-			return cardsList.get((int) (Math.random() * cardsList.size()));
+		for (Card card : cardsList)
+		{
+			if (card.isCardSpecialWild())
+				return card;
+		}
 
 		return null;
 	}
@@ -72,10 +73,13 @@ public class AI
 		return maxColor != null ? maxColor : CardColor.RED;
 	}
 
-	public Card determineNexMossa()
+	public void determineNexMossa(GameModel model)
 	{
+		this.model = model;
+
 		Player currentPlayer = model.getCurrentPlayer();
 		ArrayList<Card> playerCardList = currentPlayer.getHandCards().getCardList();
+		ArrayList<Card> validCards = new ArrayList<>();
 
 		// CHECKS IF NEXT ADVERSARY HAS MORE CARDS THAN CURRENT PLAYER
 		boolean hasPlayerMoreCards = model.getCurrentPlayer().getHandCards().getCardList().size() < model.getPlayers()
@@ -86,27 +90,39 @@ public class AI
 		playerCardList.stream().filter(e -> model.isPlacedCardValid(e))
 				.forEach(e -> System.out.println(e.getCardColor() + ", " + e.getCardType()));
 
-		if (playerCardList.size() != 0)
+		for (Card card : playerCardList)
 		{
-			if (hasSpecialWildCard(playerCardList) != null)
+			if (model.isPlacedCardValid(card))
 			{
-				System.out.println("Player has special card list");
-				this.model.setCurrentCardColor(determineMostPresentColor(playerCardList));
-			}
-
-			else if (!hasPlayerMoreCards && hasSpecialWildCard(playerCardList) != null)
-			{
-				System.out.println("Player has not special cards list");
+				validCards.add(card);
 			}
 		}
 
-		// RETURNS A NEW CARD
-		return drawCard();
+		if (validCards.size() != 0)
+		{
+			if (hasSpecialWildCard(playerCardList) != null)
+			{
+				System.out.println("asdasda");
+				model.evalMossa(hasSpecialWildCard(model.getPlayers().get(1).getHandCards().getCardList()));
+				this.model.setCurrentCardColor(determineMostPresentColor(playerCardList));
+			}
+			else
+			{
+				model.evalMossa(validCards.get((int) (Math.random() * validCards.size())));
+			}
+		}
+		else
+		{
+			drawCard();
+		}
+
 	}
 
 	private Card drawCard()
 	{
 		System.out.println("AI - Drawing a card");
+		model.getPlayers().get(model.getCurrentPlayerIndex()).addCard(model.getCardFromDeck());
+		model.nextTurn();
 		return null;
 	}
 

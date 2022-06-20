@@ -139,12 +139,14 @@ public class AIPlayerController
 			}
 			else
 			{
-				ai.determineNexMossa();
+				ai.determineNexMossa(model);
 				this.model = ai.getModel();
+				view.setUnoButtonPressed(true);
 
+				view.repaint();
 				try
 				{
-					Thread.sleep(10000);
+					Thread.sleep(2000);
 				}
 				catch (InterruptedException e)
 				{
