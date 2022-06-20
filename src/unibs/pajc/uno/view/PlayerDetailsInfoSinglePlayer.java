@@ -2,7 +2,10 @@ package unibs.pajc.uno.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -26,7 +29,6 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 	private JLabel playerTwoLabel;
 	private JComboBox comboBoxPlayerTwo;
 	private JTextField txtFieldPlayerOne;
-	private JTextField txtFieldPlayerTwo;
 
 	public PlayerDetailsInfoSinglePlayer()
 	{
@@ -42,6 +44,8 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 		String options[] = { "Human", "Computer" };
 
 		comboBoxPlayerOne = new JComboBox(options);
+		comboBoxPlayerOne.setEnabled(false);
+		comboBoxPlayerOne.setModel(new DefaultComboBoxModel(new String[] { "Computer", "Human" }));
 		comboBoxPlayerOne.setBounds(192, 132, 116, 60);
 		getContentPane().add(comboBoxPlayerOne);
 
@@ -72,6 +76,7 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 					txtFieldPlayerOne.setVisible(true);
 					break;
 				case "Computer":
+					txtFieldPlayerOne.setVisible(false);
 					break;
 				}
 			}
@@ -82,6 +87,7 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 		{
 			public void actionPerformed(ActionEvent e)
 			{
+				setVisible(false);
 				String selectionPlayerOne = (String) comboBoxPlayerOne.getSelectedItem();
 				String selectionPlayerTwo = (String) comboBoxPlayerTwo.getSelectedItem();
 
@@ -100,10 +106,18 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 		getContentPane().add(separator_1);
 
 		txtFieldPlayerOne = new JTextField();
+		txtFieldPlayerOne.addMouseListener(new MouseAdapter()
+		{
+			@Override
+			public void mousePressed(MouseEvent e)
+			{
+				txtFieldPlayerOne.setText("");
+			}
+		});
 		txtFieldPlayerOne.setHorizontalAlignment(SwingConstants.CENTER);
 		txtFieldPlayerOne.setToolTipText("Insert your name");
 		txtFieldPlayerOne.setText("Insert your name");
-		txtFieldPlayerOne.setBounds(320, 93, 130, 26);
+		txtFieldPlayerOne.setBounds(320, 87, 130, 42);
 		getContentPane().add(txtFieldPlayerOne);
 		txtFieldPlayerOne.setColumns(10);
 		txtFieldPlayerOne.setVisible(false);
@@ -118,14 +132,6 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 			}
 		});
 
-		txtFieldPlayerTwo = new JTextField();
-		txtFieldPlayerTwo.setHorizontalAlignment(SwingConstants.CENTER);
-		txtFieldPlayerTwo.setToolTipText("Insert your name");
-		txtFieldPlayerTwo.setText("Insert your name");
-		txtFieldPlayerTwo.setColumns(10);
-		txtFieldPlayerTwo.setBounds(320, 148, 130, 26);
-		txtFieldPlayerTwo.setVisible(false);
-
 		txtFieldPlayerOne.addActionListener(new ActionListener()
 		{
 			@Override
@@ -137,6 +143,5 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 		});
 
 		txtFieldPlayerOne.setVisible(true);
-		getContentPane().add(txtFieldPlayerTwo);
 	}
 }

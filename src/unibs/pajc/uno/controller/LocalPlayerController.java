@@ -87,7 +87,7 @@ public class LocalPlayerController extends PlayerController
 			view.enableViewPlayer(model.getNextPlayerIndex(), false);
 
 			// CHECKS IF UNO BUTTON SHOULD BE ENABLED
-			view.setSayUnoButtonVisibile(model.hasPlayerOneCard(model.getCurrentPlayer()),
+			view.setSayUnoButtonVisibile(model.hasPlayerOneCard(model.getCurrentPlayer()) && model.hasPlayerOneCard(0),
 					model.getCurrentPlayerIndex());
 
 			// REPAINTS VIEW

@@ -7,7 +7,9 @@ import java.net.Inet4Address;
 import java.net.UnknownHostException;
 
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -38,12 +40,14 @@ public class PlayerDetailsInfoOnline extends JFrame
 	private JLabel lblNewLabel;
 	private JRadioButton rdbtnServer;
 
+	JLabel labelMessage;
+
 	String machineIP = null;
 
 	public PlayerDetailsInfoOnline()
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 305);
+		setBounds(100, 100, 450, 350);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -59,6 +63,7 @@ public class PlayerDetailsInfoOnline extends JFrame
 		contentPane.add(lblNewLabel_2);
 
 		btnNewGameButton = new JButton("Start Game");
+		btnNewGameButton.setToolTipText("Start game");
 		btnNewGameButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -129,7 +134,7 @@ public class PlayerDetailsInfoOnline extends JFrame
 		JPanel panelSettingsClient = new JPanel();
 		panelSettingsClient.setBorder(
 				new TitledBorder(null, "Edit client details", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panelSettingsClient.setBounds(16, 107, 422, 67);
+		panelSettingsClient.setBounds(16, 107, 422, 120);
 		contentPane.add(panelSettingsClient);
 		panelSettingsClient.setLayout(null);
 
@@ -169,21 +174,33 @@ public class PlayerDetailsInfoOnline extends JFrame
 		panelSettingsClient.add(txtPort);
 		txtPort.setColumns(10);
 
+		labelMessage = new JLabel("Connect to a running server...");
+		labelMessage.setHorizontalAlignment(SwingConstants.CENTER);
+		labelMessage.setBounds(30, 78, 208, 16);
+		panelSettingsClient.add(labelMessage);
+
+		JComboBox comboBoxNumberPlayers = new JComboBox();
+		comboBoxNumberPlayers.setToolTipText("Select number of players");
+		comboBoxNumberPlayers.setModel(new DefaultComboBoxModel(new String[] { "2", "3", "4" }));
+		comboBoxNumberPlayers.setBounds(247, 74, 144, 27);
+		comboBoxNumberPlayers.setVisible(false);
+		panelSettingsClient.add(comboBoxNumberPlayers);
+
 		JLabel lblNewLabel_1 = new JLabel("Your nickname:");
 		lblNewLabel_1.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(58, 216, 150, 37);
+		lblNewLabel_1.setBounds(47, 263, 150, 37);
 		contentPane.add(lblNewLabel_1);
 
 		txtName = new JTextField();
 		txtName.setText("Player");
 		txtName.setHorizontalAlignment(SwingConstants.CENTER);
-		txtName.setBounds(220, 214, 208, 42);
+		txtName.setBounds(209, 261, 208, 42);
 		contentPane.add(txtName);
 		txtName.setColumns(10);
 
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(24, 186, 404, 12);
+		separator_1.setBounds(24, 239, 404, 12);
 		contentPane.add(separator_1);
 
 		rdbtnClient.addActionListener(new ActionListener()
@@ -195,8 +212,13 @@ public class PlayerDetailsInfoOnline extends JFrame
 				txtIPAddress.setEnabled(true);
 				txtIPAddress.setText("127.0.0.1");
 				txtName.setText("Client");
+
 				panelSettingsClient.setBorder(new TitledBorder(null, "Edit client details", TitledBorder.LEADING,
 						TitledBorder.TOP, null, null));
+
+				comboBoxNumberPlayers.setVisible(false);
+				labelMessage.setText("Connect to a running server...");
+				labelMessage.setHorizontalAlignment(SwingConstants.CENTER);
 			}
 		});
 
@@ -215,6 +237,10 @@ public class PlayerDetailsInfoOnline extends JFrame
 				txtName.setText("Server");
 				panelSettingsClient.setBorder(new TitledBorder(null, "Edit server details", TitledBorder.LEADING,
 						TitledBorder.TOP, null, null));
+
+				comboBoxNumberPlayers.setVisible(true);
+				labelMessage.setText("Set number of players");
+				labelMessage.setHorizontalAlignment(SwingConstants.CENTER);
 			}
 		});
 
