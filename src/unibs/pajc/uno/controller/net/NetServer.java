@@ -26,6 +26,10 @@ import unibs.pajc.uno.view.events.CardSelectedEvent;
 
 public class NetServer
 {
+	// NEW IMPLEMENTATION
+
+	private ArrayList<ClientHandler> clients;
+
 	// MODEL AND VIEW
 	private GameModel model;
 	private TableView view;
