@@ -85,9 +85,7 @@ public class AIPlayerController extends PlayerController
 		view.enableViewPlayer(0, model.getCurrentPlayerIndex() == 0);
 
 		// CHECKS IF UNO BUTTON SHOULD BE ENABLED
-		view.setSayUnoButtonVisibile(
-				model.hasPlayerOneCard(model.getCurrentPlayer()) && model.getCurrentPlayerIndex() == 0,
-				model.getCurrentPlayerIndex());
+		view.setSayUnoButtonVisibile(model.hasPlayerOneCard(model.getCurrentPlayer()), model.getCurrentPlayerIndex());
 
 		// REPAINTS VIEW
 		view.repaint();
