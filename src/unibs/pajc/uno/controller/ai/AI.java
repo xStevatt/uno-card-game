@@ -45,7 +45,7 @@ public class AI
 	{
 		HashMap<CardColor, Integer> hashColorMap = new HashMap<CardColor, Integer>();
 		CardColor maxColor = null;
-		int maxOccurencies = 0;
+		int maxOccurrences = 0;
 
 		for (Card card : cardsList)
 		{
@@ -63,7 +63,7 @@ public class AI
 		{
 			for (Entry<CardColor, Integer> entry : hashColorMap.entrySet())
 			{
-				if (entry.getValue() >= maxOccurencies)
+				if (entry.getValue() >= maxOccurrences)
 				{
 					maxColor = entry.getKey();
 				}
@@ -87,8 +87,10 @@ public class AI
 
 		// FILTERS OUT ONLY VALID CARDS
 
+		System.out.print("VALID CARDS -> < ");
 		playerCardList.stream().filter(e -> model.isPlacedCardValid(e))
-				.forEach(e -> System.out.println(e.getCardColor() + ", " + e.getCardType()));
+				.forEach(e -> System.out.print(e.getCardColor() + ", " + e.getCardType()));
+		System.out.println(" >");
 
 		for (Card card : playerCardList)
 		{
@@ -102,28 +104,31 @@ public class AI
 		{
 			if (hasSpecialWildCard(playerCardList) != null)
 			{
-				System.out.println("asdasda");
-				model.evalMossa(hasSpecialWildCard(model.getPlayers().get(1).getHandCards().getCardList()));
+				Card card = hasSpecialWildCard(model.getPlayers().get(1).getHandCards().getCardList());
+				System.out.println("Best move -> < " + card.getCardColor() + " " + card.getCardType() + " >");
+				model.evalMossa(card);
 				this.model.setCurrentCardColor(determineMostPresentColor(playerCardList));
 			}
 			else
 			{
-				model.evalMossa(validCards.get((int) (Math.random() * validCards.size())));
+				Card card = validCards.get((int) (Math.random() * validCards.size()));
+				System.out.println("Best move -> < " + card.getCardColor() + " " + card.getCardType() + " >");
+				model.evalMossa(card);
 			}
 		}
 		else
 		{
+
 			drawCard();
 		}
 
 	}
 
-	private Card drawCard()
+	private void drawCard()
 	{
 		System.out.println("AI - Drawing a card");
 		model.getPlayers().get(model.getCurrentPlayerIndex()).addCard(model.getCardFromDeck());
 		model.nextTurn();
-		return null;
 	}
 
 	public GameModel getModel()

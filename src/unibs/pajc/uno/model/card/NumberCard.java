@@ -44,4 +44,9 @@ public class NumberCard extends AbstractCard
 	{
 		return this.cardType == CardType.WILD_COLOR || this.cardType == CardType.WILD_DRAW_FOUR;
 	}
+
+	public String toString()
+	{
+		return "Type: " + cardType.toString() + " Color"
+ 	}
 }

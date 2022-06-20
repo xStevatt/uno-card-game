@@ -36,4 +36,10 @@ public class WildCard extends AbstractCard
 	{
 		return this.cardType == CardType.WILD_COLOR || this.cardType == CardType.WILD_DRAW_FOUR;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "WILD CARD";
+	}
 }

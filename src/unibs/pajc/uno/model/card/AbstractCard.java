@@ -16,4 +16,6 @@ public abstract class AbstractCard implements Card
 		this.cardColor = cardColor;
 		this.cardType = cardType;
 	}
+
+	public abstract String toString();
 }

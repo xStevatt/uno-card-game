@@ -30,7 +30,7 @@ public class GameModel implements Serializable
 
 	/**
 	 * 
-	 * @param players
+	 * @param players is the the
 	 */
 	public GameModel(ArrayList<Player> players)
 	{
@@ -53,7 +53,7 @@ public class GameModel implements Serializable
 	/**
 	 * Constructor that allows to set a custom number of players
 	 * 
-	 * @param numberOfPlayers the number of players set by the user
+	 * @param maxNumberOfPlayers the number of players set by the user
 	 */
 	public GameModel(int maxNumberOfPlayers)
 	{
