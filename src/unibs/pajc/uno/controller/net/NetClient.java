@@ -34,15 +34,15 @@ public class NetClient
 	private String playerNameClient;
 	private String playerNameServer;
 
-	private TableView view;
+	private final TableView view;
 	private GameModel model;
 
 	private CardSelectedEvent mouseListener;
-	private CardDrawnEvent mouseListenerDrawnCard;
+	private final CardDrawnEvent mouseListenerDrawnCard;
 
-	private Object syncCardSelected = new Object();
-	private Object syncObjectModel = new Object();
-	private Object syncObjectChat = new Object();
+	private final Object syncCardSelected = new Object();
+	private final Object syncObjectModel = new Object();
+	private final Object syncObjectChat = new Object();
 
 	public NetClient(String IP_ADDRESS, int port, String playerName)
 	{
@@ -93,7 +93,7 @@ public class NetClient
 			public void run()
 			{
 				// CHECKS IF DECK CARD SHOULD BE ENABLED / CHECKS IF "SAY UNO" BUTTON IS VISIBLE
-				view.setMiddleCardClickable(model.getCurrentPlayerIndex() == 1 ? true : false);
+				view.setMiddleCardClickable(model.getCurrentPlayerIndex() == 1);
 				view.setSayUnoButtonVisibile(model.hasPlayerOneCard() && model.getCurrentPlayerIndex() == 1, 0);
 				view.setUnoButtonPressed(false);
 
@@ -117,7 +117,7 @@ public class NetClient
 				panelPlayerOneCards.forEach(e -> e.addMouseListener(mouseListener));
 
 				// ENABLES / DISABLES CARDS
-				view.enableViewPlayer(0, model.getCurrentPlayerIndex() == 1 ? true : false);
+				view.enableViewPlayer(0, model.getCurrentPlayerIndex() == 1);
 
 				// REPAINTS VIEW
 				view.repaint();
@@ -313,12 +313,12 @@ public class NetClient
 		}
 		catch (UnknownHostException e)
 		{
-			System.err.println("IP address of the host could not be determined : " + e.toString());
+			System.err.println("IP address of the host could not be determined : " + e);
 			System.exit(0);
 		}
 		catch (IOException e)
 		{
-			System.err.println("Error in creating socket: " + e.toString());
+			System.err.println("Error in creating socket: " + e);
 			System.exit(0);
 		}
 	}
@@ -338,7 +338,7 @@ public class NetClient
 
 				if (objReceived != null && objReceived instanceof String && ((String) objReceived).length() > 0)
 				{
-					System.out.println("[CLIENT] - Message received from server: " + ((String) objReceived));
+					System.out.println("[CLIENT] - Message received from server: " + objReceived);
 
 					System.out.println("Server name: " + playerNameServer);
 					view.addChatMessage((String) objReceived, playerNameServer);
@@ -408,7 +408,7 @@ public class NetClient
 
 			if (objToSend instanceof String)
 			{
-				System.out.println("[CLIENT] - Message sent: " + (String) objToSend);
+				System.out.println("[CLIENT] - Message sent: " + objToSend);
 			}
 
 			objOutputStream.flush();

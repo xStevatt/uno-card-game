@@ -6,7 +6,6 @@ package unibs.pajc.uno.model.card;
  * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
  *
  */
-public enum CardColor
-{
+public enum CardColor extends AbstractCard {
 	RED, GREEN, BLUE, YELLOW;
 }

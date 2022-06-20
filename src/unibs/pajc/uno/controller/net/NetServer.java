@@ -32,12 +32,12 @@ public class NetServer
 
 	// MODEL AND VIEW
 	private GameModel model;
-	private TableView view;
+	private final TableView view;
 
 	// NETWORK ATTRIBUTES
 	private Socket client;
 	private ServerSocket serverSocket;
-	private int PORT;
+	private final int PORT;
 	private boolean isConnected = false;
 
 	// OUTPUT / INPUT STREAMS
@@ -49,15 +49,15 @@ public class NetServer
 	private String playerNameClient = null;
 
 	private CardSelectedEvent mouseListener;
-	private CardDrawnEvent mouseListenerDrawnCard;
+	private final CardDrawnEvent mouseListenerDrawnCard;
 
 	// MULTIPLE CLIENTS
 	private ArrayList<Thread> threadList;
-	private int playerIndex = 0;
+	private final int playerIndex = 0;
 
-	private Object syncCardSelected = new Object();
-	private Object syncObjectModel = new Object();
-	private Object syncObjectChat = new Object();
+	private final Object syncCardSelected = new Object();
+	private final Object syncObjectModel = new Object();
+	private final Object syncObjectChat = new Object();
 
 	public NetServer(int PORT, String playerNameServer)
 	{
@@ -96,7 +96,7 @@ public class NetServer
 			{
 				Player player = model.getPlayers().get(playerIndex);
 
-				view.setMiddleCardClickable(model.getCurrentPlayerIndex() == 0 ? true : false);
+				view.setMiddleCardClickable(model.getCurrentPlayerIndex() == 0);
 
 				// SETS UNIO BUTTON
 				view.setSayUnoButtonVisibile(model.hasPlayerOneCard() && model.getCurrentPlayerIndex() == 0, 0);
@@ -120,7 +120,7 @@ public class NetServer
 				panelPlayerOneCards.forEach(e -> e.addMouseListener(mouseListener));
 
 				// ENABLES / DISABLES CARDS
-				view.enableViewPlayer(0, model.getCurrentPlayerIndex() == 0 ? true : false);
+				view.enableViewPlayer(0, model.getCurrentPlayerIndex() == 0);
 
 				view.repaint();
 			}
@@ -137,7 +137,7 @@ public class NetServer
 		Player server = new Player(playerNameServer, model.generateStartingCards(), 0);
 		Player client = new Player(playerNameClient, model.generateStartingCards(), 1);
 
-		model.initPlayers(new ArrayList<Player>(Arrays.asList(new Player[] { server, client })));
+		model.initPlayers(new ArrayList<Player>(Arrays.asList(server, client)));
 
 		// SENDING MODEL TO CLIENT
 		sendToClient(model);
@@ -345,7 +345,7 @@ public class NetServer
 
 				if (objReceived != null && objReceived instanceof String && ((String) objReceived).length() > 0)
 				{
-					System.out.println("[SERVER] - Message received from client: " + ((String) objReceived));
+					System.out.println("[SERVER] - Message received from client: " + objReceived);
 
 					view.addChatMessage((String) objReceived, playerNameClient);
 				}
@@ -415,7 +415,7 @@ public class NetServer
 
 			if (objToSend instanceof String)
 			{
-				System.out.println("Message sent: " + (String) objToSend);
+				System.out.println("Message sent: " + objToSend);
 			}
 
 			objOutputStream.flush();
