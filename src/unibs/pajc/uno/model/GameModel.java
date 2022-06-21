@@ -14,10 +14,6 @@ import unibs.pajc.uno.model.player.PlayerRoundIterator;
 
 public class GameModel implements Serializable
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private CardDeck cardsDeck;
 	private UsedPile usedCards;
 

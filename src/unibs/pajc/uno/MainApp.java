@@ -33,13 +33,11 @@ import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.card.CardType;
 import unibs.pajc.uno.model.card.NumberCard;
 import unibs.pajc.uno.model.card.WildCard;
-import unibs.pajc.uno.model.player.HandCards;
 import unibs.pajc.uno.view.CardBackView;
 import unibs.pajc.uno.view.CardView;
 import unibs.pajc.uno.view.PlayerDetailsInfoOffline;
 import unibs.pajc.uno.view.PlayerDetailsInfoOnline;
 import unibs.pajc.uno.view.PlayerDetailsInfoSinglePlayer;
-import unibs.pajc.uno.view.TableView;
 import unibs.pajc.uno.view.events.HoverButtonEvent;
 
 /**
@@ -84,29 +82,6 @@ public class MainApp extends JFrame
 
 	public static void main(String[] args)
 	{
-		TableView tableView = new TableView("", "", true);
-		tableView.setVisible(true);
-
-		Card cardsArray[] = new Card[10];
-
-		for (int i = 0; i < 10; i++)
-		{
-			cardsArray[i] = new NumberCard(CardColor.RED, i);
-		}
-
-		HandCards cards = new HandCards(cardsArray);
-
-		tableView.loadCards(cards, 0);
-
-		try
-		{
-			Thread.sleep(100000);
-		}
-		catch (InterruptedException e)
-		{
-
-		}
-
 		EventQueue.invokeLater(new Runnable()
 		{
 			@Override
