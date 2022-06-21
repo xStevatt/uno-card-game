@@ -41,17 +41,20 @@ import unibs.pajc.uno.view.PlayerDetailsInfoSinglePlayer;
 import unibs.pajc.uno.view.events.HoverButtonEvent;
 
 /**
- * Enum describing card types
+ * Classe entry point per il programma, permette di accedere alle modalità di
+ * principali di gioco Uno
  * 
  * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
  *
  */
 public class MainApp extends JFrame
 {
-	private static final long serialVersionUID = 1L;
+	// FIRMA SCHERMATA PRINCIPALE
 	private static final String APP_SIGNATURE = "Made by Stefano Valloncini, Yuhang Ye, Luigi Amarante";
+	// TITOLO APPLICAZIONE
 	private static final String DEFAULT_APP_TITLE = "UnoPAJC, a remake of the uno card game, in Java";
 
+	// BUTTONS ---
 	private JPanel bannerPanel;
 	private JLabel bannerLabel;
 
@@ -66,8 +69,11 @@ public class MainApp extends JFrame
 
 	private JPanel AIGamePanel;
 	private JButton newAIGameButton;
+	// END BUTTONS ---
 
+	// GAME LOGO ---
 	private JLayeredPane panelCards;
+
 	private Card cards[] = { new NumberCard(CardColor.RED, 6), new WildCard(CardType.SKIP, CardColor.YELLOW),
 			new NumberCard(CardColor.GREEN, 9) };
 	CardView cardViews[];
@@ -79,6 +85,7 @@ public class MainApp extends JFrame
 	private JPanel panelLogo;
 	private Graphics2D g2;
 	private JLabel descriptorLabel;
+	// END GAME LOGO ---
 
 	public static void main(String[] args)
 	{
@@ -117,6 +124,9 @@ public class MainApp extends JFrame
 		loadInterface();
 	}
 
+	/**
+	 * Carica l'interfaccia principale del gioco con le carie opzioni, accessibili
+	 */
 	protected void loadInterface()
 	{
 		initializeBannerPanel();
@@ -128,7 +138,6 @@ public class MainApp extends JFrame
 		panelCards = new JLayeredPane();
 		panelCards.setBounds(100, 39, 250, 150);
 		bannerPanel.add(panelCards);
-		// this.add(buttonsPanel, BorderLayout.SOUTH);
 		getContentPane().add(mainContainer, BorderLayout.SOUTH);
 
 		this.pack();
@@ -154,11 +163,13 @@ public class MainApp extends JFrame
 			cardViews[i].setEnabled(rootPaneCheckingEnabled);
 		}
 
+		// AGGIUNGE AL PANNELLO DELLE CARTE LE 4 CARTE CREATE
 		panelCards.add(backView);
 		panelCards.add(cardViews[0]);
 		panelCards.add(cardViews[1]);
 		panelCards.add(cardViews[2]);
 
+		// MOUSE LISTENER EASTER-EGG
 		backView.addMouseListener(new MouseAdapter()
 		{
 			@Override
@@ -169,6 +180,7 @@ public class MainApp extends JFrame
 			}
 		});
 
+		// METTE IN PRIMO PIANO LA CARTA AL CONTRARIO
 		panelCards.moveToFront(backView);
 
 		panelLogo = new JPanel()
@@ -179,13 +191,14 @@ public class MainApp extends JFrame
 			public void paintComponent(Graphics g)
 			{
 				g2 = (Graphics2D) g;
+				// IMPOSTA L'ANTI-ALIASING PER I COMPONENTI GRAFICI DISEGNATI
 				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				// IMPOSTA L'ANTI-ALIASING PER I COMPONENTI GRAFICI DI TESTO
 				g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 				int CARD_WIDTH = (int) ((int) 100 * 1.2);
 				int CARD_HEIGHT = (int) ((int) 150 * 1.2);
 
-				// var defaultFont = new Font(Util.DEFAULT_FONT, Font.BOLD, cardWidth / 2 + 5);
 				var defaultFont = new Font("Corbel", Font.ITALIC + Font.BOLD, 55);
 				var fontMetrics = this.getFontMetrics(defaultFont);
 				int stringWidth = fontMetrics.stringWidth("UNO") / 2;
@@ -193,10 +206,12 @@ public class MainApp extends JFrame
 
 				g2.setColor(Color.black);
 
+				// RUOTA IL LOGO PRINCIPALE DEL GIOCO
 				AffineTransform affineTransform = new AffineTransform();
 				affineTransform.rotate(Math.toRadians(-8), 0, 0);
 				Font rotatedFont = defaultFont.deriveFont(affineTransform);
 
+				// IMPOSTA LE CARATTERISTICHE GRAFICHE
 				g2.setFont(rotatedFont);
 				g2.drawString("UNO", CARD_WIDTH / 2 - stringWidth, CARD_HEIGHT / 2 + fontHeight);
 				g2.setColor(new Color(88, 24, 31));
@@ -233,10 +248,12 @@ public class MainApp extends JFrame
 		bannerPanel.setPreferredSize(new Dimension(600, 250));
 		bannerPanel.setLayout(null);
 		bannerPanel.add(bannerLabel);
-		// bannerPanel.add(bannerLabelSubtitle);
 		bannerPanel.setBackground(new Color(237, 28, 36));
 	}
 
+	/**
+	 * Inizializza il menu dei bottoni
+	 */
 	protected void initializeButtonsPanel()
 	{
 		newOnlineGameButton = new JButton("Online Game");
@@ -344,6 +361,10 @@ public class MainApp extends JFrame
 				.addMouseListener(new HoverButtonEvent("Start a game against AI", DEFAULT_APP_TITLE, descriptorLabel));
 	}
 
+	/*
+	 * Gestisce l'animazione dell'easter egg, quando viene premuta la carta al
+	 * contrario.
+	 */
 	public void cardAnimation()
 	{
 		new Thread(() -> {

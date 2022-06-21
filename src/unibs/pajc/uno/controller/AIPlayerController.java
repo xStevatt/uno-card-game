@@ -16,7 +16,13 @@ import unibs.pajc.uno.view.TableView;
 import unibs.pajc.uno.view.events.CardDrawnEvent;
 import unibs.pajc.uno.view.events.CardSelectedEvent;
 
-public class AIPlayerController extends PlayerController
+/**
+ * Classe di gestione del controller per il gioco in single player
+ * 
+ * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
+ *
+ */
+class AIPlayerController extends PlayerController
 {
 	private AI ai;
 
@@ -35,6 +41,10 @@ public class AIPlayerController extends PlayerController
 		executor.execute(this::runGame);
 	}
 
+	/**
+	 * Inizializza la view, creando l'interfaccia del tavolo e impostando tutte le
+	 * variabili necessarie a visualizzare correttamente la view
+	 */
 	protected void initView()
 	{
 		// SHOWS GUI
@@ -49,6 +59,12 @@ public class AIPlayerController extends PlayerController
 		updateView();
 	}
 
+	/**
+	 * Inizializza il model del gioco
+	 * 
+	 * @param namePlayerOne nome del primo player
+	 * @param namePlayerTwo nome del secondo player
+	 */
 	protected void initModel(String namePlayerOne, String namePlayerTwo)
 	{
 		Player playerOne = new Player("Human", model.generateStartingCards(), 0);
@@ -60,6 +76,9 @@ public class AIPlayerController extends PlayerController
 		ai = new AI(model);
 	}
 
+	/*
+	 * Aggiorna la view con gli ultimi componenti grafici
+	 */
 	protected void updateView()
 	{
 
