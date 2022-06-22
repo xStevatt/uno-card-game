@@ -77,7 +77,7 @@ public class Util
 		}
 		case WILD_COLOR ->
 		{
-			return "W";
+			return "C";
 		}
 		case WILD_DRAW_FOUR ->
 		{

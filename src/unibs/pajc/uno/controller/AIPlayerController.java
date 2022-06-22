@@ -22,7 +22,7 @@ import unibs.pajc.uno.view.events.CardSelectedEvent;
  * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
  *
  */
-class AIPlayerController extends PlayerController
+public class AIPlayerController extends PlayerController
 {
 	private AI ai;
 

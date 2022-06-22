@@ -18,11 +18,6 @@ import unibs.pajc.uno.controller.AIPlayerController;
 
 public class PlayerDetailsInfoSinglePlayer extends JFrame
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	private JLabel lblTitle;
 	private JComboBox comboBoxPlayerOne;
 	private JLabel playerOneLabel;
