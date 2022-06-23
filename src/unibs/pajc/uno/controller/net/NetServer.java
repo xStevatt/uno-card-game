@@ -48,7 +48,6 @@ public class NetServer
 	private final CardDrawnEvent mouseListenerDrawnCard;
 
 	// MULTIPLE CLIENTS
-	private ArrayList<Thread> threadList;
 	private final int playerIndex = 0;
 
 	private final Object syncCardSelected = new Object();
@@ -193,6 +192,16 @@ public class NetServer
 		{
 			JOptionPane.showMessageDialog(null,
 					model.getWinnerPlayer().getNamePlayer() + " hai perso! L'importante è partecipare?");
+		}
+
+		try
+		{
+			serverSocket.close();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		System.exit(0);

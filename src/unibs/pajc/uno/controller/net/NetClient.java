@@ -27,6 +27,7 @@ public class NetClient
 	private final int port;
 	private boolean isConnected = false;
 
+	Socket clientSocket;
 	private volatile ObjectInputStream objInputStream;
 	private volatile ObjectOutputStream objOutputStream;
 	private volatile Object objReceivedGame = null;
@@ -200,6 +201,17 @@ public class NetClient
 					model.getWinnerPlayer().getNamePlayer() + " hai perso! L'importante è partecipare?");
 		}
 
+		// CLOSES RESOURCES
+		try
+		{
+			clientSocket.close();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		System.exit(0);
 	}
 
@@ -287,7 +299,7 @@ public class NetClient
 	{
 		try
 		{
-			Socket clientSocket = new Socket(IP_ADDRESS, port);
+			clientSocket = new Socket(IP_ADDRESS, port);
 
 			System.out.println("[CLIENT] - Trying to connect to server");
 
