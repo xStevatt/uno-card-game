@@ -118,7 +118,6 @@ public class AI
 		}
 		else
 		{
-
 			drawCard();
 		}
 
