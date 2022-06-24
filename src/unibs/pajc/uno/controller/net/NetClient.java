@@ -27,10 +27,10 @@ public class NetClient
 	private final int port;
 	private boolean isConnected = false;
 
-	Socket clientSocket;
-	private volatile ObjectInputStream objInputStream;
-	private volatile ObjectOutputStream objOutputStream;
-	private volatile Object objReceivedGame = null;
+	private Socket clientSocket;
+	private ObjectInputStream objInputStream;
+	private ObjectOutputStream objOutputStream;
+	private Object objReceivedGame = null;
 
 	private String playerNameClient;
 	private String playerNameServer;
