@@ -4,6 +4,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -299,7 +300,8 @@ public class NetClient
 	{
 		try
 		{
-			clientSocket = new Socket(IP_ADDRESS, port);
+			InetAddress ip = InetAddress.getByName(IP_ADDRESS);
+			clientSocket = new Socket(ip, port);
 
 			System.out.println("[CLIENT] - Trying to connect to server");
 
