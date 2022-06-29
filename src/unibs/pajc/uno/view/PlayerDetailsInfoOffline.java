@@ -28,46 +28,55 @@ public class PlayerDetailsInfoOffline extends JFrame
 	public PlayerDetailsInfoOffline()
 	{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 470, 335);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JLabel lblTitle = new JLabel("Insert your details");
-		lblTitle.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
+		lblTitle.setFont(new Font("Lucida Grande", Font.PLAIN, 18));
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitle.setBounds(6, 6, 438, 29);
+		lblTitle.setBounds(6, 21, 458, 29);
 		contentPane.add(lblTitle);
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(16, 40, 428, 12);
+		separator.setBounds(24, 51, 420, 12);
 		contentPane.add(separator);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(26, 64, 398, 183);
+		panel.setBounds(26, 75, 420, 208);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
 		JLabel lblPlayerOneName = new JLabel("Player 1 Name");
-		lblPlayerOneName.setBounds(37, 33, 135, 16);
+		lblPlayerOneName.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		lblPlayerOneName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPlayerOneName.setBounds(16, 14, 179, 26);
 		panel.add(lblPlayerOneName);
 
 		txtPlayerOne = new JTextField();
-		txtPlayerOne.setBounds(184, 28, 186, 26);
+		txtPlayerOne.setHorizontalAlignment(SwingConstants.CENTER);
+		txtPlayerOne.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		txtPlayerOne.setBounds(207, 6, 186, 42);
 		panel.add(txtPlayerOne);
 		txtPlayerOne.setColumns(10);
 
 		JLabel lblPlayerTwoName = new JLabel("Player 2 Name");
-		lblPlayerTwoName.setBounds(37, 71, 135, 16);
+		lblPlayerTwoName.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		lblPlayerTwoName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPlayerTwoName.setBounds(16, 84, 179, 16);
 		panel.add(lblPlayerTwoName);
 
 		txtPlayerTwo = new JTextField();
+		txtPlayerTwo.setHorizontalAlignment(SwingConstants.CENTER);
+		txtPlayerTwo.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
 		txtPlayerTwo.setColumns(10);
-		txtPlayerTwo.setBounds(184, 66, 186, 26);
+		txtPlayerTwo.setBounds(207, 72, 186, 41);
 		panel.add(txtPlayerTwo);
 
-		JButton btnStartNewGame = new JButton("Start game");
+		JButton btnStartNewGame = new JButton("Start game!");
+		btnStartNewGame.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		btnStartNewGame.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent e)
@@ -88,12 +97,16 @@ public class PlayerDetailsInfoOffline extends JFrame
 				}
 			}
 		});
-		btnStartNewGame.setBounds(129, 135, 128, 42);
+		btnStartNewGame.setBounds(144, 155, 128, 53);
 		panel.add(btnStartNewGame);
 
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(37, 107, 333, 12);
+		separator_1.setBounds(6, 125, 408, 12);
 		panel.add(separator_1);
+
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setBounds(6, 52, 408, 12);
+		panel.add(separator_2);
 
 		this.setLocationRelativeTo(null);
 	}

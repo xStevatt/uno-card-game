@@ -227,8 +227,8 @@ public class PlayerDetailsInfoOnline extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				txtIPAddress.setEditable(false);
-				txtIPAddress.setEnabled(false);
+				txtIPAddress.setEditable(true);
+				txtIPAddress.setEnabled(true);
 
 				machineIP.trim();
 				String splittedIP[] = machineIP.split("/");

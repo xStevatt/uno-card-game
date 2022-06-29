@@ -155,7 +155,12 @@ public class MainApp extends JFrame
 		CardBackView backView = new CardBackView(false);
 		backView.setBounds(0, 0, backView.getDimension().width, backView.getDimension().height);
 
-		for (int i = 0, j = 50; i < 3; i++, j += 50)
+		final int STARTING_POINT = 0;
+		final int OFFSET_CARD = 50;
+		final int NUMBER_OF_CARDS = 3;
+
+		// DRAWS TITLE ICONS
+		for (int i = STARTING_POINT, j = OFFSET_CARD; i < NUMBER_OF_CARDS; i++, j += OFFSET_CARD)
 		{
 			cardViews[i] = new CardView(cards[i]);
 			cardViews[i].setBounds(j, 0, backView.getDimension().width, backView.getDimension().height);
@@ -378,7 +383,6 @@ public class MainApp extends JFrame
 				}
 				catch (InterruptedException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
