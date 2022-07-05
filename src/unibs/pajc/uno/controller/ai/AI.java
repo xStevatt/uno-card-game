@@ -36,10 +36,10 @@ public class AI
 	}
 
 	/**
-	 * Method
+	 * Method that returns the most present color in the player's hand cards
 	 * 
-	 * @param cardsList
-	 * @return
+	 * @param cardsList requires the player hand cards
+	 * @return the color that is most present in the hand cards
 	 */
 	private CardColor determineMostPresentColor(ArrayList<Card> cardsList)
 	{
@@ -73,6 +73,29 @@ public class AI
 		return maxColor != null ? maxColor : CardColor.RED;
 	}
 
+	/**
+	 * Method prints all cards that are currently valid for the player
+	 * 
+	 * @param model
+	 */
+	public void printValidCards(GameModel model)
+	{
+		// FILTERS OUT ONLY VALID CARDS
+
+		Player currentPlayer = model.getCurrentPlayer();
+		ArrayList<Card> playerCardList = currentPlayer.getHandCards().getCardList();
+		ArrayList<Card> validCards = new ArrayList<>();
+
+		System.out.print("VALID CARDS -> < ");
+		playerCardList.stream().filter(e -> model.isPlacedCardValid(e))
+				.forEach(e -> System.out.print(e.getCardColor() + ", " + e.getCardType()));
+		System.out.println(" >");
+	}
+
+	/**
+	 * 
+	 * @param model
+	 */
 	public void determineNexMossa(GameModel model)
 	{
 		this.model = model;
@@ -85,12 +108,7 @@ public class AI
 		boolean hasPlayerMoreCards = model.getCurrentPlayer().getHandCards().getCardList().size() < model.getPlayers()
 				.get(model.getNextPlayerIndex()).getHandCards().getCardList().size();
 
-		// FILTERS OUT ONLY VALID CARDS
-
-		System.out.print("VALID CARDS -> < ");
-		playerCardList.stream().filter(e -> model.isPlacedCardValid(e))
-				.forEach(e -> System.out.print(e.getCardColor() + ", " + e.getCardType()));
-		System.out.println(" >");
+		printValidCards(model);
 
 		for (Card card : playerCardList)
 		{
@@ -123,6 +141,9 @@ public class AI
 
 	}
 
+	/**
+	 * 
+	 */
 	private void drawCard()
 	{
 		System.out.println("AI - Drawing a card");

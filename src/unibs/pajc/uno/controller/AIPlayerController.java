@@ -11,7 +11,7 @@ import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.player.Player;
 import unibs.pajc.uno.view.CardView;
 import unibs.pajc.uno.view.DialogSelectNewColor;
-import unibs.pajc.uno.view.PlayerDetailsInfoOffline;
+import unibs.pajc.uno.view.PlayerDetailsInfoSinglePlayer;
 import unibs.pajc.uno.view.TableView;
 import unibs.pajc.uno.view.events.CardDrawnEvent;
 import unibs.pajc.uno.view.events.CardSelectedEvent;
@@ -25,15 +25,20 @@ import unibs.pajc.uno.view.events.CardSelectedEvent;
 public class AIPlayerController extends PlayerController
 {
 	private AI ai;
+	private String playerOneName;
+	private String playerTwoName;
 
-	public AIPlayerController(String nameHuman1)
+	public AIPlayerController(String playerOneName, String playerTwoName)
 	{
+		this.playerOneName = playerOneName;
+		this.playerTwoName = playerTwoName;
+
 		// INITS MODEL
 		model = new GameModel();
-		initModel(nameHuman1, "Robot");
+		initModel(playerOneName, playerTwoName);
 
 		// INITS VIEW
-		view = new TableView(nameHuman1, "Robot", true);
+		view = new TableView(playerOneName, playerTwoName, true);
 		initView();
 
 		// START RUNNING GAME
@@ -67,8 +72,8 @@ public class AIPlayerController extends PlayerController
 	 */
 	protected void initModel(String namePlayerOne, String namePlayerTwo)
 	{
-		Player playerOne = new Player("Human", model.generateStartingCards(), 0);
-		Player playerTwo = new Player("Robot", model.generateStartingCards(), 1);
+		Player playerOne = new Player(namePlayerOne, model.generateStartingCards(), 0);
+		Player playerTwo = new Player(namePlayerTwo, model.generateStartingCards(), 1);
 
 		model.initPlayer(playerOne);
 		model.initPlayer(playerTwo);
@@ -81,7 +86,6 @@ public class AIPlayerController extends PlayerController
 	 */
 	protected void updateView()
 	{
-
 		// SETS TURN AND LOADS CARDS
 		view.setTurn(model.getCurrentPlayer().getNamePlayer());
 		view.loadCards(model.getPlayers().get(0).getHandCards(), 0);
@@ -110,6 +114,9 @@ public class AIPlayerController extends PlayerController
 		view.repaint();
 	}
 
+	/**
+	 * 
+	 */
 	protected void runGame()
 	{
 		while (!model.isGameOver())
@@ -170,6 +177,9 @@ public class AIPlayerController extends PlayerController
 		gameOver();
 	}
 
+	/**
+	 * 
+	 */
 	protected void playerDrawCard()
 	{
 		// CHECK IF PLAYER SAID UNO
@@ -177,6 +187,9 @@ public class AIPlayerController extends PlayerController
 		model.nextTurn();
 	}
 
+	/**
+	 * 
+	 */
 	protected void playerSelectedCard()
 	{
 		// CHECK IF PLAYER SAID UNO
@@ -252,9 +265,7 @@ public class AIPlayerController extends PlayerController
 		{
 		case 0:
 			view.dispose();
-
-			new LocalPlayerController(model.getPlayers().get(0).getNamePlayer(),
-					model.getPlayers().get(1).getNamePlayer());
+			new AIPlayerController(playerOneName, playerTwoName);
 			break;
 		case 1:
 			view.dispose();
@@ -262,7 +273,7 @@ public class AIPlayerController extends PlayerController
 			break;
 		case 2:
 			view.dispose();
-			new PlayerDetailsInfoOffline().setVisible(true);
+			new PlayerDetailsInfoSinglePlayer().setVisible(true);
 			break;
 		}
 	}

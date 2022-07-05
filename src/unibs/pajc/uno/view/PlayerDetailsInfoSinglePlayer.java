@@ -5,7 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -25,37 +24,45 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 	private JComboBox comboBoxPlayerTwo;
 	private JTextField txtFieldPlayerOne;
 
+	private enum PlayerType
+	{
+		COMPUTER, HUMAN;
+	}
+
 	public PlayerDetailsInfoSinglePlayer()
 	{
 		getContentPane().setLayout(null);
 
-		this.setSize(460, 305);
+		this.setSize(500, 329);
 
 		lblTitle = new JLabel("Insert your details!");
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitle.setBounds(12, 6, 438, 42);
+		lblTitle.setBounds(12, 6, 482, 42);
 		getContentPane().add(lblTitle);
 
-		String options[] = { "Human", "Computer" };
+		PlayerType options[] = { PlayerType.COMPUTER, PlayerType.HUMAN };
 
 		comboBoxPlayerOne = new JComboBox(options);
 		comboBoxPlayerOne.setEnabled(false);
-		comboBoxPlayerOne.setModel(new DefaultComboBoxModel(new String[] { "Computer", "Human" }));
-		comboBoxPlayerOne.setBounds(192, 132, 116, 60);
+
+		comboBoxPlayerOne.setSelectedIndex(0);
+
+		comboBoxPlayerOne.setBounds(162, 132, 146, 60);
 		getContentPane().add(comboBoxPlayerOne);
 
 		playerOneLabel = new JLabel("Player 1");
 		playerOneLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		playerOneLabel.setBounds(64, 98, 116, 16);
+		playerOneLabel.setBounds(34, 98, 116, 16);
 		getContentPane().add(playerOneLabel);
 
 		playerTwoLabel = new JLabel("Player 2");
 		playerTwoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		playerTwoLabel.setBounds(64, 153, 116, 16);
+		playerTwoLabel.setBounds(34, 153, 116, 16);
 		getContentPane().add(playerTwoLabel);
 
 		comboBoxPlayerTwo = new JComboBox(options);
-		comboBoxPlayerTwo.setBounds(192, 77, 116, 60);
+		comboBoxPlayerTwo.setSelectedIndex(1);
+		comboBoxPlayerTwo.setBounds(162, 77, 146, 60);
 		getContentPane().add(comboBoxPlayerTwo);
 
 		comboBoxPlayerTwo.addActionListener(new ActionListener()
@@ -63,14 +70,14 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				String selection = (String) ((JComboBox<?>) e.getSource()).getSelectedItem();
+				PlayerType selection = (PlayerType) ((JComboBox<?>) e.getSource()).getSelectedItem();
 
-				switch (selection.trim())
+				switch (selection)
 				{
-				case "Human":
+				case HUMAN:
 					txtFieldPlayerOne.setVisible(true);
 					break;
-				case "Computer":
+				case COMPUTER:
 					txtFieldPlayerOne.setVisible(false);
 					break;
 				}
@@ -83,21 +90,19 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 			public void actionPerformed(ActionEvent e)
 			{
 				setVisible(false);
-				String selectionPlayerOne = (String) comboBoxPlayerOne.getSelectedItem();
-				String selectionPlayerTwo = (String) comboBoxPlayerTwo.getSelectedItem();
 
-				AIPlayerController aicontroller = new AIPlayerController("Vallo");
+				AIPlayerController aicontroller = new AIPlayerController(txtFieldPlayerOne.getText().trim(), "");
 			}
 		});
-		btnStartGame.setBounds(166, 215, 116, 51);
+		btnStartGame.setBounds(192, 217, 116, 51);
 		getContentPane().add(btnStartGame);
 
 		JSeparator separator = new JSeparator();
-		separator.setBounds(64, 191, 334, 12);
+		separator.setBounds(64, 191, 386, 12);
 		getContentPane().add(separator);
 
 		JSeparator separator_1 = new JSeparator();
-		separator_1.setBounds(172, 53, 116, 12);
+		separator_1.setBounds(192, 60, 116, 12);
 		getContentPane().add(separator_1);
 
 		txtFieldPlayerOne = new JTextField();

@@ -142,7 +142,7 @@ public class MainApp extends JFrame
 
 		this.pack();
 
-		Image bannerImage = new ImageIcon("res/img/main_icon.png").getImage().getScaledInstance(500, 500,
+		Image bannerImage = new ImageIcon("res/img/main_icon.png").getImage().getScaledInstance(250, 250,
 				java.awt.Image.SCALE_SMOOTH);
 
 		this.setResizable(false);
