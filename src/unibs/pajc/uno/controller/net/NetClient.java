@@ -307,43 +307,45 @@ public class NetClient
 
 	private void startClient()
 	{
-		try
-		{
-			InetAddress ip = InetAddress.getByName(IP_ADDRESS);
-			clientSocket = new Socket(ip, port);
-
-			System.out.println("[CLIENT] - Trying to connect to server");
-
-			objInputStream = new ObjectInputStream(clientSocket.getInputStream());
-			objOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-
-			isConnected = true;
-			System.out.println("[CLIENT] - CONNECTED TO SERVER: " + isConnected);
-
-			if (isConnected)
+		new Thread(() -> {
+			try
 			{
-				try
+				InetAddress ip = InetAddress.getByName(IP_ADDRESS);
+				clientSocket = new Socket(ip, port);
+
+				System.out.println("[CLIENT] - Trying to connect to server");
+
+				objInputStream = new ObjectInputStream(clientSocket.getInputStream());
+				objOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+
+				isConnected = true;
+				System.out.println("[CLIENT] - CONNECTED TO SERVER: " + isConnected);
+
+				if (isConnected)
 				{
-					// SENDS CLIENT NAME TO SERVER
-					objOutputStream.writeObject(playerNameClient);
-				}
-				catch (IOException e)
-				{
-					System.out.println("Error while getting init details");
-					e.printStackTrace();
+					try
+					{
+						// SENDS CLIENT NAME TO SERVER
+						objOutputStream.writeObject(playerNameClient);
+					}
+					catch (IOException e)
+					{
+						System.out.println("Error while getting init details");
+						e.printStackTrace();
+					}
 				}
 			}
-		}
-		catch (UnknownHostException e)
-		{
-			System.err.println("IP address of the host could not be determined : " + e);
-			System.exit(0);
-		}
-		catch (IOException e)
-		{
-			System.err.println("Error in creating socket: " + e);
-			System.exit(0);
-		}
+			catch (UnknownHostException e)
+			{
+				System.err.println("IP address of the host could not be determined : " + e);
+				System.exit(0);
+			}
+			catch (IOException e)
+			{
+				System.err.println("Error in creating socket: " + e);
+				System.exit(0);
+			}
+		}).start();
 	}
 
 	/**

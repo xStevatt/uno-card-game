@@ -35,6 +35,7 @@ public class NetServer
 	private ServerSocket serverSocket;
 	private final int PORT;
 	private boolean isConnected = false;
+	private Object syncServerConnection = new Object();
 
 	// OUTPUT / INPUT STREAMS
 	private ObjectInputStream objInputStream;
@@ -333,6 +334,7 @@ public class NetServer
 			System.err.println("Some communication error happened: " + e);
 			System.exit(0);
 		}
+
 	}
 
 	/**
