@@ -30,9 +30,4 @@ public class ActionCard extends AbstractCard
 	{
 		return this.cardType == CardType.WILD_COLOR || this.cardType == CardType.WILD_DRAW_FOUR;
 	}
-
-	public String toString()
-	{
-		return "ACTION CARD";
-	}
 }

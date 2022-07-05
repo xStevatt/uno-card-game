@@ -7,13 +7,19 @@ import unibs.pajc.uno.model.card.Card;
 public class Player implements Serializable
 {
 	private final String namePlayer;
-	private final int index;
+	private int index;
 	private HandCards handCards;
 
 	public Player(String namePlayer, Card[] cards, int index)
 	{
 		this.namePlayer = namePlayer;
 		this.handCards = new HandCards(cards);
+		this.index = index;
+	}
+
+	public Player(String namePlayer, int index)
+	{
+		this.namePlayer = namePlayer;
 		this.index = index;
 	}
 

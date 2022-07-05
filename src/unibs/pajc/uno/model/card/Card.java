@@ -15,6 +15,4 @@ public interface Card extends Serializable
 	public CardColor getCardColor();
 
 	public boolean isCardSpecialWild();
-
-	public String toString();
 }

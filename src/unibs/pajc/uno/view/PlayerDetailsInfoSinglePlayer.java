@@ -91,7 +91,12 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 			{
 				setVisible(false);
 
-				AIPlayerController aicontroller = new AIPlayerController(txtFieldPlayerOne.getText().trim(), "");
+				String playerNameOne = comboBoxPlayerTwo.getSelectedItem() == PlayerType.COMPUTER ? "Computer"
+						: txtFieldPlayerOne.getText().trim();
+				String playerNameTwo = comboBoxPlayerOne.getSelectedItem() == PlayerType.COMPUTER ? "Computer"
+						: txtFieldPlayerOne.getText().trim();
+
+				AIPlayerController aicontroller = new AIPlayerController(playerNameOne, playerNameTwo);
 			}
 		});
 		btnStartGame.setBounds(192, 217, 116, 51);
@@ -143,5 +148,7 @@ public class PlayerDetailsInfoSinglePlayer extends JFrame
 		});
 
 		txtFieldPlayerOne.setVisible(true);
+
+		this.setLocationRelativeTo(null);
 	}
 }

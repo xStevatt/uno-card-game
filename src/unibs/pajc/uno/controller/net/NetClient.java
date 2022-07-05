@@ -67,6 +67,9 @@ public class NetClient
 		executor.execute(this::runGameLogic);
 	}
 
+	/**
+	 * 
+	 */
 	private void initView()
 	{
 		SwingUtilities.invokeLater(new Runnable()
@@ -87,6 +90,9 @@ public class NetClient
 		});
 	}
 
+	/**
+	 * 
+	 */
 	private void updateView()
 	{
 		SwingUtilities.invokeLater(new Runnable()
@@ -127,6 +133,9 @@ public class NetClient
 		});
 	}
 
+	/**
+	 * 
+	 */
 	private void runGameLogic()
 	{
 		synchronized (syncObjectModel)

@@ -297,32 +297,39 @@ public class GameModel implements Serializable
 	{
 		boolean isCardValid = false;
 
+		// GIOCATORE HA UNA CARTA E USA UNA CARTA SPECIALE; ALLORA FALSE
 		if (cardSelected.isCardSpecialWild() && turnIterator.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
 		{
 			return false;
 		}
 
+		// GIOCATORE HA UNA CARTA E USA UNA CARTA SKIP; ALLORA FALSE
 		if (cardSelected.getCardType() == CardType.SKIP
 				&& turnIterator.getCurrentPlayer().getHandCards().getNumberOfCards() == 1)
 		{
 			return false;
 		}
 
+		// GIOCATORE HA UNA CARTA SPECIALE WILD E IL COLORE DELLA CARTA POSIZIONATA è
+		// NULLO; ALLORA TRUE
 		if (cardUsed.isCardSpecialWild() && currentCardColor == null)
 		{
 			isCardValid = true;
 		}
 
-		if (cardUsed.isCardSpecialWild() && cardSelected.isCardSpecialWild())
-		{
-			isCardValid = true;
-		}
+		/*
+		 * // GIOCATORE USA LA CARTA WILD E LA CARTA PRECEDENTE è WILD, ALLORA VA BENE
+		 * if (cardUsed.isCardSpecialWild() && cardSelected.isCardSpecialWild()) {
+		 * isCardValid = true; }
+		 */
 
+		// SE LA CARTA è SPECIALE
 		if (cardSelected.isCardSpecialWild())
 		{
 			isCardValid = true;
 		}
 
+		//
 		if (cardSelected.isCardSpecialWild() || cardUsed.isCardSpecialWild())
 		{
 			if (cardUsed.isCardSpecialWild() && cardSelected.getCardColor() == currentCardColor)
@@ -421,7 +428,7 @@ public class GameModel implements Serializable
 	 * 
 	 * @param player is the identifier of the player
 	 */
-	public synchronized Card[] generateStartingCards()
+	public Card[] generateStartingCards()
 	{
 		Card[] card = new Card[GameRules.DEFAULT_NUMBER_OF_CARDS];
 
@@ -441,7 +448,7 @@ public class GameModel implements Serializable
 	 * @param player        is the index of the player the new set of cards is set
 	 *                      for
 	 */
-	public synchronized void generateStartingCards(int startingCards)
+	public void generateStartingCards(int startingCards)
 	{
 		Card[] card = new Card[startingCards];
 
@@ -451,12 +458,12 @@ public class GameModel implements Serializable
 		}
 	}
 
-	public synchronized int getCurrentPlayerIndex()
+	public int getCurrentPlayerIndex()
 	{
 		return turnIterator.getIndexCurrentPlayer();
 	}
 
-	public synchronized int getNextPlayerIndex()
+	public int getNextPlayerIndex()
 	{
 		return turnIterator.getIndexNextPlayer();
 	}

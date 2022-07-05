@@ -36,6 +36,23 @@ public class AI
 	}
 
 	/**
+	 * Method checks if player has any wild cards
+	 * 
+	 * @param cardsList the cardsList to check
+	 * @return method returns true if player has any special wild cards
+	 */
+	private Card hasSpecialWildCardColor(ArrayList<Card> cardsList)
+	{
+		for (Card card : cardsList)
+		{
+			if (card.isCardSpecialWild())
+				return card;
+		}
+
+		return null;
+	}
+
+	/**
 	 * Method that returns the most present color in the player's hand cards
 	 * 
 	 * @param cardsList requires the player hand cards
@@ -105,7 +122,7 @@ public class AI
 		ArrayList<Card> validCards = new ArrayList<>();
 
 		// CHECKS IF NEXT ADVERSARY HAS MORE CARDS THAN CURRENT PLAYER
-		boolean hasPlayerMoreCards = model.getCurrentPlayer().getHandCards().getCardList().size() < model.getPlayers()
+		boolean hasPlayerMoreCards = model.getCurrentPlayer().getHandCards().getCardList().size() >= model.getPlayers()
 				.get(model.getNextPlayerIndex()).getHandCards().getCardList().size();
 
 		printValidCards(model);
@@ -120,7 +137,7 @@ public class AI
 
 		if (validCards.size() != 0)
 		{
-			if (hasSpecialWildCard(playerCardList) != null)
+			if (hasSpecialWildCard(playerCardList) != null && hasPlayerMoreCards)
 			{
 				Card card = hasSpecialWildCard(model.getPlayers().get(1).getHandCards().getCardList());
 				System.out.println("Best move -> < " + card.getCardColor() + " " + card.getCardType() + " >");
