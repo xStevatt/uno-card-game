@@ -13,6 +13,14 @@ import unibs.pajc.uno.view.TableView;
 import unibs.pajc.uno.view.events.CardDrawnEvent;
 import unibs.pajc.uno.view.events.CardSelectedEvent;
 
+/**
+ * Classe di gestione del controller per il gioco in multiplayer locale
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
+ *
+ */
 public class LocalPlayerController extends PlayerController
 {
 	public LocalPlayerController(String playerOneName, String playerTwoName)
@@ -30,6 +38,13 @@ public class LocalPlayerController extends PlayerController
 		executor.execute(this::runGame);
 	}
 
+	/**
+	 * Metodo per inizializzare gli elementi del model necessari per iniziare il
+	 * gioco in multiplayer in locale sullo stesso computer
+	 * 
+	 * @param playerOneName
+	 * @param playerTwoName
+	 */
 	protected void initModel(String playerOneName, String playerTwoName)
 	{
 		Player playerOne = new Player(playerOneName, model.generateStartingCards(), 0);
@@ -55,7 +70,7 @@ public class LocalPlayerController extends PlayerController
 	}
 
 	/**
-	 * Updates game view, loading all the new data available and setting up
+	 * Aggionra la view con tutti gli elementi aggiornati
 	 */
 	@Override
 	protected void updateView()

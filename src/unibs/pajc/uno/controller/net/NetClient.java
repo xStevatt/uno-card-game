@@ -2,8 +2,10 @@ package unibs.pajc.uno.controller.net;
 
 import java.io.EOFException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -29,8 +31,8 @@ public class NetClient
 	private boolean isConnected = false;
 
 	private Socket clientSocket;
-	private ObjectInputStream objInputStream;
-	private ObjectOutputStream objOutputStream;
+	private ObjectInputStream objInputStream = null;
+	private ObjectOutputStream objOutputStream = null;
 	private Object objReceivedGame = null;
 
 	private String playerNameClient;
@@ -55,7 +57,7 @@ public class NetClient
 		this.playerNameClient = playerName;
 
 		startClient();
-		System.out.println("[CLIENT] - starting");
+
 		view = new TableView(null, null, false, syncObjectChat);
 		view.setTitle(playerNameClient);
 
@@ -342,21 +344,28 @@ public class NetClient
 		try
 		{
 			InetAddress ip = InetAddress.getByName(IP_ADDRESS);
+
 			clientSocket = new Socket(ip, port);
 
 			System.out.println("[CLIENT] - Trying to connect to server");
 
-			objInputStream = new ObjectInputStream(clientSocket.getInputStream());
-			objOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+			// STREAMS
+			InputStream inputStream = clientSocket.getInputStream();
+			OutputStream outputStream = clientSocket.getOutputStream();
+
+			// OBJ INPUT STREAMS
+			objInputStream = new ObjectInputStream(inputStream);
+			objOutputStream = new ObjectOutputStream(outputStream);
 
 			isConnected = true;
-			System.out.println("[CLIENT] - CONNECTED TO SERVER: " + isConnected);
 
 			if (isConnected)
 			{
+				System.out.println("[CLIENT] - CONNECTED TO SERVER: " + isConnected);
+
 				try
 				{
-					// SENDS CLIENT NAME TO SERVER
+					System.out.println("[CLIENT] - Trying to send data");
 					objOutputStream.writeObject(playerNameClient);
 				}
 				catch (IOException e)
@@ -369,12 +378,10 @@ public class NetClient
 		catch (UnknownHostException e)
 		{
 			System.err.println("IP address of the host could not be determined : " + e);
-			System.exit(0);
 		}
 		catch (IOException e)
 		{
 			System.err.println("Error in creating socket: " + e);
-			System.exit(0);
 		}
 	}
 

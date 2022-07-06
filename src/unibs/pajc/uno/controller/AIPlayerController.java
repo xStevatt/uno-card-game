@@ -17,9 +17,12 @@ import unibs.pajc.uno.view.events.CardDrawnEvent;
 import unibs.pajc.uno.view.events.CardSelectedEvent;
 
 /**
- * Classe di gestione del controller per il gioco in single player
+ * Classe di gestione del controller per il gioco in single player con
+ * l'intelligenza artificiale
  * 
- * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
  *
  */
 public class AIPlayerController extends PlayerController

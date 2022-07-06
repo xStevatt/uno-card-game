@@ -9,6 +9,14 @@ import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.player.Player;
 
+/**
+ * Classe di gestione del controller per il gioco in multiplayer locale
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
+ *
+ */
 public class AI
 {
 	private GameModel model;

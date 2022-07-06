@@ -42,10 +42,12 @@ import unibs.pajc.uno.view.PlayerDetailsInfoSinglePlayer;
 import unibs.pajc.uno.view.events.HoverButtonEvent;
 
 /**
- * Classe entry point per il programma, permette di accedere alle modalità di
- * principali di gioco Uno
  * 
- * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
+ * Classe contenente il main, che genera il menu iniziale
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
  *
  */
 public class MainApp extends JFrame
@@ -55,10 +57,11 @@ public class MainApp extends JFrame
 	// TITOLO APPLICAZIONE
 	private static final String DEFAULT_APP_TITLE = "UnoPAJC, a remake of the uno card game, in Java";
 
-	// BUTTONS ---
+	// BUTTONS PANEL COMPONTENTI ---
 	private JPanel bannerPanel;
 	private JLabel bannerLabel;
 
+	// PANNELLI
 	private JPanel buttonsPanel;
 	private JPanel mainContainer;
 
@@ -126,7 +129,9 @@ public class MainApp extends JFrame
 	}
 
 	/**
-	 * Carica l'interfaccia principale del gioco con le carie opzioni, accessibili
+	 * Carica l'interfaccia principale del gioco con le carie opzioni di gioco, da
+	 * questa schermata è possibile accedere graficamente a tutte le altre modalità
+	 * di gioco
 	 */
 	protected void loadInterface()
 	{
@@ -235,6 +240,9 @@ public class MainApp extends JFrame
 		bannerPanel.add(lblNewLabel);
 	}
 
+	/**
+	 * Inizializzai gli elementi che fanno parte del banner all'inizio del gioco
+	 */
 	protected void initializeBannerPanel()
 	{
 		// Image bannerImage = new

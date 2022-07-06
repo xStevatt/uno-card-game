@@ -6,8 +6,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 
 import javax.swing.BorderFactory;
@@ -54,38 +52,6 @@ public class CardBackView extends JPanel
 	{
 		setPreferredSize(dimension);
 		setBorder(defaultBorder);
-
-		addMouseListener(new MouseAdapter()
-		{
-			@Override
-			public void mousePressed(MouseEvent e)
-			{
-				if (shouldCardWork)
-				{
-					CardBackView.isCardDrawnFromDeck = true;
-				}
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e)
-			{
-				if (shouldCardWork)
-				{
-					setBorder(focusedBorder);
-					setToolTipText("Draw a card!");
-				}
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e)
-			{
-				if (shouldCardWork)
-				{
-					setBorder(defaultBorder);
-					setToolTipText(null);
-				}
-			}
-		});
 	}
 
 	public void setSelectedBorder()
@@ -108,7 +74,7 @@ public class CardBackView extends JPanel
 		g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
 		fillBackground(g2, Color.BLACK);
-		drawWhiteOvalInCenter(g2);
+		drawRedOvalInCenter(g2);
 		drawValueInCenter(g2);
 	}
 
@@ -122,15 +88,17 @@ public class CardBackView extends JPanel
 		g2.setColor(Color.BLACK);
 		g2.fillRect(0, 0, cardWidth, cardHeight);
 
-		g2.setColor(cardColor);
-		g2.fillRect(margin, margin, cardWidth - 2 * margin, cardHeight - 2 * margin);
+		/*
+		 * g2.setColor(cardColor); g2.fillRect(margin, margin, cardWidth - 2 * margin,
+		 * cardHeight - 2 * margin);
+		 */
 	}
 
 	/**
 	 * 
 	 * @param g2
 	 */
-	private void drawWhiteOvalInCenter(Graphics2D g2)
+	private void drawRedOvalInCenter(Graphics2D g2)
 	{
 		var transformer = g2.getTransform();
 		g2.setColor(Color.red);
