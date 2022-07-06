@@ -2,6 +2,7 @@ package unibs.pajc.uno.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardColor;
@@ -24,10 +25,8 @@ public class GameModel implements Serializable
 
 	private CardColor currentCardColor = null;
 
-	/**
-	 * 
-	 * @param players is the the
-	 */
+	private HashMap<CardType, Mossa> mapMosse = new HashMap<CardType, Mossa>();
+
 	public GameModel(ArrayList<Player> players)
 	{
 		this.players = players;
@@ -44,6 +43,7 @@ public class GameModel implements Serializable
 		this.currentCardColor = currentCardColor;
 
 		turnIterator = new PlayerRoundIterator(players, turn);
+		loadMosse();
 	}
 
 	/**
@@ -78,6 +78,7 @@ public class GameModel implements Serializable
 	{
 		cardsDeck = new CardDeck();
 		usedCards = new UsedPile(cardsDeck.getRandomCard());
+		loadMosse();
 	}
 
 	/**
@@ -142,6 +143,33 @@ public class GameModel implements Serializable
 		return cardsDeck.getRandomCard();
 	}
 
+	public void loadMosse()
+	{
+		mapMosse.put(CardType.NUMBER, () -> false);
+
+		mapMosse.put(CardType.WILD_COLOR, () -> true);
+
+		mapMosse.put(CardType.WILD_DRAW_FOUR, () -> {
+			addCardsToPlayer(4);
+			return true;
+		});
+
+		mapMosse.put(CardType.WILD_DRAW_TWO, () -> {
+			addCardsToPlayer(2);
+			return false;
+		});
+
+		mapMosse.put(CardType.REVERSE, () -> {
+			turnIterator.reverseDirection();
+			return false;
+		});
+
+		mapMosse.put(CardType.SKIP, () -> {
+			turnIterator.next();
+			return false;
+		});
+	}
+
 	/**
 	 * Boolean variable assignments were left for clarity
 	 * 
@@ -153,72 +181,28 @@ public class GameModel implements Serializable
 		players.get(turnIterator.getIndexCurrentPlayer()).removeCard(card);
 		usedCards.addCard(card);
 
-		boolean newColorNeedsSelection = false;
+		boolean cardNeedsNewColorSelection = false;
 
-		switch (card.getCardType())
+		if (mapMosse.containsKey(card.getCardType()))
 		{
-		case NUMBER:
+			if (card.getCardType() != CardType.REVERSE)
+				turnIterator.next();
 
-			turnIterator.next();
-			// NOTHING NEEDS TO BE DONE WHEN CARD PLACED IS A NUMBER
-			newColorNeedsSelection = false;
-
-			break;
-
-		case WILD_COLOR:
-
-			turnIterator.next();
-			// NEW COLOR NEEDS TO BE SELECTED
-			newColorNeedsSelection = true;
-
-			break;
-
-		case WILD_DRAW_FOUR:
-
-			turnIterator.next();
-			// ADD CARDS TO NEXT PLAYER
-			for (int i = 0; i < 4; i++)
-			{
-				turnIterator.getCurrentPlayer().addCard(getCardFromDeck());
-			}
-
-			// NEW COLOR NEEDS TO BE SELECTED
-			newColorNeedsSelection = true;
-
-			break;
-		case WILD_DRAW_TWO:
-
-			turnIterator.next();
-			// ADD CARDS TO NEXT PLAYER
-			for (int i = 0; i < 2; i++)
-			{
-				turnIterator.getCurrentPlayer().addCard(getCardFromDeck());
-			}
-
-			// NEW COLOR NEEDS TO BE SELECTED
-			newColorNeedsSelection = false;
-
-			break;
-
-		case SKIP:
-
-			// SKIPS ONE PLAYER
-			turnIterator.next();
-			turnIterator.next();
-			newColorNeedsSelection = false;
-
-			break;
-
-		case REVERSE:
-
-			// REVERSES ORDER
-			turnIterator.reverseDirection();
-			newColorNeedsSelection = false;
-
-			break;
+			cardNeedsNewColorSelection = mapMosse.get(card.getCardType()).evalMossa();
 		}
 
-		return newColorNeedsSelection;
+		return cardNeedsNewColorSelection;
+	}
+
+	/**
+	 * 
+	 */
+	public void addCardsToPlayer(int nCards)
+	{
+		for (int i = 0; i < nCards; i++)
+		{
+			turnIterator.getCurrentPlayer().addCard(getCardFromDeck());
+		}
 	}
 
 	/**
@@ -316,12 +300,6 @@ public class GameModel implements Serializable
 		{
 			isCardValid = true;
 		}
-
-		/*
-		 * // GIOCATORE USA LA CARTA WILD E LA CARTA PRECEDENTE è WILD, ALLORA VA BENE
-		 * if (cardUsed.isCardSpecialWild() && cardSelected.isCardSpecialWild()) {
-		 * isCardValid = true; }
-		 */
 
 		// SE LA CARTA è SPECIALE
 		if (cardSelected.isCardSpecialWild())

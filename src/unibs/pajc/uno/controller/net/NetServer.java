@@ -58,7 +58,6 @@ public class NetServer
 	public NetServer(int PORT, String playerNameServer)
 	{
 		this.PORT = PORT;
-
 		this.playerNameServer = playerNameServer;
 
 		startServer();

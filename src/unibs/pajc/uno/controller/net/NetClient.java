@@ -42,6 +42,8 @@ public class NetClient
 	private CardSelectedEvent mouseListener;
 	private final CardDrawnEvent mouseListenerDrawnCard;
 
+	private ExecutorService executor;
+
 	private final Object syncCardSelected = new Object();
 	private final Object syncObjectModel = new Object();
 	private final Object syncObjectChat = new Object();
@@ -60,7 +62,7 @@ public class NetClient
 		mouseListenerDrawnCard = new CardDrawnEvent(syncCardSelected);
 		view.getCardDeckView().addMouseListener(mouseListenerDrawnCard);
 
-		ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+		executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
 		executor.execute(this::listenForNewMessagesToSend);
 		executor.execute(this::listenToServer);
@@ -68,7 +70,7 @@ public class NetClient
 	}
 
 	/**
-	 * 
+	 * Inizializza la view del gioco
 	 */
 	private void initView()
 	{
@@ -91,7 +93,7 @@ public class NetClient
 	}
 
 	/**
-	 * 
+	 * Aggiorna la view del gioco con i dati correnti di gioco
 	 */
 	private void updateView()
 	{
@@ -134,7 +136,7 @@ public class NetClient
 	}
 
 	/**
-	 * 
+	 * Gestisce le meccaniche di gioco
 	 */
 	private void runGameLogic()
 	{
@@ -200,6 +202,14 @@ public class NetClient
 			}
 		}
 
+		gameOver();
+	}
+
+	/**
+	 * Gestisce la fine del gioco
+	 */
+	public void gameOver()
+	{
 		if (model.getWinnerPlayer().getIndex() == 1)
 		{
 			JOptionPane.showMessageDialog(null, model.getWinnerPlayer().getNamePlayer()
@@ -211,20 +221,23 @@ public class NetClient
 					model.getWinnerPlayer().getNamePlayer() + " hai perso! L'importante è partecipare?");
 		}
 
-		// CLOSES RESOURCES
+		// CHIUDE IL SOCKET
 		try
 		{
 			clientSocket.close();
+
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		System.exit(0);
 	}
 
+	/**
+	 * Gestisce il turno di gioco
+	 */
 	private void turnGame()
 	{
 		if (mouseListener.getCardSelected() != null)
@@ -244,6 +257,9 @@ public class NetClient
 		}
 	}
 
+	/**
+	 * Gestisce l'evento di carta pescata dal mazzo del tavolo, richiamando il model
+	 */
 	private void manageCardDrawn()
 	{
 		model.getCurrentPlayer().addCard(model.getCardFromDeck());
@@ -251,6 +267,10 @@ public class NetClient
 		model.nextTurn();
 	}
 
+	/**
+	 * Gestisce l'evento di carta selezionata dal proprio mazzo, richiamando il
+	 * model
+	 */
 	private void manageCardSelected()
 	{
 		if (model.isPlacedCardValid(mouseListener.getCardSelected()))
@@ -284,6 +304,9 @@ public class NetClient
 		}
 	}
 
+	/**
+	 * Controlla se il giocatore abbia detto uno o meno
+	 */
 	private void playerSaidUno()
 	{
 		if (model.hasPlayerOneCard(model.getCurrentPlayer()) && view.isUnoButtonPressed() == false)
@@ -293,6 +316,12 @@ public class NetClient
 		}
 	}
 
+	/**
+	 * Aspetta che il server gli mandi un oggetto di tipo GameModel in modo tale che
+	 * possa aggiornare le sue informazioni
+	 * 
+	 * @return il GameModel che è stato ricevuto dal server
+	 */
 	private GameModel waitForServer()
 	{
 		if (objReceivedGame != null && objReceivedGame instanceof GameModel)
@@ -305,55 +334,57 @@ public class NetClient
 		return null;
 	}
 
+	/**
+	 * Gestisce la connessione tra Client e Server
+	 */
 	private void startClient()
 	{
-		new Thread(() -> {
-			try
+		try
+		{
+			InetAddress ip = InetAddress.getByName(IP_ADDRESS);
+			clientSocket = new Socket(ip, port);
+
+			System.out.println("[CLIENT] - Trying to connect to server");
+
+			objInputStream = new ObjectInputStream(clientSocket.getInputStream());
+			objOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+
+			isConnected = true;
+			System.out.println("[CLIENT] - CONNECTED TO SERVER: " + isConnected);
+
+			if (isConnected)
 			{
-				InetAddress ip = InetAddress.getByName(IP_ADDRESS);
-				clientSocket = new Socket(ip, port);
-
-				System.out.println("[CLIENT] - Trying to connect to server");
-
-				objInputStream = new ObjectInputStream(clientSocket.getInputStream());
-				objOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
-
-				isConnected = true;
-				System.out.println("[CLIENT] - CONNECTED TO SERVER: " + isConnected);
-
-				if (isConnected)
+				try
 				{
-					try
-					{
-						// SENDS CLIENT NAME TO SERVER
-						objOutputStream.writeObject(playerNameClient);
-					}
-					catch (IOException e)
-					{
-						System.out.println("Error while getting init details");
-						e.printStackTrace();
-					}
+					// SENDS CLIENT NAME TO SERVER
+					objOutputStream.writeObject(playerNameClient);
+				}
+				catch (IOException e)
+				{
+					System.out.println("Error while getting init details");
+					e.printStackTrace();
 				}
 			}
-			catch (UnknownHostException e)
-			{
-				System.err.println("IP address of the host could not be determined : " + e);
-				System.exit(0);
-			}
-			catch (IOException e)
-			{
-				System.err.println("Error in creating socket: " + e);
-				System.exit(0);
-			}
-		}).start();
+		}
+		catch (UnknownHostException e)
+		{
+			System.err.println("IP address of the host could not be determined : " + e);
+			System.exit(0);
+		}
+		catch (IOException e)
+		{
+			System.err.println("Error in creating socket: " + e);
+			System.exit(0);
+		}
 	}
 
 	/**
-	 * Makes the server listen to the client
+	 * Ascolta il server per eventuali oggetti ricevuti. In caso positivo, notifica
+	 * i Thread che sono in attesa
 	 */
 	private void listenToServer()
 	{
-		while (true)
+		while (isConnected)
 		{
 			Object objReceived = null;
 
@@ -397,11 +428,11 @@ public class NetClient
 	}
 
 	/**
-	 * Listens for new messages to send
+	 * Controlla se l'utente vuole mandare messaggi in chat al server
 	 */
 	private void listenForNewMessagesToSend()
 	{
-		while (true)
+		while (isConnected)
 		{
 			synchronized (syncObjectChat)
 			{
@@ -420,9 +451,9 @@ public class NetClient
 	}
 
 	/**
-	 * Sends data to the server.
+	 * Manda dati al server
 	 * 
-	 * @param objToSend Object that has to be sent to the server
+	 * @param l'oggetto da mandare al server
 	 */
 	private void sendToServer(Object objToSend)
 	{
@@ -430,12 +461,6 @@ public class NetClient
 		{
 			objOutputStream.reset();
 			objOutputStream.writeObject(objToSend);
-
-			if (objToSend instanceof String)
-			{
-				System.out.println("[CLIENT] - Message sent: " + objToSend);
-			}
-
 			objOutputStream.flush();
 		}
 		catch (IOException e)
@@ -446,9 +471,10 @@ public class NetClient
 	}
 
 	/**
-	 * Returns if the client is connected to the server
+	 * Ritorna se il client è connesso al server
 	 * 
-	 * @return
+	 * @return valore booleano per verificare se il client e ancora connesso al
+	 *         server
 	 */
 	public boolean isConnected()
 	{
