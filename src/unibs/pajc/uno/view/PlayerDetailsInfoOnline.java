@@ -40,9 +40,11 @@ public class PlayerDetailsInfoOnline extends JFrame
 	private JLabel lblNewLabel;
 	private JRadioButton rdbtnServer;
 
-	JLabel labelMessage;
+	JComboBox comboBoxNumberPlayers;
 
-	String machineIP = null;
+	private JLabel labelMessage;
+
+	private String machineIP = null;
 
 	public PlayerDetailsInfoOnline()
 	{
@@ -100,7 +102,8 @@ public class PlayerDetailsInfoOnline extends JFrame
 				{
 					if (portNumber != 0 || txtIPAddress.getText().length() == 0 || txtName.getText().length() > 0)
 					{
-						new NetServer(portNumber, txtName.getText());
+						new NetServer(portNumber, txtName.getText(),
+								Integer.parseInt(((String) comboBoxNumberPlayers.getSelectedItem())));
 						setVisible(false);
 					}
 					else
@@ -179,7 +182,7 @@ public class PlayerDetailsInfoOnline extends JFrame
 		labelMessage.setBounds(30, 78, 208, 16);
 		panelSettingsClient.add(labelMessage);
 
-		JComboBox comboBoxNumberPlayers = new JComboBox();
+		comboBoxNumberPlayers = new JComboBox();
 		comboBoxNumberPlayers.setToolTipText("Select number of players");
 		comboBoxNumberPlayers.setModel(new DefaultComboBoxModel(new String[] { "2", "3", "4" }));
 		comboBoxNumberPlayers.setBounds(247, 74, 144, 27);

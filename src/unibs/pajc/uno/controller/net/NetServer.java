@@ -55,7 +55,7 @@ public class NetServer
 	private final Object syncObjectModel = new Object();
 	private final Object syncObjectChat = new Object();
 
-	public NetServer(int PORT, String playerNameServer)
+	public NetServer(int PORT, String playerNameServer, int numberOfPlayers)
 	{
 		this.PORT = PORT;
 		this.playerNameServer = playerNameServer;
@@ -333,7 +333,6 @@ public class NetServer
 			System.err.println("Some communication error happened: " + e);
 			System.exit(0);
 		}
-
 	}
 
 	/**

@@ -2,7 +2,7 @@ package unibs.pajc.uno.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardColor;
@@ -25,7 +25,7 @@ public class GameModel implements Serializable
 
 	private CardColor currentCardColor = null;
 
-	private HashMap<CardType, Mossa> mapMosse = new HashMap<CardType, Mossa>();
+	private ConcurrentHashMap<CardType, Mossa> mapMosse;
 
 	public GameModel(ArrayList<Player> players)
 	{
@@ -145,6 +145,8 @@ public class GameModel implements Serializable
 
 	public void loadMosse()
 	{
+		mapMosse = new ConcurrentHashMap<CardType, Mossa>();
+
 		mapMosse.put(CardType.NUMBER, () -> false);
 
 		mapMosse.put(CardType.WILD_COLOR, () -> true);

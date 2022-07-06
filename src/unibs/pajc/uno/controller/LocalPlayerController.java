@@ -3,6 +3,7 @@ package unibs.pajc.uno.controller;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import unibs.pajc.uno.model.GameModel;
@@ -114,6 +115,10 @@ public class LocalPlayerController extends PlayerController
 						if (model.getCurrentPlayer().getHandCards().getNumberOfCards() <= 30)
 						{
 							playerDrawCard();
+						}
+						else
+						{
+							JOptionPane.showMessageDialog(null, "Non puoi pescare ulteriori carte!");
 						}
 					}
 					if (mouseListener.getCardSelected() != null)
