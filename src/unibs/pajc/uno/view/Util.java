@@ -6,6 +6,14 @@ import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.card.NumberCard;
 
+/**
+ * Classe con metodi util per il gioco.
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
+ *
+ */
 public class Util
 {
 	private Util()
@@ -23,6 +31,12 @@ public class Util
 	private static final Character REVERSE_CHAR = (char) 8634;
 	private static final Character SKIP_CHAR = (char) Integer.parseInt("2718", 16);
 
+	/**
+	 * Metodo che converte il colore da Enum a un oggetto valido per awt
+	 * 
+	 * @param color il colore della carta enumerativo
+	 * @return il colore relativo in java.awt.Color
+	 */
 	public static Color convertCardColor(CardColor color)
 	{
 		if (color == null)
@@ -55,6 +69,12 @@ public class Util
 		}
 	}
 
+	/**
+	 * Ritorna da una carta, il valore che deve essere visulizzato
+	 * 
+	 * @param card
+	 * @return
+	 */
 	public static String getValueToDisplay(Card card)
 	{
 		switch (card.getCardType())

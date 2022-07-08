@@ -8,9 +8,12 @@ import java.util.Random;
 import unibs.pajc.uno.model.GameRules;
 
 /**
- * Deck of cards class, a deck consists of 108 cards
  * 
- * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
+ * Classe che definisce il mazzo di carte del gioco
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
  *
  */
 public class CardDeck implements Serializable

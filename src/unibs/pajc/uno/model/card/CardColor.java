@@ -1,9 +1,12 @@
 package unibs.pajc.uno.model.card;
 
 /**
- * Enum describing card colors.
  * 
- * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
+ * ENum che definisce i colori di gioco
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
  *
  */
 public enum CardColor

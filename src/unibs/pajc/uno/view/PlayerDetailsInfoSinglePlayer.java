@@ -15,6 +15,14 @@ import javax.swing.SwingConstants;
 
 import unibs.pajc.uno.controller.AIPlayerController;
 
+/**
+ * Metodo per l'input dei dati del gioco in singleplayer.
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
+ *
+ */
 public class PlayerDetailsInfoSinglePlayer extends JFrame
 {
 	private JLabel lblTitle;

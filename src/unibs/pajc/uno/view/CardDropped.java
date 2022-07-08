@@ -15,6 +15,15 @@ import javax.swing.border.Border;
 
 import unibs.pajc.uno.model.card.Card;
 
+/**
+ * 
+ * Pannello per la visualzzazione di una carta del gioco.
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
+ *
+ */
 public class CardDropped extends JPanel
 {
 	private static final long serialVersionUID = 1L;
@@ -54,6 +63,9 @@ public class CardDropped extends JPanel
 		return dimension;
 	}
 
+	/**
+	 * Inizializza la grafica della view
+	 */
 	private void initView()
 	{
 		setPreferredSize(dimension);
@@ -77,6 +89,11 @@ public class CardDropped extends JPanel
 		drawValueInCorner(g2);
 	}
 
+	/**
+	 * 
+	 * @param g2
+	 * @param cardColor
+	 */
 	private void fillBackground(Graphics2D g2, Color cardColor)
 	{
 		g2.setColor(Color.WHITE);
@@ -86,6 +103,10 @@ public class CardDropped extends JPanel
 		g2.fillRect(margin, margin, cardWidth - 2 * margin, cardHeight - 2 * margin);
 	}
 
+	/**
+	 * 
+	 * @param g2
+	 */
 	private void drawWhiteOvalInCenter(Graphics2D g2)
 	{
 		var transformer = g2.getTransform();
@@ -96,6 +117,11 @@ public class CardDropped extends JPanel
 		g2.setTransform(transformer);
 	}
 
+	/**
+	 * 
+	 * @param g2
+	 * @param cardColor
+	 */
 	private void drawValueInCenter(Graphics2D g2, Color cardColor)
 	{
 		var defaultFont = new Font(Util.DEFAULT_FONT, Font.BOLD, cardWidth / 2 + 5);
@@ -108,6 +134,10 @@ public class CardDropped extends JPanel
 		g2.drawString(value, cardWidth / 2 - stringWidth, cardHeight / 2 + fontHeight);
 	}
 
+	/**
+	 * 
+	 * @param g2
+	 */
 	private void drawValueInCorner(Graphics2D g2)
 	{
 		var defaultFont = new Font(Util.DEFAULT_FONT, Font.ITALIC, cardWidth / 5);

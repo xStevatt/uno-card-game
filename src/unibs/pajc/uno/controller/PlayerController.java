@@ -14,9 +14,11 @@ import unibs.pajc.uno.view.events.CardDrawnEvent;
 import unibs.pajc.uno.view.events.CardSelectedEvent;
 
 /**
- * Classe di gestione del controller per il gioco in multiplayer locale
+ * Classe astratta per la gesione del
  * 
- * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
  *
  */
 public abstract class PlayerController

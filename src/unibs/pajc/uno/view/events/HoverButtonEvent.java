@@ -8,6 +8,15 @@ import java.awt.event.MouseEvent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/**
+ * 
+ * Classe che gestisce quando il mouse viene sovrapposto al bottone
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
+ *
+ */
 public class HoverButtonEvent extends MouseAdapter
 {
 	private String hoveredTitle;

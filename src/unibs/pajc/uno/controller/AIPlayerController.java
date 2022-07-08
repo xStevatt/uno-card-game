@@ -5,7 +5,7 @@ import java.util.concurrent.Executors;
 
 import javax.swing.JOptionPane;
 
-import unibs.pajc.uno.controller.ai.AI;
+import unibs.pajc.uno.model.AI;
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.player.Player;

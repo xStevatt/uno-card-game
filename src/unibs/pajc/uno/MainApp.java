@@ -43,7 +43,8 @@ import unibs.pajc.uno.view.events.HoverButtonEvent;
 
 /**
  * 
- * Classe contenente il main, che genera il menu iniziale
+ * Classe contenente il main, che genera il menu iniziale dal quale si può
+ * accedere a tutte le varie modalità di gioco
  * 
  * @author Stefano Valloncini
  * @author Yuhang Ye
@@ -91,6 +92,8 @@ public class MainApp extends JFrame
 	private JLabel descriptorLabel;
 	// END GAME LOGO ---
 
+	// MAIN METHOD, da qui parte l'esecuzione del gioco, indipendentemente da che si
+	// stia runnando client o server
 	public static void main(String[] args)
 	{
 		EventQueue.invokeLater(new Runnable()
@@ -180,13 +183,13 @@ public class MainApp extends JFrame
 		panelCards.add(cardViews[1]);
 		panelCards.add(cardViews[2]);
 
-		// MOUSE LISTENER EASTER-EGG
+		// MOUSE LISTENER EASTER-EGG SEGRETO FEDERALE JON TOCCARE
 		backView.addMouseListener(new MouseAdapter()
 		{
 			@Override
 			public void mousePressed(MouseEvent e)
 			{
-				System.out.println("HERE");
+				System.out.println("STOP CLICKING EVERYWHERE; ALTRIMENTI TI MANDO IN BLUE SCREEN");
 				cardAnimation();
 			}
 		});

@@ -16,6 +16,15 @@ import javax.swing.border.EmptyBorder;
 
 import unibs.pajc.uno.controller.LocalPlayerController;
 
+/**
+ * 
+ * Pannello per l'inseriemento del gioco in multiplayer offline.
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
+ *
+ */
 public class PlayerDetailsInfoOffline extends JFrame
 {
 	private JPanel contentPane;

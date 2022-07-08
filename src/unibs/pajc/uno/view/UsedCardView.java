@@ -16,6 +16,16 @@ import javax.swing.border.Border;
 
 import unibs.pajc.uno.model.card.Card;
 
+/**
+ * Pannello che serve alla rappresentazione della carta che è stata utilizzata
+ * nel gioco, ed è nel pannello centrale (e non è possibile avere alcuna
+ * interazione con essa).
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
+ *
+ */
 public class UsedCardView extends JPanel
 {
 	protected final Card card;
@@ -41,6 +51,9 @@ public class UsedCardView extends JPanel
 		initView();
 	}
 
+	/**
+	 * Inizializza la view della carta
+	 */
 	private void initView()
 	{
 		setPreferredSize(dimension);
@@ -81,6 +94,18 @@ public class UsedCardView extends JPanel
 		drawValueInCorner(g2);
 	}
 
+	/**
+	 * 
+	 * Il metodo fillBackground riempie lo sfondo della carta. Il funzionamento `e
+	 * molto semplice, inizialmente colora lo sfondo di bianco, e successivamente
+	 * colora la carta del suo colore effettivo, lasciando ai margini −2 pixel di
+	 * spazio, in modo da mostrare una sorta di bordo bianco (dalla prima volta che
+	 * viene colorato il rettangolo, in quanto avevamo colorato lo sfondo di
+	 * bianco).
+	 * 
+	 * @param g2
+	 * @param cardColor
+	 */
 	private void fillBackground(Graphics2D g2, Color cardColor)
 	{
 		g2.setColor(Color.WHITE);
@@ -90,6 +115,14 @@ public class UsedCardView extends JPanel
 		g2.fillRect(margin, margin, cardWidth - 2 * margin, cardHeight - 2 * margin);
 	}
 
+	/**
+	 * Il metodo disegna un ovale al centro della carta e lo ruota di 45◦. In questo
+	 * modo mima il disegno della carta del gioco originale. Per fare questo abbiamo
+	 * utilizzato il metodo fillOlval che colora un ovale delle dimensioni che
+	 * abbiamo ripetuto opportune.
+	 * 
+	 * @param g2
+	 */
 	private void drawWhiteOvalInCenter(Graphics2D g2)
 	{
 		var transformer = g2.getTransform();
@@ -100,6 +133,16 @@ public class UsedCardView extends JPanel
 		g2.setTransform(transformer);
 	}
 
+	/**
+	 * Il metodo si occupa di prendere il simbolo della carta e di disegnarlo al
+	 * centro della carta. Per fare questo utilizza la classe Graphics2D, la quale
+	 * permette di usare il metodo drawString. Inoltre abbiamo utizzato setFont per
+	 * impostare il font che `e stato creato in precedenza, e setColor per impostare
+	 * un particolare colore del font.
+	 * 
+	 * @param g2
+	 * @param cardColor
+	 */
 	private void drawValueInCenter(Graphics2D g2, Color cardColor)
 	{
 		var defaultFont = new Font(Util.DEFAULT_FONT, Font.BOLD, cardWidth / 2 + 5);
@@ -112,6 +155,16 @@ public class UsedCardView extends JPanel
 		g2.drawString(value, cardWidth / 2 - stringWidth, cardHeight / 2 + fontHeight);
 	}
 
+	/**
+	 * Il metodo si occupa di disegnare il valore della carta e metterlo in alto a
+	 * sinistra della carta. Per fare questo, utilizza come anche negli altri
+	 * metodi, la classe Graphics2D. In particolare utilizza il metodo drawString
+	 * per effettivamente disegnare la stringa; setFont per impostare il font che `e
+	 * stato creato in precedenza, e setColor per impostare un particolare colore
+	 * del font.
+	 * 
+	 * @param g2
+	 */
 	private void drawValueInCorner(Graphics2D g2)
 	{
 		var defaultFont = new Font(Util.DEFAULT_FONT, Font.ITALIC, cardWidth / 5);

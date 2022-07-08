@@ -1,10 +1,12 @@
 package unibs.pajc.uno.model.card;
 
 /**
- * Class that describes a wild card defined by only a type (not definied by a
- * color)
  * 
- * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
+ * Classe che definisce il tipo di carta wildcard
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
  *
  */
 public class WildCard extends AbstractCard

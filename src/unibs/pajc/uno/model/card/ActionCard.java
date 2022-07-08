@@ -1,9 +1,12 @@
 package unibs.pajc.uno.model.card;
 
 /**
- * Class to describe an action card, defined by a type and a color
  * 
- * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
+ * Classe che definisce la carta action del gioco
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
  *
  */
 public class ActionCard extends AbstractCard

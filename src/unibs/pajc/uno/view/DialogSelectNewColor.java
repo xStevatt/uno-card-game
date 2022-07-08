@@ -7,6 +7,15 @@ import javax.swing.JOptionPane;
 
 import unibs.pajc.uno.model.card.CardColor;
 
+/**
+ * Pannello per mostrare a schermo i diversi colori disponibili quando si
+ * sceglie una carta speciale che permette di cambiare un colore.
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
+ *
+ */
 public class DialogSelectNewColor
 {
 	private final ArrayList<String> colors;
@@ -24,6 +33,11 @@ public class DialogSelectNewColor
 		}
 	}
 
+	/**
+	 * Mostra a schermo effettivamente i colori che è possibile scegliere.
+	 * 
+	 * @return il valore del colore che è stato scelto dal giocatore
+	 */
 	public CardColor show()
 	{
 		String pickedColor = (String) JOptionPane.showInputDialog(frame, "Choose a color", "Wild Card",

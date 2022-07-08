@@ -1,9 +1,13 @@
 package unibs.pajc.uno.model.card;
 
 /**
- * Enum describing card types
  * 
- * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
+ * Enumerativo che definisce i possibili tipi di carte che possono essere
+ * assunti da una carta
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
  *
  */
 public enum CardType

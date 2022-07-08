@@ -15,11 +15,17 @@ import javax.swing.border.Border;
 
 import unibs.pajc.uno.model.card.Card;
 
+/**
+ * 
+ * Pannello per la visualzzazione di una carta del gioco.
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
+ *
+ */
 public class CardView extends JPanel
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	protected final Card card;
 	protected final String value;
@@ -55,7 +61,7 @@ public class CardView extends JPanel
 	}
 
 	/**
-	 * 
+	 * Inizializza la grafica della view
 	 */
 	private void initView()
 	{
@@ -82,6 +88,13 @@ public class CardView extends JPanel
 		drawValueInCorner(g2);
 	}
 
+	/**
+	 * 
+	 * Colora lo sfondo della carta del colore effettivo della carta
+	 * 
+	 * @param g2
+	 * @param cardColor
+	 */
 	private void fillBackground(Graphics2D g2, Color cardColor)
 	{
 		g2.setColor(Color.WHITE);
@@ -91,6 +104,12 @@ public class CardView extends JPanel
 		g2.fillRect(margin, margin, cardWidth - 2 * margin, cardHeight - 2 * margin);
 	}
 
+	/**
+	 * 
+	 * Colora l'ovale nel centro della carta di bianco
+	 * 
+	 * @param g2
+	 */
 	private void drawWhiteOvalInCenter(Graphics2D g2)
 	{
 		var transformer = g2.getTransform();
@@ -101,6 +120,13 @@ public class CardView extends JPanel
 		g2.setTransform(transformer);
 	}
 
+	/**
+	 * 
+	 * Disegna il valore della carta al centro della carta
+	 * 
+	 * @param g2
+	 * @param cardColor
+	 */
 	private void drawValueInCenter(Graphics2D g2, Color cardColor)
 	{
 		var defaultFont = new Font(Util.DEFAULT_FONT, Font.BOLD, cardWidth / 2 + 5);
@@ -113,6 +139,12 @@ public class CardView extends JPanel
 		g2.drawString(value, cardWidth / 2 - stringWidth, cardHeight / 2 + fontHeight);
 	}
 
+	/**
+	 * 
+	 * Disegna il valore della carta all'angolo della carta.
+	 * 
+	 * @param g2
+	 */
 	private void drawValueInCorner(Graphics2D g2)
 	{
 		var defaultFont = new Font(Util.DEFAULT_FONT, Font.ITALIC, cardWidth / 5);
@@ -122,6 +154,12 @@ public class CardView extends JPanel
 		g2.drawString(value, margin, 5 * margin);
 	}
 
+	/**
+	 * Aggiunge un effetto di hover qunado la carta viene selezionata dal cursore.
+	 * Quando la carta viene selezionta è posta a un'altezza maggiore rispetto alle
+	 * altre carte. Viene incrementato di 20pixel il numero di pixel a cui si trova
+	 * la carta
+	 */
 	public void showHoverEffect()
 	{
 		if (active)
@@ -133,6 +171,9 @@ public class CardView extends JPanel
 		}
 	}
 
+	/**
+	 * Rimuove l'effetto di hover quando la carta non è più selezionata dal cursore.
+	 */
 	public void removeHoverEffect()
 	{
 		if (active)

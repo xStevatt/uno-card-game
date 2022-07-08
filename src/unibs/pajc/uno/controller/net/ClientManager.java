@@ -11,6 +11,15 @@ import javax.swing.JOptionPane;
 import unibs.pajc.uno.model.GameModel;
 import unibs.pajc.uno.view.TableView;
 
+/**
+ * Metodo per la gestione di molteplici client connessi al server. Eredita dalla
+ * classe @class Threa
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
+ *
+ */
 public class ClientManager extends Thread
 {
 	private TableView view;
@@ -29,6 +38,21 @@ public class ClientManager extends Thread
 
 	private boolean isConnected = false;
 
+	/**
+	 * 
+	 * Ciascun client è rappresentato in modo univoco da un certo clientIndex. Nel
+	 * caso in cui si voglia mandare un dato ad un solo client, ad esempio, è
+	 * sufficiente richiedere l'elemento che nella lista dei Thread sia a quel certo
+	 * index
+	 *
+	 * @param view            la view del gioco
+	 * @param clientSocket    il socket del client
+	 * @param clientIndex     l'indice univoco del client
+	 * @param syncObjectModel l'oggetto necessario alla sincronizzazione delle
+	 *                        azioni del giocatore
+	 * @param syncObjectChat  l'oggetto necessario alla sincronizzazione delle
+	 *                        azioni della chat di gioco
+	 */
 	public ClientManager(TableView view, Socket clientSocket, int clientIndex, Object syncObjectModel,
 			Object syncObjectChat)
 	{
@@ -82,6 +106,9 @@ public class ClientManager extends Thread
 		}
 	}
 
+	/**
+	 * Rimane in ascolto per eventuali dati ricevuti dallo stream del client
+	 */
 	public void listenToClient()
 	{
 		Object objReceived = null;
@@ -124,6 +151,11 @@ public class ClientManager extends Thread
 		}
 	}
 
+	/**
+	 * Metodo che permette l'inviio di oggetto al client
+	 * 
+	 * @param objToSend l'oggetto da mandare al client
+	 */
 	public void sendToClient(Object objToSend)
 	{
 		try

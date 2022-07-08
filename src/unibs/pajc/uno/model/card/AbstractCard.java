@@ -1,9 +1,12 @@
 package unibs.pajc.uno.model.card;
 
 /**
- * Abstract card class: number, wild and action card extend from this class
  * 
- * @author Stefano Valloncini, Yuhang Ye, Luigi Amarante
+ * Classe astratta per definire il funzionamento di una carta
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
  *
  */
 public abstract class AbstractCard implements Card

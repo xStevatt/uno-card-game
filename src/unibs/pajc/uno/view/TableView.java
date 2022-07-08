@@ -38,60 +38,81 @@ import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.model.card.CardColor;
 import unibs.pajc.uno.model.player.HandCards;
 
+/**
+ * Classe che gestisce la view principale del gioco. Eredita dalla classe JFrame
+ * e mostra a schermo tutti gli elementi di gioco della partita.
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
+ *
+ */
 public class TableView extends JFrame
 {
 	private JPanel contentPane;
 	private JTextField txtSendMessageField;
 
-	// Most important panels (player one cards, player two cards and the center
-	// panel)
+	// PANNELLI PIU IMPORTANTI
 	private JPanel panelActualPlayer;
 	private JPanel panelAdversaryPlayer;
 	private JPanel centerPanel;
 
-	// OTHER PANELS
+	// ALTRI PANNELLI SECONDARI
 	private JPanel midTable;
 	private JPanel panelChat;
 	private JPanel panelPlaced;
 	private JPanel panelDeck;
 
+	// PANNELLO LAYERED PER LA RAPPRESENTAZIONE DELLE CARTE
 	private JLayeredPane handCardsViewActual;
 	private JLayeredPane handCardsViewAdversary;
 
-	// USED CARD VIEW
+	// RAPPRESENTAZIONE GRAFICA DELLE CARTE PANNELLO CENTRALE
 	private UsedCardView usedCardView;
 	private CardBackView backView;
 
+	// PANNELLO DELLA CHAT DI GIOCO
 	private JTextArea textArea;
-
 	private JTextArea textAreaChat;
 	private JButton btnSendMessage;
-
-	private JButton sayUnoButtonPlayerTwo;
-	private JButton sayUnoButtonPlayerOne;
-	private JLabel titleLabel;
-	private JLabel lblMatchDescriptor;
-
-	private JLabel lblStopWatch;
-
-	private boolean isGameLocal = true;
-
-	private boolean unoButtonPressed = false;
-
-	private JLabel turnFinalLabel;
-	private JLabel lblPlayerTurn;
-
-	public String message = "";
-
-	private JSeparator separatorInfo1;
-	private JSeparator separatorInfo2;
-
 	private JPanel panelInfo;
 	private JSeparator separator;
 	private JScrollPane scroll;
 
+	// BOTTONI DI UNO BOTTONI
+	private JButton sayUnoButtonPlayerTwo;
+	private JButton sayUnoButtonPlayerOne;
+
+	// LABEL DI DESCRIZIONE DI GIOCO: TIMER; LABEL DEI TITOLI ECC.
+	private JLabel titleLabel;
+	private JLabel lblMatchDescriptor;
+	private JLabel lblStopWatch;
+
+	// VARIABILI BOOLEANE DI RAPPRESENTAZIONE GRAFICA
+	private boolean isGameLocal = true;
+	private boolean unoButtonPressed = false;
+
+	private JLabel turnFinalLabel;
+	private JLabel lblPlayerTurn;
+	public String message = "";
+
+	// SEPARATORE DEI PANNELLI
+	private JSeparator separatorInfo1;
+	private JSeparator separatorInfo2;
+
+	// OGGETTO DI SINCRONIZAZZIONE
 	private Object syncObjectChat;
 
+	/**
+	 * Al costruttore si passano i nomi dei due giocatori, e se il gioco deve essere
+	 * offline o online. Nel caso il gioco sia offline, la JTextArea di gioco viene
+	 * disabilitata, mentre se il gicoo è online viene abilitata. Nel costruttore
+	 * vengono caricati tutti gli elementi grafici necessari
+	 * 
+	 * @param namePlayerOne
+	 * @param namePlayerTwo
+	 * @param isGameLocal
+	 */
 	public TableView(String namePlayerOne, String namePlayerTwo, boolean isGameLocal)
 	{
 		super("Uno - cards game");
@@ -106,6 +127,7 @@ public class TableView extends JFrame
 		contentPane.setLayout(null);
 		this.setLocationRelativeTo(null);
 
+		// PANNELLO PRINCIPALE; VIENE AGGIUNTO UNO SFONDO AL PANELLO DI GIOCO
 		centerPanel = new JPanel()
 		{
 			@Override
@@ -123,6 +145,7 @@ public class TableView extends JFrame
 		contentPane.add(centerPanel);
 		centerPanel.setLayout(null);
 
+		// PANNELLO DEL GIOCATORE
 		panelActualPlayer = new JPanel();
 		panelActualPlayer
 				.setBorder(new TitledBorder(null, namePlayerOne, TitledBorder.LEADING, TitledBorder.TOP, null, null));
@@ -130,10 +153,14 @@ public class TableView extends JFrame
 		panelActualPlayer.setOpaque(false);
 		panelActualPlayer.setLayout(new GridBagLayout());
 
+		// PANNELLO DI RAPPRESENTAZIONE DEL GIOCATORE CORRENTE DELLE CARTE;
+		// JLayeredPanel per rappresentare la sovrapposizione delle carte da gioco
 		handCardsViewActual = new JLayeredPane();
 		handCardsViewActual.setPreferredSize(new Dimension(940, 175));
 		handCardsViewActual.setOpaque(false);
 
+		// PANNELLO DI RAPPRESENTAZIONE DEL GIOCATORE AVVERSARIO DELLE CARTE;
+		// JLayeredPanel per rappresentare la sovrapposizione delle carte da gioco
 		handCardsViewAdversary = new JLayeredPane();
 		handCardsViewAdversary.setPreferredSize(new Dimension(940, 175));
 		handCardsViewAdversary.setOpaque(false);
@@ -141,6 +168,7 @@ public class TableView extends JFrame
 
 		centerPanel.add(panelActualPlayer);
 
+		// PANNELLO DEL GIOCATORE AVVERSARIO; A CUI VIENE AGGIUNTO IL PANNELLO LAYERED
 		panelAdversaryPlayer = new JPanel();
 		panelAdversaryPlayer.setOpaque(false);
 		panelAdversaryPlayer
@@ -336,6 +364,14 @@ public class TableView extends JFrame
 		this.syncObjectChat = syncObjectChat;
 	}
 
+	/**
+	 * Metodo che imposta i titoli dei pannelli e i bordi. In questo modo è
+	 * possibile aggiungere il bordo con il titolo, nel quale viene rappresentato il
+	 * nome del giocatore in questione.
+	 * 
+	 * @param actualPlyer
+	 * @param adversaryPlayer
+	 */
 	public void setPanelTitles(String actualPlyer, String adversaryPlayer)
 	{
 		panelActualPlayer
@@ -350,15 +386,9 @@ public class TableView extends JFrame
 	}
 
 	/**
-	 * 
-	 * @param playerOne
-	 * @param playerTwo
-	 * @param lastCardUsed
-	 * @param currentPlayer
-	 */
-
-	/**
-	 * Inits game timer. Timer starts at 00:00:00 and stops when game is over.
+	 * Metodo per l'inizializzazione e la gestione del Timer di gioco. Esso permette
+	 * di modificare (ogni secondo) la label di testo che permette di mostrare a
+	 * schermo un Timer funzionante.
 	 */
 	public void initTimer()
 	{
@@ -391,9 +421,11 @@ public class TableView extends JFrame
 	}
 
 	/**
-	 * Replaces the cards dropped on the table
+	 * Rimpiazza l'ultima carta utilizzata sul tavolo. Per fare questo è necessario
+	 * passare alla carta la nuova carta, e il colore corrente
 	 * 
-	 * @param card
+	 * @param card         la carta che si vuole passare
+	 * @param currentColor il nuovo colore corrente
 	 */
 	public void changeDroppedCardView(Card card, CardColor currentColor)
 	{
@@ -428,6 +460,7 @@ public class TableView extends JFrame
 	}
 
 	/**
+	 * Metodo che imposta il turno corrente nel pannello delle informazioni di gioco
 	 * 
 	 * @param currentTurn
 	 */
@@ -437,6 +470,8 @@ public class TableView extends JFrame
 	}
 
 	/**
+	 * Metodo che permette di abilitare o disabilitare le carta mostrate nella view.
+	 * Per questo si passa l'index del giocatore che deve essere cambiato
 	 * 
 	 * @param index
 	 */
@@ -498,7 +533,7 @@ public class TableView extends JFrame
 	}
 
 	/**
-	 * 
+	 * Metodo che permette di disabilitare o attivare una carta
 	 */
 	public void setMiddleCardClickable(boolean isEnabled)
 	{
@@ -507,7 +542,7 @@ public class TableView extends JFrame
 
 	/**
 	 * 
-	 * Method to load all cards.
+	 * Metodo che serve a caricare le carte di un giocatore
 	 * 
 	 * @param handCards
 	 * @param players
@@ -547,7 +582,7 @@ public class TableView extends JFrame
 	}
 
 	/**
-	 * Adds cards of the players
+	 * Aggiunge le carte alla view
 	 * 
 	 * @param handCards
 	 * @param panelToAddCards
@@ -565,8 +600,10 @@ public class TableView extends JFrame
 		{
 			CardView cardView = new CardView(card);
 
+			// IMPOSTA I BOUNDS DELLA CARTA
 			cardView.setBounds(originPoint.x, originPoint.y, cardView.getDimension().width,
 					cardView.getDimension().height);
+
 			cardsView.add(cardView, i++);
 
 			cardsView.moveToFront(cardView);
@@ -575,12 +612,13 @@ public class TableView extends JFrame
 		}
 
 		cardsView.revalidate();
-		// ADDS CARDS PANEL TO OUTSIDE COMPONENT
+
+		// AGGIUNGE LE CARTE AL COMPONENTE ESTERNO
 		panelToAddCards.add(cardsView);
 	}
 
 	/**
-	 * Adds cards of the adversary player (reversed cards)
+	 * Aggiunge le carte alla visualizzazione avversaria
 	 * 
 	 * @param handCards
 	 * @param panelToAddCards
@@ -621,6 +659,7 @@ public class TableView extends JFrame
 	}
 
 	/**
+	 * Ritorna il primo punto da cui deve partire la visualizzazione delle carte
 	 * 
 	 * @param totalCards
 	 * @return
@@ -629,17 +668,11 @@ public class TableView extends JFrame
 	{
 		Point p = new Point(0, 20);
 
-		// var width = handCardsView.getWidth() == 0 ?
-		// handCardsView.getPreferredSize().width : handCardsView.getWidth();
-
-		// var offset = calculateOffset(width, totalCards);
-		// p.x = (width - offset * totalCards) / 2;
-
 		return p;
 	}
 
 	/**
-	 * Calculates the offset to set cards
+	 * Calcola l'offset che deve essere presente tra le diverse carte
 	 * 
 	 * @param width
 	 * @param totalCards
@@ -658,6 +691,7 @@ public class TableView extends JFrame
 	}
 
 	/**
+	 * Metodo che serve ad aggiungere un messaggio alla chat di gioco
 	 * 
 	 * @param message
 	 * @param playerName

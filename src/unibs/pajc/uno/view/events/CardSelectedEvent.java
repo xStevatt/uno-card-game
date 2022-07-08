@@ -6,6 +6,15 @@ import java.awt.event.MouseListener;
 import unibs.pajc.uno.model.card.Card;
 import unibs.pajc.uno.view.CardView;
 
+/**
+ * 
+ * Metodo che gestisce quando viene selezionata una carta dal giocatore
+ * 
+ * @author Stefano Valloncini
+ * @author Yuhang Ye
+ * @author Luigi Amarante
+ *
+ */
 public class CardSelectedEvent implements MouseListener
 {
 	private Object notifyObj;

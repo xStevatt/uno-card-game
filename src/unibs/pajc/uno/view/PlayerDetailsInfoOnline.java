@@ -24,6 +24,12 @@ import javax.swing.border.TitledBorder;
 import unibs.pajc.uno.controller.net.NetClient;
 import unibs.pajc.uno.controller.net.NetServer;
 
+/**
+ * Metodo per l'inserimento dei dati dei giocatori per il gioco online
+ * 
+ * @author stefano
+ *
+ */
 public class PlayerDetailsInfoOnline extends JFrame
 {
 	private static final long serialVersionUID = 1L;
